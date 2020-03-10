@@ -7,10 +7,11 @@ class Game extends Component {
         return (
             <div>
                 <div>Let's start a game</div>
-                <canvas className="Main-Canvas"></canvas>
+                <canvas id="webGlcanvas" className="Main-Canvas"></canvas>
             </div>
         )
     }
+	
 }
 
 export default Game;
