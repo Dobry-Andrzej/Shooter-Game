@@ -13,32 +13,40 @@ class App {
 		this.canvas = canvas as HTMLCanvasElement;
 		this.gl = canvas.getContext('webgl') as WebGLRenderingContext;
 		
-		this.shader = new Shader(this);
-		
-		
+		this.shader = new Shader(this, "standardShader");
+		//TODO: Dodanie wszystkich pochodnych, takich jak np. eventy, fizyka, generator mapy, itp
 	}
 	
 	/*	* Stworzenie i przypisanie wszystkich składowych aplikacji
 		*
 	 *	*/
-	public initialize () {
+	public initialize () : void {
 		this.gl.clearColor(0, 0, 0, 1);
 		
-		// Odpad animationFrame jak juz wszystko jest zainicjowane
+		// Podepnij odpowiedni shader
+		this.shader.use();
+		// Odpal animationFrame jak juz wszystko jest zainicjowane
 		this.animate();
+	}
+	
+	/*	* Getter do gl
+		* @returns {WebGLRenderingContext}
+	 *	*/
+	public getGl () : WebGLRenderingContext {
+		return this.gl;
 	}
 	
 	/*	* Funkcja do zczytywania wydarzenia od zmiany rozmiaru okna
 		*
 	 *	*/
-	private resize () {
+	private resize () : void {
 		//
 	}
 	
 	/*	* Funkcja do animowania frame'a
 		*
 	 *	*/
-	private animate () {
+	private animate () : void {
 		this.gl.clear(this.gl.COLOR_BUFFER_BIT);
 		requestAnimationFrame(this.animate.bind(this));
 	}
