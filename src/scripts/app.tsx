@@ -1,19 +1,20 @@
 import Shader from './shader/shader';
 
 class App {	
-	private gl: WebGLRenderingContext;
-	private canvas: HTMLCanvasElement;
+	private _gl: WebGLRenderingContext;
+	private _canvas: HTMLCanvasElement;
 	
-	private shader: Shader;
+	private _shader: Shader;
 	
 	/*	* Tworzy nową instancję App
 		* @param {HTMLCanvasElement} canvas
 	 *	*/
 	public constructor (canvas: HTMLCanvasElement) {
-		this.canvas = canvas as HTMLCanvasElement;
-		this.gl = canvas.getContext('webgl') as WebGLRenderingContext;
+		this._canvas = canvas as HTMLCanvasElement;
+		this._gl = canvas.getContext('webgl') as WebGLRenderingContext;
 		
-		this.shader = new Shader(this, "standardShader");
+		this._shader = new Shader(this, "standardShader");
+		//this.scene = new Scene(this);
 		//TODO: Dodanie wszystkich pochodnych, takich jak np. eventy, fizyka, generator mapy, itp
 	}
 	
@@ -23,17 +24,27 @@ class App {
 	public initialize () : void {
 		this.gl.clearColor(0, 0, 0, 1);
 		
+		// Tworzenie mapy
+		//this.scene.createMap();
+		
 		// Podepnij odpowiedni shader
-		this.shader.use();
+		this._shader.use();
 		// Odpal animationFrame jak juz wszystko jest zainicjowane
 		this.animate();
+	}
+	
+	/*	* Setter do gl
+		* @param {WebGLRenderingContext} _gl
+	 *	*/
+	public set gl (_gl: WebGLRenderingContext) {
+		this._gl = _gl;
 	}
 	
 	/*	* Getter do gl
 		* @returns {WebGLRenderingContext}
 	 *	*/
-	public getGl () : WebGLRenderingContext {
-		return this.gl;
+	public get gl () : WebGLRenderingContext {
+		return this._gl;
 	}
 	
 	/*	* Funkcja do zczytywania wydarzenia od zmiany rozmiaru okna
