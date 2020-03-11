@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import './Game.css';
+import App from '../../scripts/app';
 
 class Game extends Component {
 
@@ -11,6 +12,12 @@ class Game extends Component {
             </div>
         )
     }
+	
+	componentDidMount() {
+		var canvas = document.getElementById('webGlcanvas') as HTMLCanvasElement;
+		var app = new App(canvas);
+		app.initialize();
+	}
 	
 }
 
