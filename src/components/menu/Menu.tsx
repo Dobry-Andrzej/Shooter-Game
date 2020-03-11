@@ -23,7 +23,7 @@ class MainMenu extends Component {
                         <button>
                                 <span><Link className="link" to={{
                                     pathname: '/join-game'
-                                }}>Zabij Andrzeja</Link></span>
+                                }}>Milosz faja ma male jaja</Link></span>
                         </button>
                         <Route path="/join-game" component={Game} />
                 </BrowserRouter>
