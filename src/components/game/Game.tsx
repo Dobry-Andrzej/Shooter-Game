@@ -14,8 +14,8 @@ class Game extends Component {
     }
 	
 	componentDidMount() {
-		let canvas = document.getElementById('webGlcanvas') as HTMLCanvasElement;
-		let app = new App(canvas);
+		const canvas = document.getElementById('webGlcanvas') as HTMLCanvasElement;
+		const app = new App(canvas);
 		app.initialize();
 	}
 	
