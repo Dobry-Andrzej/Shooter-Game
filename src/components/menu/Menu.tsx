@@ -8,16 +8,24 @@ class MainMenu extends Component {
 
     render() {
         return (
-            <div className="Menu">
+            <div className="menuContainer">
+                <div className="titleGame">Witaj w naszej kochanej grze przeglądarkowej</div>
+                <div className="loginFormContainer">
+                    <form className="loginForm">
+                        <input type="text" placeholder="name"/>
+                        <input type="password" placeholder="password"/>
+                        <input type="text" placeholder="email address"/>
+                        <button>Create</button>
+                        <p className="message"> Masz juz konto <p>Sign In</p></p>
+                    </form>
+                </div>
                 <BrowserRouter>
-                    <header>
-                        <nav>
-                                <span><Link className="Link" to={{
+                        <button>
+                                <span><Link className="link" to={{
                                     pathname: '/join-game'
-                                }}>Shoot 'Em ! ! !</Link></span>
-                        </nav>
+                                }}>Zabij Andrzeja</Link></span>
+                        </button>
                         <Route path="/join-game" component={Game} />
-                    </header>
                 </BrowserRouter>
             </div>
         )
