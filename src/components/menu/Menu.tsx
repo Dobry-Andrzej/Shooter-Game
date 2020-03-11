@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { BrowserRouter, Route, Link } from 'react-router-dom';
+import {BrowserRouter, Route, Link, NavLink} from 'react-router-dom';
 
 import './Menu.css';
 import Game from '../game/Game';
@@ -11,16 +11,16 @@ class MainMenu extends Component {
         return (
             <div className="menuContainer">
                 <BrowserRouter>
-                    <Link to="/"></Link>
-                                <Link className="link" to={{
-                                    pathname: '/join-game'
-                                }}>Start Game</Link>
+
                         <Route path="/join-game"
                                component={Game}
-                               exact  />
+                                 />
                     <Route path="/"
                            component={Login}
                            exact  />
+                    <NavLink to='/join-game'
+                        activeClassName="selectedLink"
+                    >StartGame</NavLink>
                 </BrowserRouter>
             </div>
         )
