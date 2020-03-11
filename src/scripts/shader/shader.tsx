@@ -9,13 +9,11 @@ class Shader {
 	/*	* Tworzy nową instancję Shader
 		* @param {App} main
 		* @param {string} name
-		* @param {string} vertexSource
-		* @param {string} fragmentSource
 	 *	*/
-	public constructor (main: App, name: string) {
-		this._main = main;
+	public constructor (_main: App, _name: string) {
+		this._main = _main;
 		
-		this._name = name;
+		this._name = _name;
 		
 		let gl = this.main.gl;
 		
@@ -42,14 +40,14 @@ class Shader {
 	}
 	
 	/*	* Setter do name
-		* @param {string} _main
+		* @param {string} _name
 	 *	*/
-	public set name (name: string) {
-		this._name = name;
+	public set name (_name: string) {
+		this._name = _name;
 	}
 	
 	/*	* Getter do main
-		* @returns {App}
+		* @returns {string}
 	 *	*/
 	public get name () : string {
 		return this._name;

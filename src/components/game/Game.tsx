@@ -8,13 +8,14 @@ class Game extends Component {
         return (
             <div>
                 <div>Let's start a game</div>
-                <canvas id="webGlcanvas" className="Main-Canvas"></canvas>
+                <canvas width="800" height="600" id="webGlcanvas" className="Main-Canvas"></canvas>
             </div>
         )
     }
 	
 	componentDidMount() {
 		const canvas = document.getElementById('webGlcanvas') as HTMLCanvasElement;
+		
 		const app = new App(canvas);
 		app.initialize();
 	}
