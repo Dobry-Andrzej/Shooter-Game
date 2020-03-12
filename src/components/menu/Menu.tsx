@@ -1,30 +1,23 @@
-import React, { Component } from 'react';
-import {BrowserRouter, Route, Link, NavLink} from 'react-router-dom';
+import React, { Component } from "react";
+import { Button } from 'react-bootstrap';
+import history from '../../routing/history';
+import "./Menu.css";
+import Logo from "../home/logo.png";
 
-import './Menu.css';
-import Game from '../game/Game';
-import Login from '../login/Login';
-
-class MainMenu extends Component {
-
+export default class Menu extends Component {
     render() {
         return (
             <div className="menuContainer">
-                <BrowserRouter>
+                <div className="titleGame">
+                    <h1>Home page</h1>
+                    <form>
+                        <Button className="btn btn-success" onClick={() => history.push("/Game")}>Click button to view Game</Button>
+                        <Button className="btn btn-success" onClick={() => history.push("/Login")}>Click button to view Login</Button>
 
-                        <Route path="/join-game"
-                               component={Game}
-                                 />
-                    <Route path="/"
-                           component={Login}
-                           exact  />
-                    <NavLink to='/join-game'
-                        activeClassName="selectedLink"
-                    >StartGame</NavLink>
-                </BrowserRouter>
+                    </form>
+                    <img src={Logo} alt="pokemon Milosz" />
+                </div>
             </div>
-        )
+        );
     }
 }
-
-export default MainMenu;

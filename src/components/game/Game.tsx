@@ -6,7 +6,7 @@ class Game extends Component {
 
     render () {
         return (
-            <div>
+            <div className="titleGame">
                 <div>Let's start a game</div>
                 <canvas width="800" height="600" id="webGlcanvas" className="Main-Canvas"></canvas>
             </div>
