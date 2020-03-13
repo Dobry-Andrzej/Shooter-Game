@@ -1,8 +1,13 @@
+
+import RenderData from './renderData';
+
 class Mesh {
 	private _name: string;
 	private _gl: WebGLRenderingContext;
+	private _renderData: RenderData;
+	
 	private _vertices: number[];
-	private _buffer: WebGLBuffer;
+	private _colors: number[];
 	
 	/*	* Tworzy nową instancję Mesh
 		* @param {string} _name
@@ -11,8 +16,10 @@ class Mesh {
 	public constructor (_name: string, _gl: WebGLRenderingContext) {
 		this._name = _name;
 		this._gl = _gl;
+		this._renderData = new RenderData(_gl, "standardShader");
+		
 		this._vertices = [];
-		this._buffer = _gl.createBuffer() as WebGLBuffer;
+		this._colors = [];
 	}
 	
 	/*	* Setter do name
@@ -44,31 +51,55 @@ class Mesh {
 		return this._vertices;
 	}
 	
+	/*	* Setter do colors
+		* @param {number[]} _colors
+	 *	*/
+	public set colors (_colors: number[]) {
+		this._colors = _colors;
+	}
+	
+	/*	* Getter do colors
+		* @returns {number[]}
+	 *	*/
+	public get colors () : number[] {
+		return this._colors;
+	}
+	
+	/*	* Setter do renderData
+		* @param {RenderData} _renderData
+	 *	*/
+	public set renderData (_renderData: RenderData) {
+		this._renderData = _renderData;
+	}
+	
+	/*	* Getter do renderData
+		* @returns {RenderData}
+	 *	*/
+	public get renderData () : RenderData {
+		return this._renderData;
+	}
+	
 	/*	* Funkcja do zwracania vertexAmount
 		* @returns {number[]}
 	 *	*/
 	public getVertexAmount () : number {
-		return this.vertices.length / 3;
+		return this._vertices.length / 3;
 	}
 	
-	/*	* Podpina tablice do bufferów
-		*
-	 *	*/
-	public bindBufferArrays () : void {
-		this._gl.bindBuffer(this._gl.ARRAY_BUFFER, this._buffer);
-		this._gl.bufferData(this._gl.ARRAY_BUFFER, new Float32Array(this._vertices), this._gl.STATIC_DRAW);
-		this._gl.bindBuffer(this._gl.ARRAY_BUFFER, null);
+	public updateMatrices () : void {
+		//this._renderData.bindUniforms(this._projectionMatrix, this._modelViewMatrix);
+	}
+	
+	public bindArrays () : void {
+		this._renderData.bindVertexArray(this._vertices);
+		//this._renderData.bindUniforms(this._projectionMatrix, this._modelViewMatrix);
 	}
 	
 	/*	* Rysuje buffery dla tego mesha
 		*
 	 *	*/
 	public draw () : void {
-		this._gl.bindBuffer(this._gl.ARRAY_BUFFER, this._buffer);
-		this._gl.vertexAttribPointer(0, 3, this._gl.FLOAT, false, 0, 0);
-		this._gl.enableVertexAttribArray(0);
-		
-		this._gl.drawArrays(this._gl.TRIANGLES, 0, this.getVertexAmount());
+		this._renderData.draw(this.getVertexAmount());
 	}
 
 }

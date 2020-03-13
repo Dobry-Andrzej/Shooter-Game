@@ -18,7 +18,7 @@ class StlLoader {
 		request.send(null);
 	}
 	
-	private parse (data: string) : Float32Array {
+	private parse (data: string) : number[] {
 		var binData: ArrayBuffer = this.ensureBinary(data);
 		var binaryCheck: Boolean = this.isBinary(binData);
 		var vertices: number[];
@@ -29,7 +29,7 @@ class StlLoader {
 			vertices = this.parseASCII(data);
 		}
 		
-		return new Float32Array(vertices);
+		return vertices;
 	}
 	
 	private ensureBinary (buffer: string) : ArrayBuffer {
