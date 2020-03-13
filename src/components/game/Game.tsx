@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import './Game.css';
 import App from '../../scripts/app';
+import RightPanel from '../rightPanel/RightPanel';
 
 class Game extends Component {
 
@@ -9,6 +10,7 @@ class Game extends Component {
             <div>
                 <div>Let's start a game</div>
                 <canvas id="webGlcanvas" className="Main-Canvas"></canvas>
+				<RightPanel />
             </div>
         )
     }

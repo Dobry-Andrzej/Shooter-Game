@@ -20,12 +20,12 @@ class MainMenu extends Component {
                     </form>
                 </div>
                 <BrowserRouter>
-                        <button>
-                                <span><Link className="link" to={{
-                                    pathname: '/join-game'
-                                }}>Milosz faja ma male jaja</Link></span>
-                        </button>
-                        <Route path="/join-game" component={Game} />
+					<button>
+							<span><Link className="link" to={{
+								pathname: '/join-game'
+							}}>Milosz faja ma male jaja</Link></span>
+					</button>
+					<Route path="/join-game" component={Game} />
                 </BrowserRouter>
             </div>
         )

@@ -1,0 +1,9 @@
+.rightPanelContainer {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+.titleRightPanel{
+    font-size: 2em;
+    text-align: center;
+}

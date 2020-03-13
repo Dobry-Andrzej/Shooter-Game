@@ -1,10 +1,13 @@
 import Shader from './shader/shader';
+import RightPanelControls from './rightPanelControls';
 
 class App {	
 	private gl: WebGLRenderingContext;
 	private canvas: HTMLCanvasElement;
 	
 	private shader: Shader;
+	
+	//private rightPanelControls: RightPanelControls;
 	
 	/*	* Tworzy nową instancję App
 		* @param {HTMLCanvasElement} canvas
@@ -15,6 +18,8 @@ class App {
 		
 		this.shader = new Shader(this, "standardShader");
 		//TODO: Dodanie wszystkich pochodnych, takich jak np. eventy, fizyka, generator mapy, itp
+		
+		//this.rightPanelControls = new RightPanelControls();
 	}
 	
 	/*	* Stworzenie i przypisanie wszystkich składowych aplikacji
@@ -27,6 +32,8 @@ class App {
 		this.shader.use();
 		// Odpal animationFrame jak juz wszystko jest zainicjowane
 		this.animate();
+		
+		//this.rightPanelControls.initialize();
 	}
 	
 	/*	* Getter do gl
