@@ -1,4 +1,5 @@
 import Shader from './shader/shader';
+import RightPanelControls from './rightPanelControls';
 import Scene from './scene/scene';
 import StlLoader from './stlloader';
 
@@ -9,6 +10,8 @@ class App {
 	private _shader: Shader;
 	private _scene: Scene;
 	private _stlLoader: StlLoader;
+	
+	//private rightPanelControls: RightPanelControls;
 	
 	/*	* Tworzy nową instancję App
 		* @param {HTMLCanvasElement} canvas
@@ -21,6 +24,8 @@ class App {
 		this._scene = new Scene(this);
 		this._stlLoader = new StlLoader();
 		//TODO: Dodanie wszystkich pochodnych, takich jak np. eventy, fizyka, generator mapy, itp
+		
+		//this.rightPanelControls = new RightPanelControls();
 	}
 	
 	/*	* Setter do gl
@@ -92,6 +97,8 @@ class App {
 		this.shader.use();
 		// Odpal animationFrame jak juz wszystko jest zainicjowane
 		this.animate();
+		
+		//this.rightPanelControls.initialize();
 	}
 	
 	/*	* Funkcja do zczytywania wydarzenia od zmiany rozmiaru okna
