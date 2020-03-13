@@ -1,5 +1,6 @@
 import Shader from './shader/shader';
 import Scene from './scene/scene';
+import StlLoader from './stlloader';
 
 class App {	
 	private _gl: WebGLRenderingContext;
@@ -7,6 +8,7 @@ class App {
 	
 	private _shader: Shader;
 	private _scene: Scene;
+	private _stlLoader: StlLoader;
 	
 	/*	* Tworzy nową instancję App
 		* @param {HTMLCanvasElement} canvas
@@ -17,6 +19,7 @@ class App {
 		
 		this._shader = new Shader(this, "standardShader");
 		this._scene = new Scene(this);
+		this._stlLoader = new StlLoader();
 		//TODO: Dodanie wszystkich pochodnych, takich jak np. eventy, fizyka, generator mapy, itp
 	}
 	
@@ -60,6 +63,20 @@ class App {
 	 *	*/
 	public get scene () : Scene {
 		return this._scene;
+	}
+	
+	/*	* Setter do stlLoader
+		* @param {StlLoader} _stlLoader
+	 *	*/
+	public set stlLoader (_stlLoader: StlLoader) {
+		this._stlLoader = _stlLoader;
+	}
+	
+	/*	* Getter do stlLoader
+		* @returns {StlLoader}
+	 *	*/
+	public get stlLoader () : StlLoader {
+		return this._stlLoader;
 	}
 	
 	/*	* Stworzenie i przypisanie wszystkich składowych aplikacji

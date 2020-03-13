@@ -63,19 +63,16 @@ class Scene {
 	public createMap () : void {
 		let gl = this.main.gl;
 		let mesh = new Mesh("mapa", gl);
+		let stlLoader = this.main.stlLoader;
+		let self: Scene = this;
 		
-		let vertices : number[] = [
-			0,		0, 		0,
-			0,		0.5, 	0,
-			0.5,	0, 		0,
-			0,		0.5, 	0,
-			0.5,	0, 		0,
-			0.5,	0.5,	0
-		];
+		stlLoader.load("shooter/src/meshes/map.stl", function(vertices: number[]) {
+			mesh.vertices = vertices;
+			mesh.bindBufferArrays();
 		
-		mesh.vertices = vertices;
+			self.add(mesh);
+		});
 		
-		this.add(mesh);
 	}
 
 }
