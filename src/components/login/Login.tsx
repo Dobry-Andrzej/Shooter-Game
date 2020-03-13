@@ -22,8 +22,7 @@ const Login = () => {
                                        placeholder="Nickname"
                                        name = "login"
                                        ref={register(
-                                           { required: true,
-                                               maxLength: 20 }
+                                           { required: true }
                                        )}
                                 />
                             </div>
