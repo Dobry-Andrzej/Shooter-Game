@@ -7,9 +7,10 @@ class Game extends Component {
 
     render () {
         return (
-            <div>
+            <div className="titleGame">
                 <div>Let's start a game</div>
                 <canvas id="webGlcanvas" className="Main-Canvas"></canvas>
+                <canvas width="800" height="600" id="webGlcanvas" className="Main-Canvas"></canvas>
 				<RightPanel />
             </div>
         )
@@ -17,6 +18,7 @@ class Game extends Component {
 	
 	componentDidMount() {
 		const canvas = document.getElementById('webGlcanvas') as HTMLCanvasElement;
+		
 		const app = new App(canvas);
 		app.initialize();
 	}

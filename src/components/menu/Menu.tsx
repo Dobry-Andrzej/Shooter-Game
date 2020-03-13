@@ -1,35 +1,23 @@
-import React, { Component } from 'react';
-import { BrowserRouter, Route, Link } from 'react-router-dom';
+import React, { Component } from "react";
+import { Button } from 'react-bootstrap';
+import history from '../../routing/history';
+import "./Menu.css";
+import Logo from "../home/logo.png";
 
-import './Menu.css';
-import Game from '../game/Game';
-
-class MainMenu extends Component {
-
+export default class Menu extends Component {
     render() {
         return (
             <div className="menuContainer">
-                <div className="titleGame">Witaj w naszej kochanej grze przeglądarkowej</div>
-                <div className="loginFormContainer">
-                    <form className="loginForm">
-                        <input type="text" placeholder="name"/>
-                        <input type="password" placeholder="password"/>
-                        <input type="text" placeholder="email address"/>
-                        <button>Create</button>
-                        <p className="message"> Masz juz konto <p>Sign In</p></p>
+                <div className="titleGame">
+                    <h1>Home page</h1>
+                    <form>
+                        <Button className="btn btn-success" onClick={() => history.push("/Game")}>Click button to view Game</Button>
+                        <Button className="btn btn-success" onClick={() => history.push("/Login")}>Click button to view Login</Button>
+
                     </form>
+                    <img src={Logo} alt="pokemon Milosz" />
                 </div>
-                <BrowserRouter>
-					<button>
-							<span><Link className="link" to={{
-								pathname: '/join-game'
-							}}>Milosz faja ma male jaja</Link></span>
-					</button>
-					<Route path="/join-game" component={Game} />
-                </BrowserRouter>
             </div>
-        )
+        );
     }
 }
-
-export default MainMenu;

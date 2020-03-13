@@ -7,7 +7,7 @@ class RightPanelControls {
 	}
 
 	public initialize () : void {
-		this._hpElement = document.getElementById("rightPanelHP");
+		//this._hpElement = document.getElementById("rightPanelHP");
 	}
     
 }
