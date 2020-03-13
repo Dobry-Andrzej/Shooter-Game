@@ -1,6 +1,12 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import Menu from './components/menu/Menu';
+import { BrowserRouter as Router } from 'react-router-dom';
+import Routes from './routing/index';
+ReactDOM.render(
+    <Router>
+        <Routes />
+    </Router>,
+    document.getElementById('root')
 
-ReactDOM.render(<Menu />, document.getElementById('root'));
+);
