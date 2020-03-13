@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Button } from 'react-bootstrap';
-import history from '../../routing/history';
+import history from '../../routing/History';
 import "./Menu.css";
 import Logo from "../home/logo.png";
 
