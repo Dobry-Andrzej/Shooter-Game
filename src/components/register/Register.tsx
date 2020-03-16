@@ -1,13 +1,22 @@
 import React, { Component } from 'react';
 import './Register.css';
 import { useForm } from 'react-hook-form';
+import axios from "axios";
 
     const Register = () => {
 
         const { register, handleSubmit,  errors } = useForm();
 
-        const onSubmit = (data:any) => {
+        const onSubmit = async (data:any) => {
+            data.admin = false;
             console.warn(data);
+
+            try {
+                const response = await axios.post('localhost:3000/add-user', { createUserDTO: data });
+                console.log('👉 Returned data:', response);
+            } catch (e) {
+                console.log(`😱 Axios request failed: ${e}`);
+            }
         };
         return (
             <div className="menuContainer">
@@ -69,13 +78,13 @@ import { useForm } from 'react-hook-form';
                                    {
                                        required: true,
                                        maxLength: 20,
-                                       minLength: 6
+                                       minLength: 3
                                    }
                                )}
                         />
                         {errors.surname && <p className="login-error">Surname is required!</p>}
                         <button>Create</button>
-                        <p className="message"> Masz juz konto <p>Sign In</p></p>
+                        <p className="message"> Do you have an account? <p>Sign In</p></p>
                     </form>
                 </div>
             </div>
