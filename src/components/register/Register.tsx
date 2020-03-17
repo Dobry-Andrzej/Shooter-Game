@@ -2,21 +2,64 @@ import React, { Component } from 'react';
 import './Register.css';
 import { useForm } from 'react-hook-form';
 import axios from "axios";
+import history from "../../routing/History";
 
-    const Register = () => {
+    const  Register = () => {
 
+        let test = {
+            name: "",
+            surname: "",
+            login: "",
+            password: "",
+            admin: "",
+            email: ""
+        };
+         axios.get('http://localhost:3000/users/users/').then(ret=>{
+            test = {
+                name: ret.data.name,
+                surname: ret.data.surname,
+                login: ret.data.login,
+                password: ret.data.password,
+                admin: ret.data.admin,
+                email: ret.data.email
+            };
+
+            console.log(ret);
+        });
         const { register, handleSubmit,  errors } = useForm();
+        const options = {
+            headers: {"Access-Control-Allow-Origin" : "*"},
+            mode: 'cors',
+        };
 
         const onSubmit = async (data:any) => {
+
             data.admin = false;
             console.warn(data);
-
-            try {
-                const response = await axios.post('localhost:3000/add-user', { createUserDTO: data });
-                console.log('👉 Returned data:', response);
-            } catch (e) {
-                console.log(`😱 Axios request failed: ${e}`);
-            }
+                try {
+                    for(var i = 0; i < test.name.length ; i++) {
+                        if (test.login[i] === data.login || test.email[i] === data.email) {
+                            console.log("test");
+                        }
+                    }
+                    const response = await axios.post('http://localhost:3000/users/add-user/',{
+                        name:data.name,
+                        surname: data.surname,
+                        login: data.login,
+                        password: data.Password,
+                        admin: data.admin,
+                        email: data.email
+                    },options);
+                    if(response.status == 200){
+                        console.log("asdasdas")
+                        console.log('👉 Returned data:', response);
+                        //dodać okno że rejestracja przebiegła poprawnie//
+                        history.push("/Login");
+                    }
+                    console.log('👉 Returned data:', response);
+                } catch (e) {
+                    console.log(`😱 Axios request failed: ${e}`);
+                }
         };
         return (
             <div className="menuContainer">
@@ -24,17 +67,17 @@ import axios from "axios";
                 <div className="loginFormContainer">
                     <form onSubmit={handleSubmit(onSubmit)} className="loginForm">
                         <input type="text"
-                               placeholder="Username"
-                               name="Username"
+                               placeholder="Login"
+                               name="login"
                                ref={register(
                                    {
-                                       required: true,
+                                       required: true ,
                                        maxLength: 15,
                                        minLength: 3
                                    }
                                )}
                         />
-                        {errors.Username && <p className="login-error">Username is required!</p>}
+                        {errors.login && <p className="login-error">Login is required!</p>}
                         <input type="password"
                                placeholder="password"
                                name="Password"
@@ -52,7 +95,7 @@ import axios from "axios";
                                name="email"
                                ref={register(
                                    {
-                                       required: true,
+                                       required: true ,
                                        maxLength: 30,
                                        minLength: 6
                                    }
