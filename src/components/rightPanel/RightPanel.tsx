@@ -10,16 +10,12 @@ class RightPanel extends Component {
                 <div className="titleRightPanel">Tu Będzie menu gry </div>
                 <div id="rightPanel">
 					<div>
-						<span>HP: </span><span id="rightPanelHP"> 0 </span><span> /100 </span>
+						<span>HP: <progress id="rightPanelHPProgress" value="0" max="100"> </progress> </span> <span id="rightPanelHP"> 0 </span><span> /100 </span>
 					</div>
 				</div>
             </div>
         )
     }
-	
-	public funkcjaTestowa() {
-		console.log("test");
-	}
 }
 
 export default RightPanel;

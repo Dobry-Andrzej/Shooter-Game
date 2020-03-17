@@ -1,13 +1,20 @@
 
 class RightPanelControls {
-	private _hpElement: HTMLElement;
-	
 	public constructor () {
-		this._hpElement = document.createElement("div");
+		
 	}
 
-	public initialize () : void {
-		//this._hpElement = document.getElementById("rightPanelHP");
+	public setHp(hp: number) : void {
+		let hpElement = document.getElementById("rightPanelHP");
+		let hpProgress = document.getElementById("rightPanelHPProgress");
+		
+		if (hpElement) {
+			hpElement.textContent = String(hp);
+		}
+		
+		if (hpProgress) {
+			(hpProgress as HTMLInputElement).value = String(hp);
+		}
 	}
     
 }
