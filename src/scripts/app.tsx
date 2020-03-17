@@ -1,13 +1,14 @@
-import Shader from './shader/shader';
+
 import RightPanelControls from './rightPanelControls';
 import Scene from './scene/scene';
+import StlLoader from './stlloader';
 
 class App {	
 	private _gl: WebGLRenderingContext;
 	private _canvas: HTMLCanvasElement;
 	
-	private _shader: Shader;
 	private _scene: Scene;
+	private _stlLoader: StlLoader;
 	
 	private _rightPanelControls: RightPanelControls;
 	
@@ -18,8 +19,8 @@ class App {
 		this._canvas = _canvas as HTMLCanvasElement;
 		this._gl = _canvas.getContext('webgl') as WebGLRenderingContext;
 		
-		this._shader = new Shader(this, "standardShader");
 		this._scene = new Scene(this);
+		this._stlLoader = new StlLoader();
 		//TODO: Dodanie wszystkich pochodnych, takich jak np. eventy, fizyka, generator mapy, itp
 		
 		this._rightPanelControls = new RightPanelControls();
@@ -39,18 +40,18 @@ class App {
 		return this._gl;
 	}
 	
-	/*	* Setter do shader
-		* @param {Shader} _shader
+	/*	* Setter do canvas
+		* @param {HTMLCanvasElement} _canvas
 	 *	*/
-	public set shader (_shader: Shader) {
-		this._shader = _shader;
+	public set canvas (_canvas: HTMLCanvasElement) {
+		this._canvas = _canvas;
 	}
 	
-	/*	* Getter do shader
-		* @returns {Shader}
+	/*	* Getter do canvas
+		* @returns {HTMLCanvasElement}
 	 *	*/
-	public get shader () : Shader {
-		return this._shader;
+	public get canvas () : HTMLCanvasElement {
+		return this._canvas;
 	}
 	
 	/*	* Setter do scene
@@ -67,17 +68,32 @@ class App {
 		return this._scene;
 	}
 	
+	/*	* Setter do stlLoader
+		* @param {StlLoader} _stlLoader
+	 *	*/
+	public set stlLoader (_stlLoader: StlLoader) {
+		this._stlLoader = _stlLoader;
+	}
+	
+	/*	* Getter do stlLoader
+		* @returns {StlLoader}
+	 *	*/
+	public get stlLoader () : StlLoader {
+		return this._stlLoader;
+	}
+	
 	/*	* Stworzenie i przypisanie wszystkich składowych aplikacji
 		*
 	 *	*/
 	public initialize () : void {
 		this.gl.clearColor(0, 0, 0, 1);
 		
+		// Ustawienie viewporta
+		this.scene.initViewport();
+		
 		// Tworzenie mapy
 		this.scene.createMap();
 		
-		// Podepnij odpowiedni shader
-		this.shader.use();
 		// Odpal animationFrame jak juz wszystko jest zainicjowane
 		this.animate();
 		

@@ -1,3 +1,4 @@
+
 class StandardShader {
 	private vertexSource: string;
 	private fragmentSource: string;
@@ -7,17 +8,24 @@ class StandardShader {
 	 *	*/
 	public constructor () {
 		this.vertexSource = `
-			attribute vec3 position;
+			attribute vec4 aVertexPosition;
+			attribute vec4 aVertexColor;
 			
-			void main() {
-				gl_Position = vec4(position, 1.0);
+			uniform mat4 uProjectionMatrix;
+			uniform mat4 uModelViewMatrix;
+			
+			varying lowp vec4 vColor;
+			
+			void main(void) {
+				gl_Position = uProjectionMatrix * uModelViewMatrix * aVertexPosition;
+				vColor = aVertexColor;
 			}
 		`;
 		this.fragmentSource = `
-			precision mediump float;
+			varying lowp vec4 vColor;
 			
-			void main() {
-				gl_FragColor = vec4(1.0);
+			void main(void) {
+				gl_FragColor = vColor;
 			}
 		`;
 	}

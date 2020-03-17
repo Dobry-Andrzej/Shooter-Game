@@ -1,3 +1,4 @@
+
 import App from '../app';
 import Mesh from '../mesh/mesh';
 
@@ -41,6 +42,13 @@ class Scene {
 		return this._meshes;
 	}
 	
+	public initViewport () : void {
+		let gl = this.main.gl;
+		let canvas = this.main.canvas;
+		
+		gl.viewport(0, 0, canvas.width, canvas.height);
+	}
+	
 	/*	* Rysuje buffery wszystkich meshy 
 		*
 	 *	*/
@@ -63,19 +71,16 @@ class Scene {
 	public createMap () : void {
 		let gl = this.main.gl;
 		let mesh = new Mesh("mapa", gl);
+		let stlLoader = this.main.stlLoader;
+		let self: Scene = this;
 		
-		let vertices : number[] = [
-			0,		0, 		0,
-			0,		0.5, 	0,
-			0.5,	0, 		0,
-			0,		0.5, 	0,
-			0.5,	0, 		0,
-			0.5,	0.5,	0
-		];
+		stlLoader.load("shooter/src/meshes/map.stl", function(vertices: number[]) {
+			mesh.vertices = vertices;
+			mesh.bindArrays();
 		
-		mesh.vertices = vertices;
+			self.add(mesh);
+		});
 		
-		this.add(mesh);
 	}
 
 }
