@@ -10,7 +10,7 @@ class App {
 	private _scene: Scene;
 	private _stlLoader: StlLoader;
 	
-	//private rightPanelControls: RightPanelControls;
+	private _rightPanelControls: RightPanelControls;
 	
 	/*	* Tworzy nową instancję App
 		* @param {HTMLCanvasElement} canvas
@@ -23,7 +23,7 @@ class App {
 		this._stlLoader = new StlLoader();
 		//TODO: Dodanie wszystkich pochodnych, takich jak np. eventy, fizyka, generator mapy, itp
 		
-		//this.rightPanelControls = new RightPanelControls();
+		this._rightPanelControls = new RightPanelControls();
 	}
 	
 	/*	* Setter do gl
@@ -97,7 +97,7 @@ class App {
 		// Odpal animationFrame jak juz wszystko jest zainicjowane
 		this.animate();
 		
-		//this.rightPanelControls.initialize();
+		this._rightPanelControls.setHp(69);
 	}
 	
 	/*	* Funkcja do zczytywania wydarzenia od zmiany rozmiaru okna

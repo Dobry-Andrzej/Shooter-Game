@@ -7,3 +7,27 @@
     font-size: 1em;
     text-align: center;
 }
+progress {
+  width: 200px;
+  padding: 4px;
+  border: 0 none;
+  background: #444;
+  border-radius: 14px;
+}
+progress::-moz-progress-bar {
+  border-radius: 12px;
+  background: #FF0000;
+}
+/* webkit */
+@media screen and (-webkit-min-device-pixel-ratio:0) {
+  progress {
+    height: 25px;
+  }
+}
+progress::-webkit-progress-bar {
+    background: transparent;
+}  
+progress::-webkit-progress-value {  
+  border-radius: 12px;
+  background: #FF0000;
+} 
