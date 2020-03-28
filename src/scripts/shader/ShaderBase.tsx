@@ -58,8 +58,7 @@ class ShaderBase {
 		
 		this._program = this.createProgram(gl, vertexShader, fragmentShader);
 		
-		this.initAttributes(gl);
-		this.initUniforms(gl);
+		
 		
 		return this;
 	}
@@ -72,9 +71,7 @@ class ShaderBase {
 		
 		gl.useProgram(this._program);
 		
-		this.bindAttributes(mesh);
-		this.updateUniforms(mesh);
-		this.drawBuffer(mesh);
+		
 	}
 	
 	/*	* Genertuje program i zalacza do niego shadery
