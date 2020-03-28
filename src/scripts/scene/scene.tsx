@@ -80,27 +80,27 @@ class Scene {
 		let stlLoader = new StlLoader();
 		let self: Scene = this;
 		
-		mesh.vertices = new Float32Array([
-			0,        0,         0,
-            0,        0.5,     0,
-            0.5,    0,         0,
-            0,        0.5,     0,
-            0.5,    0,         0,
-            0.5,    0.5,    0
-		]);
-		
-		mesh.updateBuffers();
-		
-		this.add(mesh);
-		
-		/*stlLoader.load("shooter/src/meshes/map.stl", function(vertices: number[]) {
+		stlLoader.load("shooter/src/meshes/map.stl", function(vertices: number[]) {
 			mesh.vertices = new Float32Array(vertices);
 			
+			let colors: number[] = [];
+			colors.length = vertices.length;
+			//Cziterstwo jak na razie, tylko po to, żeby widzieć różnice między ścianami
+			for (let i: number = 0; i < colors.length / 3; i++) {
+				let i3: number = i * 3;
+				
+				colors[i3] = 0.1;
+				colors[i3 + 1] = 0.7;
+				colors[i3 + 2] = (i3 / colors.length);
+			}
+			
+			mesh.colors = new Float32Array(colors);
+			
 			mesh.setPosition(0, 0, 0);
-			mesh.updateMatrices();
+			mesh.updateBuffers();
 		
 			self.add(mesh);
-		});*/
+		});
 		
 	}
 

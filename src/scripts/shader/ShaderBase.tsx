@@ -87,7 +87,7 @@ class ShaderBase {
 	private initAttributes (gl: WebGLRenderingContext) : void {
 		let program = this._program as WebGLProgram;
 		this._attributes.aVertexPosition = new Attribute(gl, program, 'aVertexPosition', 3, gl.FLOAT);
-		//this._attributes.aVertexColors = new Attribute(gl, program, 'aVertexColor', 3, gl.FLOAT);
+		this._attributes.aVertexColor = new Attribute(gl, program, 'aVertexColor', 3, gl.FLOAT);
 	}
 	
 	/*	* Funkcja do zainicjowania uniformów do shadera
@@ -102,6 +102,7 @@ class ShaderBase {
 	 *	*/
 	private bindAttributes (mesh: Mesh) : void {
 		this._attributes.aVertexPosition.bindToBuffer(mesh.renderData.vertexBuffer);
+		this._attributes.aVertexColor.bindToBuffer(mesh.renderData.colorBuffer);
 	}
 	
 	/*	* Funkcja do zainicjowania atrybutów do shadera

@@ -42,11 +42,25 @@ class RenderData {
 		this._vertexBuffer = vertexBuffer;
 	}
 	
-	/*	* Getter do gl
+	/*	* Getter do vertexBuffer
 		* @returns {Buffer}
 	 *	*/
 	public get vertexBuffer () : Buffer {
 		return this._vertexBuffer;
+	}
+	
+	/*	* Setter do colorBuffer
+		* @param {Buffer} buffer
+	 *	*/
+	public set colorBuffer (colorBuffer: Buffer) {
+		this._vertexBuffer = colorBuffer;
+	}
+	
+	/*	* Getter do colorBuffer
+		* @returns {Buffer}
+	 *	*/
+	public get colorBuffer () : Buffer {
+		return this._colorBuffer;
 	}
 	
 	/*	* Setter do shaderType

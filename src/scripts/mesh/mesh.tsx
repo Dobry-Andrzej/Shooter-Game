@@ -1,7 +1,8 @@
 
 import ShaderList from '../shader/ShaderList';
 import RenderData from './meshData/RenderData';
-import Matrix from '../math/Matrix';
+
+import { mat4 } from 'gl-matrix';
 
 class Mesh {
 	private _name: string;
@@ -10,7 +11,7 @@ class Mesh {
 	private _vertices: Float32Array;
 	private _colors: Float32Array;
 	
-	private _matrix: Matrix;
+	private _matrix: mat4;
 	
 	/*	* Tworzy nową instancję Mesh
 		* @param {string} name
@@ -23,7 +24,7 @@ class Mesh {
 		this._vertices = new Float32Array(0);
 		this._colors = new Float32Array(0);
 		
-		this._matrix = new Matrix();
+		this._matrix = mat4.create();
 	}
 	
 	/*	* Setter do name
@@ -89,7 +90,7 @@ class Mesh {
 		* @param {number} z
 	 *	*/
 	public setPosition (x: number, y: number, z: number) : void {
-		this._matrix.setPosition(x, y, z);
+		console.log(x, y, z);
 	}
 	
 	/*	* Funkcja do zwracania vertexAmount
@@ -104,6 +105,7 @@ class Mesh {
 	 *	*/
 	public updateBuffers () : void {
 		this.updateVertexBuffer();
+		this.updateColorBuffer();
 	}
 	
 	/*	* Aktualizuje vertex buffer na podstawie _vertices
@@ -111,6 +113,13 @@ class Mesh {
 	 *	*/
 	public updateVertexBuffer () : void {
 		this._renderData.vertexBuffer.update(this._vertices, this.getVertexAmount() * 3);
+	}
+	
+	/*	* Aktualizuje color buffer na podstawie _colors
+		*
+	 *	*/
+	public updateColorBuffer () : void {
+		this._renderData.colorBuffer.update(this._colors, this.getVertexAmount() * 3);
 	}
 	
 	/*	* Aktualizuje macierze i binduje na nowo do uniformów
