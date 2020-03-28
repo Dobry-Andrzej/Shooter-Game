@@ -1,9 +1,12 @@
 
-import App from '../app';
-import Mesh from '../mesh/mesh';
+import App from '../App';
+import Mesh from '../mesh/Mesh';
+import StlLoader from '../loaders/StlLoader';
 
 class Scene {
 	private _main: App;
+	private _gl: WebGLRenderingContext;
+	
 	private _meshes: Mesh[];
 	
 	/*	* Tworzy nową instancję Scene
@@ -11,6 +14,8 @@ class Scene {
 	 *	*/
 	public constructor (_main: App) {
 		this._main = _main;
+		this._gl = _main.gl;
+		
 		this._meshes = [];
 	}
 	
@@ -52,9 +57,10 @@ class Scene {
 	/*	* Rysuje buffery wszystkich meshy 
 		*
 	 *	*/
-	public drawMeshes () : void {
+	public renderMeshes () : void {
+		//TODO Przekazanie camery do rendera
 		for (let i: number = 0; i < this.meshes.length; i++) {
-			this.meshes[i].draw();
+			this._meshes[i].render();
 		}
 	}
 	
@@ -62,21 +68,23 @@ class Scene {
 		*
 	 *	*/
 	public add (mesh: Mesh) : void {
-		this.meshes.push(mesh);
+		this._meshes.push(mesh);
 	}
 	
 	/*	* Tworzy geometrie i objekt mapy i dodaje do sceny
 		*
 	 *	*/
 	public createMap () : void {
-		let gl = this.main.gl;
+		let gl = this._main.gl;
 		let mesh = new Mesh("mapa", gl);
-		let stlLoader = this.main.stlLoader;
+		let stlLoader = new StlLoader();
 		let self: Scene = this;
 		
 		stlLoader.load("shooter/src/meshes/map.stl", function(vertices: number[]) {
 			mesh.vertices = vertices;
-			mesh.bindArraysAndEnableProgram();
+			
+			mesh.setPosition(0, 0, 0);
+			mesh.updateMatrices();
 		
 			self.add(mesh);
 		});

@@ -1,14 +1,12 @@
 
-import RightPanelControls from './rightPanelControls';
-import Scene from './scene/scene';
-import StlLoader from './stlloader';
+import RightPanelControls from './RightPanelControls';
+import Scene from './scene/Scene';
 
 class App {	
 	private _gl: WebGLRenderingContext;
 	private _canvas: HTMLCanvasElement;
 	
 	private _scene: Scene;
-	private _stlLoader: StlLoader;
 	
 	private _rightPanelControls: RightPanelControls;
 	
@@ -17,10 +15,12 @@ class App {
 	 *	*/
 	public constructor (_canvas: HTMLCanvasElement) {
 		this._canvas = _canvas as HTMLCanvasElement;
+		
 		this._gl = _canvas.getContext('webgl') as WebGLRenderingContext;
+		//Enable Depth Test
+		this._gl.enable(this._gl.DEPTH_TEST);
 		
 		this._scene = new Scene(this);
-		this._stlLoader = new StlLoader();
 		//TODO: Dodanie wszystkich pochodnych, takich jak np. eventy, fizyka, generator mapy, itp
 		
 		this._rightPanelControls = new RightPanelControls();
@@ -68,20 +68,6 @@ class App {
 		return this._scene;
 	}
 	
-	/*	* Setter do stlLoader
-		* @param {StlLoader} _stlLoader
-	 *	*/
-	public set stlLoader (_stlLoader: StlLoader) {
-		this._stlLoader = _stlLoader;
-	}
-	
-	/*	* Getter do stlLoader
-		* @returns {StlLoader}
-	 *	*/
-	public get stlLoader () : StlLoader {
-		return this._stlLoader;
-	}
-	
 	/*	* Stworzenie i przypisanie wszystkich składowych aplikacji
 		*
 	 *	*/
@@ -113,7 +99,7 @@ class App {
 	private animate () : void {
 		this._gl.clear(this._gl.COLOR_BUFFER_BIT);
 		
-		this._scene.drawMeshes();
+		this._scene.renderMeshes();
 		
 		requestAnimationFrame(this.animate.bind(this));
 	}

@@ -1,12 +1,14 @@
 
-class StandardShader {
-	private vertexSource: string;
-	private fragmentSource: string;
+import ShaderBase from '../ShaderBase';
+
+class StandardShader extends ShaderBase {
 	
 	/*	* Tworzy nową instancję StandardShader
 		*
 	 *	*/
 	public constructor () {
+		super();
+		console.log(this);
 		this.vertexSource = `
 			attribute vec4 aVertexPosition;
 			attribute vec4 aVertexColor;
@@ -28,20 +30,6 @@ class StandardShader {
 				gl_FragColor = vColor;
 			}
 		`;
-	}
-	
-	/*	* Getter do vertexSource
-		* @returns {string}
-	 *	*/
-	public getVertexSource () : string {
-		return this.vertexSource;
-	}
-	
-	/*	* Getter do fragmentSource
-		* @returns {string}
-	 *	*/
-	public getFragmentSource () : string {
-		return this.fragmentSource;
 	}
 }
 

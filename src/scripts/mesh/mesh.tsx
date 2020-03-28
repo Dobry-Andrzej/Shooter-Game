@@ -1,13 +1,16 @@
 
-import RenderData from './meshData/renderData';
+import ShaderList from '../shader/ShaderList';
+import RenderData from './meshData/RenderData';
+import Matrix from '../math/Matrix';
 
 class Mesh {
 	private _name: string;
-	private _gl: WebGLRenderingContext;
 	private _renderData: RenderData;
 	
 	private _vertices: number[];
 	private _colors: number[];
+	
+	private _matrix: Matrix;
 	
 	/*	* Tworzy nową instancję Mesh
 		* @param {string} _name
@@ -15,11 +18,12 @@ class Mesh {
 	 *	*/
 	public constructor (_name: string, _gl: WebGLRenderingContext) {
 		this._name = _name;
-		this._gl = _gl;
-		this._renderData = new RenderData(_gl, "standardShader");
+		this._renderData = new RenderData(_gl);
 		
 		this._vertices = [];
 		this._colors = [];
+		
+		this._matrix = new Matrix();
 	}
 	
 	/*	* Setter do name
@@ -79,6 +83,15 @@ class Mesh {
 		return this._renderData;
 	}
 	
+	/*	* Funkcja do zwracania zmieniania pozycji mesha
+		* @param {number} x
+		* @param {number} y
+		* @param {number} z
+	 *	*/
+	public setPosition (x: number, y: number, z: number) : void {
+		this._matrix.setPosition(x, y, z);
+	}
+	
 	/*	* Funkcja do zwracania vertexAmount
 		* @returns {number[]}
 	 *	*/
@@ -86,22 +99,26 @@ class Mesh {
 		return this._vertices.length / 3;
 	}
 	
-	public updateMatrices () : void {
-		//this._renderData.bindUniforms(this._projectionMatrix, this._modelViewMatrix);
-	}
-	
-	public bindArraysAndEnableProgram () : void {
-		this._renderData.bindVertexArray(this._vertices);
-		//this._renderData.bindUniforms(this._projectionMatrix, this._modelViewMatrix);
-		
-		//this._renderData.enableProgramUsageAndDepth();
-	}
-	
-	/*	* Rysuje buffery dla tego mesha
+	/*	* Aktualizuje macierze i binduje na nowo do uniformów
 		*
 	 *	*/
-	public draw () : void {
-		this._renderData.draw(this.getVertexAmount());
+	public updateMatrices () : void {
+		
+	}
+	
+	/*	* Odpala shader rendering dla tego mesha
+		*
+	 *	*/
+	public render () : void {
+		ShaderList[this._renderData.shaderType].getOrCreate(this._renderData.gl).draw(this);
+	}
+	
+	/*	* Oblicza na nowo macierze do projekcji na podstawie podanej camery
+		* @param {Camera} camera
+		*
+	 *	*/
+	private computeProjectAndModelViewMatrices () : void {
+		//TODO: camera
 	}
 
 }
