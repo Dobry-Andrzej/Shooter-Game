@@ -1,11 +1,13 @@
 
 import Mesh from './../mesh/Mesh';
+import Attribute from './../render/Attribute';
 
 class ShaderBase {
 	private _vertexSource: string;
 	private _fragmentSource: string;
 	
 	private _program: WebGLProgram | null;
+	private _attributes: { [aVertexPosition: string]: Attribute };
 	
 	/*	* Tworzy nową instancję StandardShader
 		*
@@ -15,6 +17,8 @@ class ShaderBase {
 		this._fragmentSource = ``;
 		
 		this._program = null;
+		
+		this._attributes = {};
 	}
 	
 	/*	* Setter do vertexSource
@@ -50,7 +54,7 @@ class ShaderBase {
 		* @returns ShaderBase
 	 *	*/
 	public getOrCreate (gl: WebGLRenderingContext) : ShaderBase {
-		if (this._program) {
+		if (this._program != null) {
 			return this;
 		}
 		let vertexShader = this.loadShader(gl, this._vertexSource, gl.VERTEX_SHADER);
@@ -58,7 +62,8 @@ class ShaderBase {
 		
 		this._program = this.createProgram(gl, vertexShader, fragmentShader);
 		
-		
+		this.initAttributes(gl);
+		this.initUniforms(gl);
 		
 		return this;
 	}
@@ -71,7 +76,45 @@ class ShaderBase {
 		
 		gl.useProgram(this._program);
 		
+		this.bindAttributes(mesh);
+		this.updateUniforms(mesh);
+		this.drawBuffer(mesh);
+	}
+	
+	/*	* Funkcja do zainicjowania atrybutów do shadera
+		* @param {WebGLRenderingContext} gl
+	 *	*/
+	private initAttributes (gl: WebGLRenderingContext) : void {
+		let program = this._program as WebGLProgram;
+		this._attributes.aVertexPosition = new Attribute(gl, program, 'aVertex', 3, gl.FLOAT);
+	}
+	
+	/*	* Funkcja do zainicjowania uniformów do shadera
+		* @param {WebGLRenderingContext} gl
+	 *	*/
+	private initUniforms (gl: WebGLRenderingContext) : void {
 		
+	}
+	
+	/*	* Funkcja do zainicjowania atrybutów do shadera
+		* @param {Mesh} mesh
+	 *	*/
+	private bindAttributes (mesh: Mesh) : void {
+		//
+	}
+	
+	/*	* Funkcja do zainicjowania atrybutów do shadera
+		* @param {Mesh} mesh
+	 *	*/
+	private updateUniforms (mesh: Mesh) : void {
+		//
+	}
+	
+	/*	* Funkcja do zainicjowania atrybutów do shadera
+		* @param {Mesh} mesh
+	 *	*/
+	private drawBuffer (mesh: Mesh) : void {
+		//
 	}
 	
 	/*	* Genertuje program i zalacza do niego shadery

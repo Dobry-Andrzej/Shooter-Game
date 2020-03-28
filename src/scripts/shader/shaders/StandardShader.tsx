@@ -8,7 +8,7 @@ class StandardShader extends ShaderBase {
 	 *	*/
 	public constructor () {
 		super();
-		console.log(this);
+		
 		this.vertexSource = `
 			attribute vec4 aVertexPosition;
 			attribute vec4 aVertexColor;
