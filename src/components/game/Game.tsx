@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import './Game.css';
-import App from '../../scripts/App';
+import AppController from '../../scripts/AppController';
 import RightPanel from '../rightPanel/RightPanel';
 
 class Game extends Component {
@@ -18,8 +18,7 @@ class Game extends Component {
 	componentDidMount() {
 		const canvas = document.getElementById('webGlcanvas') as HTMLCanvasElement;
 		
-		const app = new App(canvas);
-		app.initialize();
+		AppController.init(canvas);
 	}
 	
 }
