@@ -1,5 +1,5 @@
 
-import RenderData from './renderData';
+import RenderData from './meshData/renderData';
 
 class Mesh {
 	private _name: string;
@@ -90,9 +90,11 @@ class Mesh {
 		//this._renderData.bindUniforms(this._projectionMatrix, this._modelViewMatrix);
 	}
 	
-	public bindArrays () : void {
+	public bindArraysAndEnableProgram () : void {
 		this._renderData.bindVertexArray(this._vertices);
 		//this._renderData.bindUniforms(this._projectionMatrix, this._modelViewMatrix);
+		
+		//this._renderData.enableProgramUsageAndDepth();
 	}
 	
 	/*	* Rysuje buffery dla tego mesha

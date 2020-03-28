@@ -76,7 +76,7 @@ class Scene {
 		
 		stlLoader.load("shooter/src/meshes/map.stl", function(vertices: number[]) {
 			mesh.vertices = vertices;
-			mesh.bindArrays();
+			mesh.bindArraysAndEnableProgram();
 		
 			self.add(mesh);
 		});

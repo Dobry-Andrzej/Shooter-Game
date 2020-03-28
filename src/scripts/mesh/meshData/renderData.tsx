@@ -1,5 +1,5 @@
 
-import StandardShader from '../shader/standardShader';
+import StandardShader from '../../shader/standardShader';
 
 class RenderData {
 	private _gl: WebGLRenderingContext;
@@ -81,9 +81,6 @@ class RenderData {
 		gl.enableVertexAttribArray(0);
 		
 		gl.drawArrays(gl.TRIANGLES, 0, elementAmount);
-		
-		// Podepnij odpowiedni program
-		gl.useProgram(this._program);
 	}
 	
 	
@@ -117,6 +114,16 @@ class RenderData {
 			false,
 			modelViewMatrix
 		);
+	}
+	
+	/*	* Włącza użycie programu i depth test
+		*
+	 *	*/
+	public enableProgramUsageAndDepth () : void {
+		// Podepnij odpowiedni program
+		this._gl.useProgram(this._program);
+		
+		this._gl.enable(this._gl.DEPTH_TEST);
 	}
 	
 	/*	* Generuje shadery, laduje do nich kod i kompiluje

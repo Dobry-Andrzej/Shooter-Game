@@ -86,13 +86,13 @@ class App {
 		*
 	 *	*/
 	public initialize () : void {
-		this.gl.clearColor(0, 0, 0, 1);
+		this._gl.clearColor(0, 0, 0, 1);
 		
 		// Ustawienie viewporta
-		this.scene.initViewport();
+		this._scene.initViewport();
 		
 		// Tworzenie mapy
-		this.scene.createMap();
+		this._scene.createMap();
 		
 		// Odpal animationFrame jak juz wszystko jest zainicjowane
 		this.animate();
@@ -111,9 +111,9 @@ class App {
 		*
 	 *	*/
 	private animate () : void {
-		this.gl.clear(this.gl.COLOR_BUFFER_BIT);
+		this._gl.clear(this._gl.COLOR_BUFFER_BIT);
 		
-		this.scene.drawMeshes();
+		this._scene.drawMeshes();
 		
 		requestAnimationFrame(this.animate.bind(this));
 	}
