@@ -10,20 +10,20 @@ class Scene {
 	private _meshes: Mesh[];
 	
 	/*	* Tworzy nową instancję Scene
-		* @param {App} _main
+		* @param {App} main
 	 *	*/
-	public constructor (_main: App) {
-		this._main = _main;
-		this._gl = _main.gl;
+	public constructor (main: App) {
+		this._main = main;
+		this._gl = main.gl;
 		
 		this._meshes = [];
 	}
 	
 	/*	* Setter do main
-		* @param {App} _main
+		* @param {App} main
 	 *	*/
-	public set main (_main: App) {
-		this._main = _main;
+	public set main (main: App) {
+		this._main = main;
 	}
 	
 	/*	* Getter do main
@@ -34,10 +34,10 @@ class Scene {
 	}
 	
 	/*	* Setter do meshes
-		* @param {Mesh[]} _meshes
+		* @param {Mesh[]} meshes
 	 *	*/
-	public set meshes (_meshes: Mesh[]) {
-		this._meshes = _meshes;
+	public set meshes (meshes: Mesh[]) {
+		this._meshes = meshes;
 	}
 	
 	/*	* Getter do meshes
@@ -48,8 +48,8 @@ class Scene {
 	}
 	
 	public initViewport () : void {
-		let gl = this.main.gl;
-		let canvas = this.main.canvas;
+		let gl = this._main.gl;
+		let canvas = this._main.canvas;
 		
 		gl.viewport(0, 0, canvas.width, canvas.height);
 	}
@@ -80,14 +80,27 @@ class Scene {
 		let stlLoader = new StlLoader();
 		let self: Scene = this;
 		
-		stlLoader.load("shooter/src/meshes/map.stl", function(vertices: number[]) {
-			mesh.vertices = vertices;
+		mesh.vertices = new Float32Array([
+			0,        0,         0,
+            0,        0.5,     0,
+            0.5,    0,         0,
+            0,        0.5,     0,
+            0.5,    0,         0,
+            0.5,    0.5,    0
+		]);
+		
+		mesh.updateBuffers();
+		
+		this.add(mesh);
+		
+		/*stlLoader.load("shooter/src/meshes/map.stl", function(vertices: number[]) {
+			mesh.vertices = new Float32Array(vertices);
 			
 			mesh.setPosition(0, 0, 0);
 			mesh.updateMatrices();
 		
 			self.add(mesh);
-		});
+		});*/
 		
 	}
 

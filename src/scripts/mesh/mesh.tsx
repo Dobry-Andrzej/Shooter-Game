@@ -7,30 +7,30 @@ class Mesh {
 	private _name: string;
 	private _renderData: RenderData;
 	
-	private _vertices: number[];
-	private _colors: number[];
+	private _vertices: Float32Array;
+	private _colors: Float32Array;
 	
 	private _matrix: Matrix;
 	
 	/*	* Tworzy nową instancję Mesh
-		* @param {string} _name
-		* @param {WebGLRenderingContext} _gl
+		* @param {string} name
+		* @param {WebGLRenderingContext} gl
 	 *	*/
-	public constructor (_name: string, _gl: WebGLRenderingContext) {
-		this._name = _name;
-		this._renderData = new RenderData(_gl);
+	public constructor (name: string, gl: WebGLRenderingContext) {
+		this._name = name;
+		this._renderData = new RenderData(gl);
 		
-		this._vertices = [];
-		this._colors = [];
+		this._vertices = new Float32Array(0);
+		this._colors = new Float32Array(0);
 		
 		this._matrix = new Matrix();
 	}
 	
 	/*	* Setter do name
-		* @param {string} _name
+		* @param {string} name
 	 *	*/
-	public set name (_name: string) {
-		this._name = _name;
+	public set name (name: string) {
+		this._name = name;
 	}
 	
 	/*	* Getter do name
@@ -42,38 +42,38 @@ class Mesh {
 	
 	
 	/*	* Setter do vertices
-		* @param {number[]} _vertices
+		* @param {Float32Array} vertices
 	 *	*/
-	public set vertices (_vertices: number[]) {
-		this._vertices = _vertices;
+	public set vertices (vertices: Float32Array) {
+		this._vertices = vertices;
 	}
 	
 	/*	* Getter do vertices
-		* @returns {number[]}
+		* @returns {Float32Array}
 	 *	*/
-	public get vertices () : number[] {
+	public get vertices () : Float32Array {
 		return this._vertices;
 	}
 	
 	/*	* Setter do colors
-		* @param {number[]} _colors
+		* @param {Float32Array} colors
 	 *	*/
-	public set colors (_colors: number[]) {
-		this._colors = _colors;
+	public set colors (colors: Float32Array) {
+		this._colors = colors;
 	}
 	
 	/*	* Getter do colors
-		* @returns {number[]}
+		* @returns {Float32Array}
 	 *	*/
-	public get colors () : number[] {
+	public get colors () : Float32Array {
 		return this._colors;
 	}
 	
 	/*	* Setter do renderData
 		* @param {RenderData} _renderData
 	 *	*/
-	public set renderData (_renderData: RenderData) {
-		this._renderData = _renderData;
+	public set renderData (renderData: RenderData) {
+		this._renderData = renderData;
 	}
 	
 	/*	* Getter do renderData
@@ -97,6 +97,20 @@ class Mesh {
 	 *	*/
 	public getVertexAmount () : number {
 		return this._vertices.length / 3;
+	}
+	
+	/*	* Aktualizuje wszystkie buffery na podstawie topologii
+		*
+	 *	*/
+	public updateBuffers () : void {
+		this.updateVertexBuffer();
+	}
+	
+	/*	* Aktualizuje vertex buffer na podstawie _vertices
+		*
+	 *	*/
+	public updateVertexBuffer () : void {
+		this._renderData.vertexBuffer.update(this._vertices, this.getVertexAmount() * 3);
 	}
 	
 	/*	* Aktualizuje macierze i binduje na nowo do uniformów

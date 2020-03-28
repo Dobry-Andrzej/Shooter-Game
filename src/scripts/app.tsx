@@ -13,10 +13,10 @@ class App {
 	/*	* Tworzy nową instancję App
 		* @param {HTMLCanvasElement} canvas
 	 *	*/
-	public constructor (_canvas: HTMLCanvasElement) {
-		this._canvas = _canvas as HTMLCanvasElement;
+	public constructor (canvas: HTMLCanvasElement) {
+		this._canvas = canvas;
 		
-		this._gl = _canvas.getContext('webgl') as WebGLRenderingContext;
+		this._gl = canvas.getContext('webgl') as WebGLRenderingContext;
 		//Enable Depth Test
 		this._gl.enable(this._gl.DEPTH_TEST);
 		
@@ -27,10 +27,10 @@ class App {
 	}
 	
 	/*	* Setter do gl
-		* @param {WebGLRenderingContext} _gl
+		* @param {WebGLRenderingContext} gl
 	 *	*/
-	public set gl (_gl: WebGLRenderingContext) {
-		this._gl = _gl;
+	public set gl (gl: WebGLRenderingContext) {
+		this._gl = gl;
 	}
 	
 	/*	* Getter do gl
@@ -41,10 +41,10 @@ class App {
 	}
 	
 	/*	* Setter do canvas
-		* @param {HTMLCanvasElement} _canvas
+		* @param {HTMLCanvasElement} canvas
 	 *	*/
-	public set canvas (_canvas: HTMLCanvasElement) {
-		this._canvas = _canvas;
+	public set canvas (canvas: HTMLCanvasElement) {
+		this._canvas = canvas;
 	}
 	
 	/*	* Getter do canvas
@@ -55,10 +55,10 @@ class App {
 	}
 	
 	/*	* Setter do scene
-		* @param {Scene} _scene
+		* @param {Scene} scene
 	 *	*/
-	public set scene (_scene: Scene) {
-		this._scene = _scene;
+	public set scene (scene: Scene) {
+		this._scene = scene;
 	}
 	
 	/*	* Getter do scene

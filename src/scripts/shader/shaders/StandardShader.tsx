@@ -10,24 +10,25 @@ class StandardShader extends ShaderBase {
 		super();
 		
 		this.vertexSource = `
-			attribute vec4 aVertexPosition;
-			attribute vec4 aVertexColor;
+			attribute vec3 aVertexPosition;
+			attribute vec3 aVertexColor;
 			
 			uniform mat4 uProjectionMatrix;
 			uniform mat4 uModelViewMatrix;
 			
-			varying lowp vec4 vColor;
+			varying lowp vec3 vColor;
 			
 			void main(void) {
-				gl_Position = uProjectionMatrix * uModelViewMatrix * aVertexPosition;
 				vColor = aVertexColor;
+				
+				gl_Position = vec4(aVertexPosition, 1.0);
 			}
 		`;
 		this.fragmentSource = `
-			varying lowp vec4 vColor;
+			varying lowp vec3 vColor;
 			
 			void main(void) {
-				gl_FragColor = vColor;
+				gl_FragColor = vec4(1.0);
 			}
 		`;
 	}

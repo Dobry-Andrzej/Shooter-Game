@@ -22,10 +22,10 @@ class ShaderBase {
 	}
 	
 	/*	* Setter do vertexSource
-		* @param {string} _vertexSource
+		* @param {string} vertexSource
 	 *	*/
-	public set vertexSource (_vertexSource: string) {
-		this._vertexSource = _vertexSource;
+	public set vertexSource (vertexSource: string) {
+		this._vertexSource = vertexSource;
 	}
 	
 	/*	* Getter do vertexSource
@@ -36,10 +36,10 @@ class ShaderBase {
 	}
 	
 	/*	* Setter do fragmentSource
-		* @param {string} _fragmentSource
+		* @param {string} fragmentSource
 	 *	*/
-	public set fragmentSource (_fragmentSource: string) {
-		this._fragmentSource = _fragmentSource;
+	public set fragmentSource (fragmentSource: string) {
+		this._fragmentSource = fragmentSource;
 	}
 	
 	/*	* Getter do fragmentSource
@@ -86,7 +86,8 @@ class ShaderBase {
 	 *	*/
 	private initAttributes (gl: WebGLRenderingContext) : void {
 		let program = this._program as WebGLProgram;
-		this._attributes.aVertexPosition = new Attribute(gl, program, 'aVertex', 3, gl.FLOAT);
+		this._attributes.aVertexPosition = new Attribute(gl, program, 'aVertexPosition', 3, gl.FLOAT);
+		//this._attributes.aVertexColors = new Attribute(gl, program, 'aVertexColor', 3, gl.FLOAT);
 	}
 	
 	/*	* Funkcja do zainicjowania uniformów do shadera
@@ -100,7 +101,7 @@ class ShaderBase {
 		* @param {Mesh} mesh
 	 *	*/
 	private bindAttributes (mesh: Mesh) : void {
-		//
+		this._attributes.aVertexPosition.bindToBuffer(mesh.renderData.vertexBuffer);
 	}
 	
 	/*	* Funkcja do zainicjowania atrybutów do shadera
@@ -114,7 +115,21 @@ class ShaderBase {
 		* @param {Mesh} mesh
 	 *	*/
 	private drawBuffer (mesh: Mesh) : void {
-		//
+		var gl = mesh.renderData.gl;
+		
+		gl.drawArrays(gl.TRIANGLES, 0, mesh.getVertexAmount());
+		
+		gl.bindBuffer(gl.ARRAY_BUFFER, null);
+		//gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, null);
+
+		this.unbindAttributes();
+	}
+	
+	/*	* Funkcja do unbindowania atrybutów
+		*
+	 *	*/
+	private unbindAttributes () : void {
+		this._attributes.aVertexPosition.unbind();
 	}
 	
 	/*	* Genertuje program i zalacza do niego shadery
