@@ -96,8 +96,9 @@ class Scene {
 			
 			mesh.colors = new Float32Array(colors);
 			
-			mesh.setPosition(0, 0, 0);
+			mesh.setPosition(0, -1, -5);
 			mesh.updateBuffers();
+			mesh.updateMatrices();
 		
 			self.add(mesh);
 		});

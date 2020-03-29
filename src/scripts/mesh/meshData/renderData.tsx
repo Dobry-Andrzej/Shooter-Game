@@ -1,7 +1,9 @@
 
+import Mesh from '../Mesh';
 import Buffer from '../../render/Buffer';
 
 class RenderData {
+	private _mesh: Mesh;
 	private _gl: WebGLRenderingContext;
 	
 	private _vertexBuffer: Buffer;
@@ -10,9 +12,11 @@ class RenderData {
 	private _shaderType: number;
 	
 	/*	* Tworzy nową instancję RenderData
-		* @param {WebGLRenderingContext) gl
+		* @param {Mesh) mesh
+		* @param {WebGLRenderingContext} gl
 	 *	*/
-	public constructor (gl: WebGLRenderingContext) {
+	public constructor (mesh: Mesh, gl: WebGLRenderingContext) {
+		this._mesh = mesh;
 		this._gl = gl;
 		
 		this._vertexBuffer = new Buffer(gl, gl.ARRAY_BUFFER, gl.DYNAMIC_DRAW);

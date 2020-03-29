@@ -1,17 +1,24 @@
 
 import ShaderList from '../shader/ShaderList';
-import RenderData from './meshData/RenderData';
 
-import { mat4 } from 'gl-matrix';
+import RenderData from './meshData/RenderData';
+import TransformData from './meshData/TransformData';
+
+import { vec3, quat, mat4 } from 'gl-matrix';
 
 class Mesh {
 	private _name: string;
 	private _renderData: RenderData;
+	private _transformData: TransformData;
 	
 	private _vertices: Float32Array;
 	private _colors: Float32Array;
 	
 	private _matrix: mat4;
+	
+	private _position: vec3;
+	private _rotation: quat;
+	private _scale: vec3;
 	
 	/*	* Tworzy nową instancję Mesh
 		* @param {string} name
@@ -19,12 +26,19 @@ class Mesh {
 	 *	*/
 	public constructor (name: string, gl: WebGLRenderingContext) {
 		this._name = name;
-		this._renderData = new RenderData(gl);
+		this._renderData = new RenderData(this, gl);
+		this._transformData = new TransformData(this);
 		
 		this._vertices = new Float32Array(0);
 		this._colors = new Float32Array(0);
 		
 		this._matrix = mat4.create();
+		
+		this._position = vec3.create();
+		this._rotation = quat.create();
+		this._scale = vec3.create();
+		// Skala musi być 1, bo skala 0 to troche mały objekt
+		vec3.set(this._scale, 1, 1, 1);
 	}
 	
 	/*	* Setter do name
@@ -84,13 +98,36 @@ class Mesh {
 		return this._renderData;
 	}
 	
+	/*	* Setter do transformData
+		* @param {TransformData} _renderData
+	 *	*/
+	public set transformData (transformData: TransformData) {
+		this._transformData = transformData;
+	}
+	
+	/*	* Getter do transformData
+		* @returns {TransformData}
+	 *	*/
+	public get transformData () : TransformData {
+		return this._transformData;
+	}
+	
 	/*	* Funkcja do zwracania zmieniania pozycji mesha
 		* @param {number} x
 		* @param {number} y
 		* @param {number} z
 	 *	*/
 	public setPosition (x: number, y: number, z: number) : void {
-		console.log(x, y, z);
+		vec3.set(this._position, x, y, z);
+	}
+	
+	/*	* Funkcja do zwracania zmieniania rotacji mesha
+		* @param {number} x
+		* @param {number} y
+		* @param {number} z
+	 *	*/
+	public setRotation (x: number, y: number, z: number) : void {
+		quat.fromEuler(this._rotation, x, y, z);
 	}
 	
 	/*	* Funkcja do zwracania vertexAmount
@@ -122,11 +159,11 @@ class Mesh {
 		this._renderData.colorBuffer.update(this._colors, this.getVertexAmount() * 3);
 	}
 	
-	/*	* Aktualizuje macierze i binduje na nowo do uniformów
+	/*	* Aktualizuje macierze na podstawie pozycji, rotacji i skali
 		*
 	 *	*/
 	public updateMatrices () : void {
-		
+		this._transformData.updateMatrices(this._position, this._rotation, this._scale);
 	}
 	
 	/*	* Odpala shader rendering dla tego mesha

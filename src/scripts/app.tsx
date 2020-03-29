@@ -9,6 +9,8 @@ class App {
 	private _scene: Scene;
 	
 	private _rightPanelControls: RightPanelControls;
+	//To jest do usuniecia po zabawie w rotacje
+	private _rotate: number;
 	
 	/*	* Tworzy nową instancję App
 		* @param {HTMLCanvasElement} canvas
@@ -24,6 +26,9 @@ class App {
 		//TODO: Dodanie wszystkich pochodnych, takich jak np. eventy, fizyka, generator mapy, itp
 		
 		this._rightPanelControls = new RightPanelControls();
+		
+		//To jest do usuniecia po zabawie w animatora
+		this._rotate = 0;
 	}
 	
 	/*	* Setter do gl
@@ -72,7 +77,7 @@ class App {
 		*
 	 *	*/
 	public initialize () : void {
-		this._gl.clearColor(0, 0, 0, 1);
+		this._gl.clearColor(0.9, 0.9, 0.9, 1);
 		
 		// Ustawienie viewporta
 		this._scene.initViewport();
@@ -99,6 +104,10 @@ class App {
 	private animate () : void {
 		this._gl.clear(this._gl.COLOR_BUFFER_BIT);
 		
+		for (let i: number = 0; i < this._scene.meshes.length; i++) {
+			this._scene.meshes[i].setRotation(0, this._rotate += 1, 0);
+			this._scene.meshes[i].updateMatrices();
+		}
 		this._scene.renderMeshes();
 		
 		requestAnimationFrame(this.animate.bind(this));

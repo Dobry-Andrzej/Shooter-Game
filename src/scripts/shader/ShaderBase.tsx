@@ -7,7 +7,12 @@ class ShaderBase {
 	private _fragmentSource: string;
 	
 	private _program: WebGLProgram | null;
-	private _attributes: { [aVertexPosition: string]: Attribute };
+	private _attributes: { 
+		[key: string]: Attribute
+	};
+	private _uniforms: {
+		[key: string]: WebGLUniformLocation | null
+	};
 	
 	/*	* Tworzy nową instancję StandardShader
 		*
@@ -19,6 +24,7 @@ class ShaderBase {
 		this._program = null;
 		
 		this._attributes = {};
+		this._uniforms = {};
 	}
 	
 	/*	* Setter do vertexSource
@@ -86,6 +92,7 @@ class ShaderBase {
 	 *	*/
 	private initAttributes (gl: WebGLRenderingContext) : void {
 		let program = this._program as WebGLProgram;
+		
 		this._attributes.aVertexPosition = new Attribute(gl, program, 'aVertexPosition', 3, gl.FLOAT);
 		this._attributes.aVertexColor = new Attribute(gl, program, 'aVertexColor', 3, gl.FLOAT);
 	}
@@ -94,7 +101,10 @@ class ShaderBase {
 		* @param {WebGLRenderingContext} gl
 	 *	*/
 	private initUniforms (gl: WebGLRenderingContext) : void {
+		let program = this._program as WebGLProgram;
 		
+		this._uniforms.uProjectionMatrix = gl.getUniformLocation(program, 'uProjectionMatrix');
+		this._uniforms.uModelViewMatrix = gl.getUniformLocation(program, 'uModelViewMatrix');
 	}
 	
 	/*	* Funkcja do zainicjowania atrybutów do shadera
@@ -109,14 +119,17 @@ class ShaderBase {
 		* @param {Mesh} mesh
 	 *	*/
 	private updateUniforms (mesh: Mesh) : void {
-		//
+		let gl = mesh.renderData.gl;
+		
+		gl.uniformMatrix4fv(this._uniforms.uProjectionMatrix, false, mesh.transformData.projectionMatrix);
+		gl.uniformMatrix4fv(this._uniforms.uModelViewMatrix, false, mesh.transformData.modelViewMatrix);
 	}
 	
 	/*	* Funkcja do zainicjowania atrybutów do shadera
 		* @param {Mesh} mesh
 	 *	*/
 	private drawBuffer (mesh: Mesh) : void {
-		var gl = mesh.renderData.gl;
+		let gl = mesh.renderData.gl;
 		
 		gl.drawArrays(gl.TRIANGLES, 0, mesh.getVertexAmount());
 		
