@@ -89,14 +89,14 @@ class Scene {
 			for (let i: number = 0; i < colors.length / 3; i++) {
 				let i3: number = i * 3;
 				
-				colors[i3] = 0.1;
-				colors[i3 + 1] = 0.7;
-				colors[i3 + 2] = (i3 / colors.length);
+				colors[i3] = 0.4 + 0.6 * (i3 / colors.length);
+				colors[i3 + 1] = 0.4 + 0.6 * (i3 / colors.length);
+				colors[i3 + 2] = 0.4 + 0.6 * (i3 / colors.length);
 			}
 			
 			mesh.colors = new Float32Array(colors);
 			
-			mesh.setPosition(0, -1, -5);
+			mesh.setPosition(0, 0, 0);
 			mesh.updateBuffers();
 			mesh.updateMatrices();
 		

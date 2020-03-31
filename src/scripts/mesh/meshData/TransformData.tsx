@@ -24,7 +24,7 @@ class TransformData {
 		this._projectionMatrix = mat4.create();		
 		this._modelViewMatrix = mat4.create();
 		
-		mat4.perspective(this._projectionMatrix, (Math.PI / 4), (800 / 600), 0.1, 1000);
+		mat4.perspective(this._projectionMatrix, (Math.PI / 4), (800 / 600), 0.01, 1000);
 	}
 	
 	/*	* Setter do projectionMatrix
@@ -65,9 +65,21 @@ class TransformData {
 		
 		quat2.fromRotation(tmp_quat2, rotation);
 		
-		mat4.identity(this._modelViewMatrix);	
+		let view: mat4 = mat4.create();
+		let eye: vec3 = vec3.create();
+		let center: vec3 = vec3.create();
+		let up: vec3 = vec3.create();
+		
+		vec3.set(eye, 1, 1, 1);
+		vec3.set(center, 0, 0, 0);
+		vec3.set(up, 0, 1, 0);
+		
+		mat4.lookAt(view, eye, center, up);
+		
+		mat4.identity(this._modelViewMatrix);
 		//Na razie bezposrednio uaktualniam tą macierz, docelowo camera tu bedzie śmigać		
 		mat4.fromRotationTranslationScale(this._modelViewMatrix, tmp_quat2, position, scale);
+		mat4.multiply(this._modelViewMatrix, view, this._modelViewMatrix);
 	}
 	
 }
