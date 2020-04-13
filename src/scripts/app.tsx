@@ -1,16 +1,16 @@
 
 import RightPanelControls from './RightPanelControls';
 import Scene from './scene/Scene';
+import Events from './managers/Events';
 
 class App {	
 	private _gl: WebGLRenderingContext;
 	private _canvas: HTMLCanvasElement;
 	
 	private _scene: Scene;
+	private _events: Events;
 	
 	private _rightPanelControls: RightPanelControls;
-	//To jest do usuniecia po zabawie w rotacje
-	private _rotate: number;
 	
 	/*	* Tworzy nową instancję App
 		* @param {HTMLCanvasElement} canvas
@@ -19,16 +19,11 @@ class App {
 		this._canvas = canvas;
 		
 		this._gl = canvas.getContext('webgl') as WebGLRenderingContext;
-		//Enable Depth Test
-		this._gl.enable(this._gl.DEPTH_TEST);
 		
 		this._scene = new Scene(this);
-		//TODO: Dodanie wszystkich pochodnych, takich jak np. eventy, fizyka, generator mapy, itp
+		this._events = new Events(this);
 		
 		this._rightPanelControls = new RightPanelControls();
-		
-		//To jest do usuniecia po zabawie w animatora
-		this._rotate = 0;
 	}
 	
 	/*	* Setter do gl
@@ -73,10 +68,27 @@ class App {
 		return this._scene;
 	}
 	
+	/*	* Setter do events
+		* @param {Events} events
+	 *	*/
+	public set events (events: Events) {
+		this._events = events;
+	}
+	
+	/*	* Getter do events
+		* @returns {Events}
+	 *	*/
+	public get events () : Events {
+		return this._events;
+	}
+	
 	/*	* Stworzenie i przypisanie wszystkich składowych aplikacji
 		*
 	 *	*/
 	public initialize () : void {
+		//Enable Depth Test
+		this._gl.enable(this._gl.DEPTH_TEST);
+		
 		this._gl.clearColor(0.9, 0.9, 0.9, 1);
 		
 		// Ustawienie viewporta
