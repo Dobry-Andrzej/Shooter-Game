@@ -14,6 +14,11 @@ class ShaderBase {
 		[key: string]: WebGLUniformLocation | null
 	};
 	
+	private _primitiveType: string;	
+	private _primitives: {
+		[key: string]: number
+	};
+	
 	/*	* Tworzy nową instancję StandardShader
 		*
 	 *	*/
@@ -25,6 +30,15 @@ class ShaderBase {
 		
 		this._attributes = {};
 		this._uniforms = {};
+		
+		this._primitiveType = "triangles";
+		this._primitives = {
+			points: 0,
+			lines: 1,
+			line_loop: 2,
+			line_strip: 3,
+			triangles: 4
+		}
 	}
 	
 	/*	* Setter do vertexSource
@@ -53,6 +67,20 @@ class ShaderBase {
 	 *	*/
 	public get fragmentSource () : string {
 		return this._fragmentSource;
+	}
+	
+	/*	* Setter do primitiveType
+		* @param {string} primitiveType
+	 *	*/
+	public set primitiveType (primitiveType: string) {
+		this._primitiveType = primitiveType;
+	}
+	
+	/*	* Getter do primitiveType
+		* @returns {string}
+	 *	*/
+	public get primitiveType () : string {
+		return this._primitiveType;
 	}
 	
 	/*	* Funkcja do inicjowania webgl programu lub zwracania go jezeli się to juz stało
@@ -131,7 +159,7 @@ class ShaderBase {
 	private drawBuffer (mesh: Mesh) : void {
 		let gl = mesh.renderData.gl;
 		
-		gl.drawArrays(gl.TRIANGLES, 0, mesh.getVertexAmount());
+		gl.drawArrays(this._primitives[this._primitiveType], 0, mesh.getVertexAmount());
 		
 		gl.bindBuffer(gl.ARRAY_BUFFER, null);
 		//gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, null);

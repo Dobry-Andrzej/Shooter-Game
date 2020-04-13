@@ -1,15 +1,15 @@
 
 import ShaderBase from '../ShaderBase';
 
-class StandardShader extends ShaderBase {
+class WireframeShader extends ShaderBase {
 	
-	/*	* Tworzy nową instancję StandardShader
+	/*	* Tworzy nową instancję WireframeShader
 		*
 	 *	*/
 	public constructor () {
 		super();
 		
-		this.primitiveType = "triangles";
+		this.primitiveType = "lines";
 		
 		this.vertexSource = `
 			attribute vec3 aVertexPosition;
@@ -36,4 +36,4 @@ class StandardShader extends ShaderBase {
 	}
 }
 
-export default StandardShader;
+export default WireframeShader;

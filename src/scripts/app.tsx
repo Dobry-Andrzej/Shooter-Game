@@ -104,10 +104,6 @@ class App {
 	private animate () : void {
 		this._gl.clear(this._gl.COLOR_BUFFER_BIT);
 		
-		for (let i: number = 0; i < this._scene.meshes.length; i++) {
-			this._scene.meshes[i].setRotation(0, this._rotate += 1, 0);
-			this._scene.meshes[i].updateMatrices();
-		}
 		this._scene.renderMeshes();
 		
 		requestAnimationFrame(this.animate.bind(this));

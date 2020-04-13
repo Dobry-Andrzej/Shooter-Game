@@ -1,7 +1,8 @@
 
 import App from '../App';
 import Mesh from '../mesh/Mesh';
-import StlLoader from '../loaders/StlLoader';
+import Grid from '../primitives/Grid';
+import Plane from '../primitives/Plane';
 
 class Scene {
 	private _main: App;
@@ -76,32 +77,24 @@ class Scene {
 	 *	*/
 	public createMap () : void {
 		let gl = this._main.gl;
-		let mesh = new Mesh("mapa", gl);
-		let stlLoader = new StlLoader();
-		let self: Scene = this;
+		let grid = new Grid("grid", gl);
+		let plane = new Plane("plane", gl);
 		
-		stlLoader.load("shooter/src/meshes/map.stl", function(vertices: number[]) {
-			mesh.vertices = new Float32Array(vertices);
-			
-			let colors: number[] = [];
-			colors.length = vertices.length;
-			//Cziterstwo jak na razie, tylko po to, żeby widzieć różnice między ścianami
-			for (let i: number = 0; i < colors.length / 3; i++) {
-				let i3: number = i * 3;
-				
-				colors[i3] = 0.4 + 0.6 * (i3 / colors.length);
-				colors[i3 + 1] = 0.4 + 0.6 * (i3 / colors.length);
-				colors[i3 + 2] = 0.4 + 0.6 * (i3 / colors.length);
-			}
-			
-			mesh.colors = new Float32Array(colors);
-			
-			mesh.setPosition(0, 0, 0);
-			mesh.updateBuffers();
-			mesh.updateMatrices();
+		grid.generate(50, 50, 25, 25);
 		
-			self.add(mesh);
-		});
+		grid.setPosition(0, 0, 0);
+		grid.updateBuffers();
+		grid.updateMatrices();
+		
+		this.add(grid);
+		
+		plane.generate(50, 50, 25, 25);
+		
+		plane.setPosition(0, 0, 0);
+		plane.updateBuffers();
+		plane.updateMatrices();
+		
+		this.add(plane);
 		
 	}
 
