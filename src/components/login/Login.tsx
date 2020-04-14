@@ -1,8 +1,8 @@
 import React from 'react';
 import './Login.css';
 import { useForm } from 'react-hook-form';
+import Button from '@material-ui/core/Button';
 import history from "../../routing/History";
-
 
 const Login = () => {
 
@@ -15,7 +15,7 @@ const Login = () => {
         return (
             <div className="Login">
                 <div className="menuContainer">
-                    <div className="titleGame">Let's Shoot Someone!</div>
+                    <div className="titleGame">Sign In and Shoot Someone!</div>
                     <div className="loginFormContainer">
                         <form onSubmit={handleSubmit(onSubmit)} className="loginForm">
                             <div>
@@ -39,8 +39,9 @@ const Login = () => {
                                 />
                             </div>
                             {errors.password && <p className="login-error">Password is required and must be longer than 6 characters!</p>}
-                            <button type="submit">Sign In</button>
-                            <p className="message"> You don't have an account?  <button className="btn btn-success" onClick={() => history.push("/Register")}>Register</button>
+                            <Button variant="contained" color="primary" type="submit">Sign In</Button>
+                            <p className="message"> You don't have an account?
+                                <Button variant="contained" color="primary" size="small" onClick={() => history.push("/Register")}>Register</Button>
                             </p>
                         </form>
                     </div>

@@ -1,19 +1,20 @@
-import React, { Component } from "react";
-import history from '../../routing/History';
-import "./Menu.css";
+import React, { Component } from 'react';
+import Button from '@material-ui/core/Button';
+import './Menu.css';
+import history from "../../routing/History";
 
-export default class Menu extends Component {
-    render() {
-        return (
-            <div className="menuContainer">
-                <div className="titleGame">
-                    <h1>Home page</h1>
-                    <form>
-                        <button className="btn btn-success" onClick={() => history.push("/Game")}>Click button to view Game</button>
-                        <button className="btn btn-success" onClick={() => history.push("/Login")}>Click button to view Login</button>
-                    </form>
-                </div>
+const Menu = () => {
+    return (
+        <div>
+            <Button variant="contained" className="btn btn-success" onClick={() => history.push("/Login")}>Log In</Button>
+            <Button variant="contained" className="btn btn-success" onClick={() => history.push("/Register")}>Sign Up</Button>
+            <div className='menuContainer'>
+                <form>
+                    <Button variant="contained" color="primary" className="btn btn-success" onClick={() => history.push("/Game")}>Start Game</Button>
+                </form>
             </div>
-        );
-    }
-}
+        </div>
+    );
+};
+
+export default Menu;

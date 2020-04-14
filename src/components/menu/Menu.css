@@ -1,12 +1,3 @@
 .menuContainer {
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-}
-.titleGame{
-    font-size: 2em;
     text-align: center;
-}
-.link {
-    text-decoration: none;
 }

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import './Register.css';
 import { useForm } from 'react-hook-form';
+import Button from '@material-ui/core/Button';
 import axios from "axios";
 import history from "../../routing/History";
 
@@ -63,7 +64,7 @@ import history from "../../routing/History";
         };
         return (
             <div className="menuContainer">
-                <div className="titleGame">Witaj w naszej kochanej grze przeglądarkowej</div>
+                <div className="titleGame">Register to unlock ranked games!</div>
                 <div className="loginFormContainer">
                     <form onSubmit={handleSubmit(onSubmit)} className="loginForm">
                         <input type="text"
@@ -79,7 +80,7 @@ import history from "../../routing/History";
                         />
                         {errors.login && <p className="login-error">Login is required!</p>}
                         <input type="password"
-                               placeholder="password"
+                               placeholder="Password"
                                name="Password"
                                ref={register(
                                    {
@@ -91,7 +92,7 @@ import history from "../../routing/History";
                         />
                         {errors.Password && <p className="login-error">Password is required and must be longer than 6 characters!</p>}
                         <input type="text"
-                               placeholder="email"
+                               placeholder="Email"
                                name="email"
                                ref={register(
                                    {
@@ -126,8 +127,10 @@ import history from "../../routing/History";
                                )}
                         />
                         {errors.surname && <p className="login-error">Surname is required!</p>}
-                        <button>Create</button>
-                        <p className="message"> Do you have an account? <p>Sign In</p></p>
+                        <Button variant="contained" color="primary">Create</Button>
+                        <p className="message"> Do you have an account?
+                            <Button variant="contained" color="primary" size="small" onClick={() => history.push("/Login")}>Sign In</Button>
+                        </p>
                     </form>
                 </div>
             </div>
