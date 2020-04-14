@@ -1,5 +1,7 @@
 
 import Mesh from '../mesh/Mesh';
+import Camera from '../modules/Camera';
+
 import Attribute from './../render/Attribute';
 
 class ShaderBase {
@@ -104,14 +106,15 @@ class ShaderBase {
 	
 	/*	* Funkcja do rysowania mesha uzywajac tego shadera
 		* @param {Mesh} mesh
+		* @param {Camera} camera
 	 *	*/
-	public draw(mesh: Mesh) : void {
+	public draw(mesh: Mesh, camera: Camera) : void {
 		let gl = mesh.renderData.gl;
 		
 		gl.useProgram(this._program);
 		
 		this.bindAttributes(mesh);
-		this.updateUniforms(mesh);
+		this.updateUniforms(mesh, camera);
 		this.drawBuffer(mesh);
 	}
 	
@@ -132,7 +135,8 @@ class ShaderBase {
 		let program = this._program as WebGLProgram;
 		
 		this._uniforms.uProjectionMatrix = gl.getUniformLocation(program, 'uProjectionMatrix');
-		this._uniforms.uModelViewMatrix = gl.getUniformLocation(program, 'uModelViewMatrix');
+		this._uniforms.uViewMatrix = gl.getUniformLocation(program, 'uViewMatrix');
+		this._uniforms.uModelMatrix = gl.getUniformLocation(program, 'uModelMatrix');
 	}
 	
 	/*	* Funkcja do zainicjowania atrybutów do shadera
@@ -145,12 +149,14 @@ class ShaderBase {
 	
 	/*	* Funkcja do zainicjowania atrybutów do shadera
 		* @param {Mesh} mesh
+		* @param {Camera} camera
 	 *	*/
-	private updateUniforms (mesh: Mesh) : void {
+	private updateUniforms (mesh: Mesh, camera: Camera) : void {
 		let gl = mesh.renderData.gl;
 		
-		gl.uniformMatrix4fv(this._uniforms.uProjectionMatrix, false, mesh.transformData.projectionMatrix);
-		gl.uniformMatrix4fv(this._uniforms.uModelViewMatrix, false, mesh.transformData.modelViewMatrix);
+		gl.uniformMatrix4fv(this._uniforms.uProjectionMatrix, false, camera.projectionMatrix);
+		gl.uniformMatrix4fv(this._uniforms.uViewMatrix, false, camera.viewMatrix);
+		gl.uniformMatrix4fv(this._uniforms.uModelMatrix, false, mesh.transformData.matrix);
 	}
 	
 	/*	* Funkcja do zainicjowania atrybutów do shadera

@@ -59,9 +59,9 @@ class Scene {
 		*
 	 *	*/
 	public renderMeshes () : void {
-		//TODO Przekazanie camery do rendera
+		let camera = this._main.camera;
 		for (let i: number = 0; i < this.meshes.length; i++) {
-			this._meshes[i].render();
+			this._meshes[i].render(camera);
 		}
 	}
 	
@@ -77,6 +77,7 @@ class Scene {
 	 *	*/
 	public createMap () : void {
 		let gl = this._main.gl;
+		
 		let grid = new Grid("grid", gl);
 		let plane = new Plane("plane", gl);
 		

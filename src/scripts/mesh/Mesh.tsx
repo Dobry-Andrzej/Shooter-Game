@@ -4,6 +4,9 @@ import ShaderList from '../shader/ShaderList';
 import RenderData from './meshData/RenderData';
 import TransformData from './meshData/TransformData';
 
+import Camera from '../modules/Camera';
+
+import GeoMath from '../math/GeoMath';
 import { vec3, quat, mat4 } from 'gl-matrix';
 
 class Mesh {
@@ -137,6 +140,56 @@ class Mesh {
 		return this._vertices.length / 3;
 	}
 	
+	/*	* Sprawdza intersekcje miedzy rayem a trójkątami
+		* @param {vec3} origin
+		* @param {vec3} direction
+		* @returns {number}
+	 *	*/
+	public intersectTriangles (origin: vec3, direction: vec3) : number {
+		let i: number;
+		let v9: number;
+		let v18: number;
+		let distance: number;
+		let smallestDistance: number = -1;
+		let triangleIndex: number = -1;
+		
+		let vA: vec3 = vec3.create();
+		let vB: vec3 = vec3.create();
+		let vC: vec3 = vec3.create();
+		let vInt: vec3 = vec3.create();
+		
+		let triangleAmount: number = this.getVertexAmount() / 3;
+		
+		for (i = 0; i < triangleAmount; i++) {
+			v9 = i * 9;
+			
+			vec3.set(vA, this._vertices[v9], this._vertices[v9 + 1], this._vertices[v9 + 2]);
+			vec3.set(vB, this._vertices[v9 + 3], this._vertices[v9 + 4], this._vertices[v9 + 5]);
+			vec3.set(vC, this._vertices[v9 + 6], this._vertices[v9 + 7], this._vertices[v9 + 8]);
+			
+			distance = GeoMath.intersectTriangle(origin, direction, vA, vB, vC, vInt);
+			
+			if (distance == -1) continue;
+			
+			if (smallestDistance == -1 || smallestDistance > distance) {
+				smallestDistance = distance;
+				triangleIndex = i;
+			}
+		}
+		
+		let quadIndex: number = Math.floor(triangleIndex / 2);
+		
+		v18 = quadIndex * 18;
+		
+		for (i = 0; i < 18; i++) {
+			this._colors[v18 + i] = 0;
+		}
+		
+		this.updateColorBuffer();
+		
+		return smallestDistance;
+	}
+	
 	/*	* Aktualizuje wszystkie buffery na podstawie topologii
 		*
 	 *	*/
@@ -159,7 +212,7 @@ class Mesh {
 		this._renderData.colorBuffer.update(this._colors, this.getVertexAmount() * 3);
 	}
 	
-	/*	* Aktualizuje macierze na podstawie pozycji, rotacji i skali
+	/*	* Aktualizuje macierze na podstawie pozycji, rotacji, skali i kamery
 		*
 	 *	*/
 	public updateMatrices () : void {
@@ -167,18 +220,10 @@ class Mesh {
 	}
 	
 	/*	* Odpala shader rendering dla tego mesha
-		*
-	 *	*/
-	public render () : void {
-		ShaderList[this._renderData.shaderType].getOrCreate(this._renderData.gl).draw(this);
-	}
-	
-	/*	* Oblicza na nowo macierze do projekcji na podstawie podanej camery
 		* @param {Camera} camera
-		*
 	 *	*/
-	private computeProjectAndModelViewMatrices () : void {
-		//TODO: camera
+	public render (camera: Camera) : void {
+		ShaderList[this._renderData.shaderType].getOrCreate(this._renderData.gl).draw(this, camera);
 	}
 
 }

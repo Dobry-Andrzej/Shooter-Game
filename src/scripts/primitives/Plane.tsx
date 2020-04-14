@@ -33,7 +33,7 @@ class Plane extends Mesh {
 		let colors: number[] = [];
 		let offset: number = 0;
 		
-		let len: number = (2 * segmentsX * segmentsY + segmentsX + segmentsY) * 9;
+		let len: number = (2 * segmentsX * segmentsY) * 9;
 		
 		vertices.length = len;
 		colors.length = len;

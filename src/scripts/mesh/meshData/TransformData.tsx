@@ -8,9 +8,6 @@ class TransformData {
 	
 	private _matrix: mat4;
 	
-	private _projectionMatrix: mat4;
-	private _modelViewMatrix: mat4;
-	
 	/*	* Tworzy nową instancję TransformData
 		* @param {Mesh) mesh
 	 *	*/
@@ -18,41 +15,20 @@ class TransformData {
 		this._mesh = mesh;
 		
 		this._matrix = mat4.create();
-		// view bydzie z camery i odpowiada za to gdzie camera patrzy i jej rotacje
-		// this._view = mat4.create();
-		
-		this._projectionMatrix = mat4.create();		
-		this._modelViewMatrix = mat4.create();
-		
-		mat4.perspective(this._projectionMatrix, (Math.PI / 4), (800 / 600), 0.01, 1000);
 	}
 	
-	/*	* Setter do projectionMatrix
-		* @param {mat4} projectionMatrix
+	/*	* Setter do matrix
+		* @param {mat4} matrix
 	 *	*/
-	public set projectionMatrix (projectionMatrix: mat4) {
-		this._projectionMatrix = projectionMatrix;
+	public set matrix (matrix: mat4) {
+		this._matrix = matrix;
 	}
 	
-	/*	* Getter do projectionMatrix
-		* @param {mat4} projectionMatrix
+	/*	* Getter do matrix
+		* @param {mat4} matrix
 	 *	*/
-	public get projectionMatrix () : mat4 {
-		return this._projectionMatrix;
-	}
-	
-	/*	* Setter do modelViewMatrix
-		* @param {mat4} modelViewMatrix
-	 *	*/
-	public set modelViewMatrix (modelViewMatrix: mat4) {
-		this._modelViewMatrix = modelViewMatrix;
-	}
-	
-	/*	* Getter do modelViewMatrix
-		* @param {mat4} modelViewMatrix
-	 *	*/
-	public get modelViewMatrix () : mat4 {
-		return this._modelViewMatrix;
+	public get matrix () : mat4 {
+		return this._matrix;
 	}
 	
 	/*	* Aktualizuje macierze
@@ -65,21 +41,9 @@ class TransformData {
 		
 		quat2.fromRotation(tmp_quat2, rotation);
 		
-		let view: mat4 = mat4.create();
-		let eye: vec3 = vec3.create();
-		let center: vec3 = vec3.create();
-		let up: vec3 = vec3.create();
-		
-		vec3.set(eye, 40, 70, 40);
-		vec3.set(center, 0, 0, 0);
-		vec3.set(up, 0, 1, 0);
-		
-		mat4.lookAt(view, eye, center, up);
-		
-		mat4.identity(this._modelViewMatrix);
+		mat4.identity(this._matrix);
 		//Na razie bezposrednio uaktualniam tą macierz, docelowo camera tu bedzie śmigać		
-		mat4.fromRotationTranslationScale(this._modelViewMatrix, tmp_quat2, position, scale);
-		mat4.multiply(this._modelViewMatrix, view, this._modelViewMatrix);
+		mat4.fromRotationTranslationScale(this._matrix, tmp_quat2, position, scale);
 	}
 	
 }

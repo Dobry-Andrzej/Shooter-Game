@@ -18,6 +18,10 @@ class StlLoader {
 		request.send(null);
 	}
 	
+	/*	* Parsuje zaladowane dane na tablice vertexów
+		* @param {string} data
+		* @returns {number[]}
+	 *	*/
 	private parse (data: string) : number[] {
 		var binData: ArrayBuffer = this.ensureBinary(data);
 		var binaryCheck: Boolean = this.isBinary(binData);
@@ -32,6 +36,10 @@ class StlLoader {
 		return vertices;
 	}
 	
+	/*	* Zmienia na binarny format
+		* @param {string} buffer
+		* @returns {ArrayBuffer}
+	 *	*/
 	private ensureBinary (buffer: string) : ArrayBuffer {
 		var arrayBuffer = new Uint8Array(buffer.length);
 		for (let i: number = 0; i < buffer.length; i++) {
@@ -41,6 +49,12 @@ class StlLoader {
 		return arrayBuffer.buffer;
 	}
 	
+	/*	* Sprawdza czy kazdy byte w query pokrywa sie z bytem w DataView na podstawie offsetu
+		* @param {number[]} query
+		* @param {DataView} reader
+		* @param {number} offset
+		* @returns {Boolean}
+	 *	*/
 	private matchDataViewAt (query: number[], reader: DataView, offset: number) : Boolean {
 		// Check if each byte in query matches the corresponding byte from the current offset
 		for (let i: number = 0, il: number = query.length; i < il; i++) {
@@ -51,6 +65,10 @@ class StlLoader {
 
 	}
 	
+	/*	* Sprawdza czy dane są binarne
+		* @param {ArrayBuffer} data
+		* @returns {Boolean}
+	 *	*/
 	private isBinary (data: ArrayBuffer) : Boolean {
 
 		var expect, face_size, n_faces, reader;
@@ -91,6 +109,10 @@ class StlLoader {
 
 	}
 	
+	/*	* Parsuje binarne dane wejsciowe na tablice vertexów
+		* @param {ArrayBuffer} data
+		* @returns {number[]}
+	 *	*/
 	private parseBinary (data: ArrayBuffer) : number[] {
 		var vertices: number[] = [];
 		
@@ -170,6 +192,10 @@ class StlLoader {
 
 	}
 
+	/*	* Parsuje ASCII dane wejsciowe na tablice vertexów
+		* @param {string} data
+		* @returns {number[]}
+	 *	*/
 	private parseASCII (data: string) : number[] {
 		
 		let patternFace = /facet([\s\S]*?)endfacet/g;
