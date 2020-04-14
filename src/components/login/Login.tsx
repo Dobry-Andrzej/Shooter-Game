@@ -1,7 +1,6 @@
 import React from 'react';
 import './Login.css';
 import { useForm } from 'react-hook-form';
-import { Button } from "react-bootstrap";
 import history from "../../routing/History";
 
 
@@ -41,7 +40,7 @@ const Login = () => {
                             </div>
                             {errors.password && <p className="login-error">Password is required and must be longer than 6 characters!</p>}
                             <button type="submit">Sign In</button>
-                            <p className="message"> You don't have an account?  <Button className="btn btn-success" onClick={() => history.push("/Register")}>Register</Button>
+                            <p className="message"> You don't have an account?  <button className="btn btn-success" onClick={() => history.push("/Register")}>Register</button>
                             </p>
                         </form>
                     </div>

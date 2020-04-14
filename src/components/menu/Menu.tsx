@@ -1,8 +1,6 @@
 import React, { Component } from "react";
-import { Button } from 'react-bootstrap';
 import history from '../../routing/History';
 import "./Menu.css";
-import Logo from "../home/logo.png";
 
 export default class Menu extends Component {
     render() {
@@ -11,11 +9,9 @@ export default class Menu extends Component {
                 <div className="titleGame">
                     <h1>Home page</h1>
                     <form>
-                        <Button className="btn btn-success" onClick={() => history.push("/Game")}>Click button to view Game</Button>
-                        <Button className="btn btn-success" onClick={() => history.push("/Login")}>Click button to view Login</Button>
-
+                        <button className="btn btn-success" onClick={() => history.push("/Game")}>Click button to view Game</button>
+                        <button className="btn btn-success" onClick={() => history.push("/Login")}>Click button to view Login</button>
                     </form>
-                    <img src={Logo} alt="pokemon Milosz" />
                 </div>
             </div>
         );
