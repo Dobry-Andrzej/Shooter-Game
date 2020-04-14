@@ -1,5 +1,5 @@
 
-import Mesh from './../mesh/Mesh';
+import Mesh from '../mesh/Mesh';
 import Attribute from './../render/Attribute';
 
 class ShaderBase {
