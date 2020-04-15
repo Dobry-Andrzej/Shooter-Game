@@ -10,6 +10,10 @@ class Camera {
 	private _width: number;
 	private _height: number;
 	
+	private _eye: vec3; // pozycja kamery
+	private _center: vec3; // punkt na który kamera patrzy
+	private _up: vec3; // wektor kierunku, raczej na ogół 0, 1, 0
+	
 	private _viewMatrix: mat4;
 	private _projectionMatrix: mat4;
 	private _viewportMatrix: mat4;
@@ -38,15 +42,15 @@ class Camera {
 		
 		mat4.perspective(this._projectionMatrix, (Math.PI / 4), (800 / 600), 0.01, 1000);
 		
-		let eye: vec3 = vec3.create();
-		let center: vec3 = vec3.create();
-		let up: vec3 = vec3.create();
+		this._eye = vec3.create();
+		this._center = vec3.create();
+		this._up = vec3.create();
 		
-		vec3.set(eye, 4, 7, 4);
-		vec3.set(center, 0, 0, 0);
-		vec3.set(up, 0, 1, 0);
+		vec3.set(this._eye, 4, 7, 4);
+		vec3.set(this._center, 0, 0, 0);
+		vec3.set(this._up, 0, 1, 0);
 		
-		mat4.lookAt(this._viewMatrix, eye, center, up);
+		mat4.lookAt(this._viewMatrix, this._eye, this._center, this._up);
 	}
 	
 	/*	* Setter do viewMatrix
@@ -77,40 +81,38 @@ class Camera {
 		return this._projectionMatrix;
 	}
 	
-	/*	* Funkcja do togglowania widoku
-		* @param {number} index
+	/*	* Funkcja do zoomowania kamery
+		* @param {number} delta
 	 *	*/
-	public toggleView(index: number) : void {
-		let eye: vec3 = vec3.create();
-		let center: vec3 = vec3.create();
-		let up: vec3 = vec3.create();
+	public zoom(delta: number) : void {
+		let dir: vec3 = vec3.create();
+		let distance: number = vec3.distance(this._eye, this._center);
 		
-		switch (index) {
-			case 1:
-				vec3.set(eye, 4, 1, 4);
-				break;
-			case 2:
-				vec3.set(eye, 4, 1, 4);
-				break;
-			case 3:
-				vec3.set(eye, 0, 1, 4);
-				break;
-			case 4:
-				vec3.set(eye, -4, 1, 4);
-				break;
-			case 5:
-				vec3.set(eye, -4, 1, 4);
-				break;
-			case 0:
-			default:
-				vec3.set(eye, 4, 7, 4);
-				break;
+		if (distance + delta > 0.1 && distance + delta < 20) {
+		
+			vec3.sub(dir, this._eye, this._center);
+			vec3.normalize(dir, dir);
+			vec3.scaleAndAdd(this._eye, this._eye, dir, delta);
+			
+			mat4.lookAt(this._viewMatrix, this._eye, this._center, this._up);
 		}
+	}
+	
+	/*	* Funkcja do panowania kamery
+		* @param {number} deltaX
+		* @param {number} deltaY
+		* @param {number} deltaZ
+	 *	*/
+	public pan(deltaX: number, deltaY: number, deltaZ: number) : void {
+		let delta: vec3 = vec3.create();
 		
-		vec3.set(center, 0, 0, 0);
-		vec3.set(up, 0, 1, 0);
+		vec3.set(delta, -deltaX * 1e3, -deltaY * 1e3, -deltaZ * 1e3);
 		
-		mat4.lookAt(this._viewMatrix, eye, center, up);
+		vec3.add(this._eye, this._eye, delta);
+		vec3.add(this._center, this._center, delta);
+		
+		mat4.lookAt(this._viewMatrix, this._eye, this._center, this._up);
+		
 	}
 	
 	/*	* Konwersja z pozycji ekranu na pozycje w 3d
