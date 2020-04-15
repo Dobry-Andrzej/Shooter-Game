@@ -20,9 +20,10 @@ class Events {
 		* @param {any} target
 		* @param {string} type
 		* @param {(any) => void} callback
+		* @param {boolean}
 	 *	*/
-	public attachEvent (target: any, type: string, callback: (event: any) => void) : void {
-		target.addEventListener(type, callback, true);
+	public attachEvent (target: any, type: string, callback: (event: any) => void, useCapture: boolean = false) : void {
+		target.addEventListener(type, callback, useCapture);
 	}
 
 }
