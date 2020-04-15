@@ -9,6 +9,8 @@ let app: App | null = null;
 	* @param {HTMLCanvasElement} canvas
  *	*/
 const init = async function (canvas: HTMLCanvasElement) {
+	if (app != null) return;
+	
 	app = new App(canvas);
 	await app.initialize();
 	
@@ -20,8 +22,14 @@ const init = async function (canvas: HTMLCanvasElement) {
 	let vStart: vec3 = vec3.create();
 	let vEnd: vec3 = vec3.create();
 	
+	app.events.attachEvent(canvas, "contextmenu", function(event: Event) {
+		event.preventDefault();
+		event.stopPropagation();
+	});
+	
 	app.events.attachEvent(canvas, "mousedown", function(event: MouseEvent) {
 		event.preventDefault();
+		event.stopPropagation();
 		
 		if (app != null) {
 			if (event.which == 1) {
@@ -40,13 +48,15 @@ const init = async function (canvas: HTMLCanvasElement) {
 	
 	app.events.attachEvent(canvas, "mousemove", function(event: MouseEvent) {
 		event.preventDefault();
+		event.stopPropagation();
 		
 		if (app != null) {
+			vStart = app.camera.unproject(mouseXY[0], mouseXY[1], 0.0);
+			vEnd = app.camera.unproject(event.offsetX, event.offsetY, 0.0);
 			if (panEnabled == true) {				
-				vStart = app.camera.unproject(mouseXY[0], mouseXY[1], 0.0);
-				vEnd = app.camera.unproject(event.offsetX, event.offsetY, 0.0);
-				
 				app.camera.pan(vEnd[0] - vStart[0], vEnd[1] - vStart[1], vEnd[2] - vStart[2]);
+			} else if (rotationEnabled == true) {
+				app.camera.rotate(vEnd[0] - vStart[0], vEnd[1] - vStart[1], vEnd[2] - vStart[2]);
 			}
 			
 			vec2.set(mouseXY, event.offsetX, event.offsetY);
@@ -55,6 +65,7 @@ const init = async function (canvas: HTMLCanvasElement) {
 	
 	app.events.attachEvent(canvas, "mouseup", function(event: MouseEvent) {
 		event.preventDefault();
+		event.stopPropagation();
 		
 		if (app != null) {
 			panEnabled = false;
@@ -64,6 +75,7 @@ const init = async function (canvas: HTMLCanvasElement) {
 	
 	app.events.attachEvent(canvas, "mouseout", function(event: MouseEvent) {
 		event.preventDefault();
+		event.stopPropagation();
 		
 		if (app != null) {
 			panEnabled = false;

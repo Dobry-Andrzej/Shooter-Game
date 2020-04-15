@@ -189,7 +189,7 @@ class Mesh {
 	public intersectTriangles (origin: vec3, direction: vec3, vIntOut?: vec3) : number {
 		let i: number;
 		let v9: number;
-		let v18: number;
+		
 		let distance: number;
 		let smallestDistance: number = -1;
 		let triangleIndex: number = -1;
