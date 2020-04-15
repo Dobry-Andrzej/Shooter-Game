@@ -3,13 +3,31 @@ import './Login.css';
 import { useForm } from 'react-hook-form';
 import Button from '@material-ui/core/Button';
 import history from "../../routing/History";
+import axios from "axios";
 
 const Login = () => {
 
         const { register, handleSubmit,  errors } = useForm();
 
         const onSubmit = (data:any) => {
-            console.warn(data);
+            axios.post('http://localhost:3000/auth/login/', {
+                username: data.username,
+                password: data.password
+            }).then((ret) => {
+                if (ret.status == 201) {
+                    history.push({
+                        pathname: '/Game',
+                        state: {
+                            access_token: ret.data,
+                            username: data.username
+                        }
+                    });
+                }
+            }, (error) => {
+                if (error.response.status == 401) {
+                    console.log('UNATHORIZED USER');
+                }
+            });
         };
 
         return (
@@ -21,20 +39,20 @@ const Login = () => {
                             <div>
                                 <input type="text"
                                        placeholder="Nickname"
-                                       name = "login"
+                                       name = "username"
                                        ref={register(
                                            { required: true }
                                        )}
                                 />
                             </div>
-                            {errors.login && <p className="login-error">Login is required!</p>}
+                            {errors.username && <p className="login-error">Login is required!</p>}
                             <div>
                                 <input type="password"
                                        placeholder="Password"
                                        name = "password"
                                        ref={register(
                                            { required: true, maxLength: 20,
-                                               minLength: 6 }
+                                               minLength: 2 }
                                        )}
                                 />
                             </div>
