@@ -17,12 +17,13 @@ class Game extends Component<Props> {
     }
 
     render () {
-        const usernameState = this.props.location.state;
+        const userNameState = this.props.location.state;
+        const userName = userNameState ? userNameState.username : "Guest";
 
         return (
             <div className="titleGame">
                 <div>Let's start a game</div>
-                <p>Logged as: { usernameState.username }</p>
+                <p>Logged as: { userName }</p>
                 <canvas width="800" height="600" id="webGlcanvas" className="Main-Canvas"></canvas>
 				<RightPanel />
             </div>
