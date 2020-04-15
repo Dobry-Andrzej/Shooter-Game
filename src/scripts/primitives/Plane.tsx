@@ -54,16 +54,16 @@ class Plane extends Mesh {
 				vertices[offset + 8] = -halfHeight + (y + 1) * ystep;
 				
 				colors[offset] = 0.2;
-				colors[offset + 1] = 0.5;
-				colors[offset + 2] = 0.3;
+				colors[offset + 1] = 0.2;
+				colors[offset + 2] = 0.2;
 				
 				colors[offset + 3] = 0.2;
-				colors[offset + 4] = 0.5;
-				colors[offset + 5] = 0.3;
+				colors[offset + 4] = 0.2;
+				colors[offset + 5] = 0.2;
 				
 				colors[offset + 6] = 0.2;
-				colors[offset + 7] = 0.5;
-				colors[offset + 8] = 0.3;
+				colors[offset + 7] = 0.2;
+				colors[offset + 8] = 0.2;
 				
 				// Drugi trójkąt
 				vertices[offset + 9] = -halfWidth + x * xstep;
@@ -79,16 +79,16 @@ class Plane extends Mesh {
 				vertices[offset + 17] = -halfHeight + (y + 1) * ystep;
 				
 				colors[offset + 9] = 0.2;
-				colors[offset + 10] = 0.5;
-				colors[offset + 11] = 0.3;
+				colors[offset + 10] = 0.2;
+				colors[offset + 11] = 0.2;
 				
 				colors[offset + 12] = 0.2;
-				colors[offset + 13] = 0.5;
-				colors[offset + 14] = 0.3;
+				colors[offset + 13] = 0.2;
+				colors[offset + 14] = 0.2;
 				
 				colors[offset + 15] = 0.2;
-				colors[offset + 16] = 0.5;
-				colors[offset + 17] = 0.3;
+				colors[offset + 16] = 0.2;
+				colors[offset + 17] = 0.2;
 				
 				offset += 18;
 			}

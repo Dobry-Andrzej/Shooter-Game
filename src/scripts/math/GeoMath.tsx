@@ -18,10 +18,10 @@ const intersectTriangle = (function () {
 		* @param {vec3} vA
 		* @param {vec3} vB
 		* @param {vec3} vC
-		* @param {vec3} vInt
+		* @param {vec3} vInt?
 		* @returns {number}
 	 *	*/
-	return function (origin: vec3, dir: vec3, vA: vec3, vB: vec3, vC: vec3, vInt: vec3) : number {
+	return function (origin: vec3, dir: vec3, vA: vec3, vB: vec3, vC: vec3, vInt?: vec3) : number {
 		// Generate edges
 		vec3.sub(edge0, vC, vA);
 		vec3.sub(edge1, vB, vA);
@@ -51,7 +51,9 @@ const intersectTriangle = (function () {
 			return -1.0;
 		}
 		
-		vec3.scaleAndAdd(vInt, origin, dir, t);
+		if (vInt) {
+			vec3.scaleAndAdd(vInt, origin, dir, t);
+		}
 		
 		return t;
 	}

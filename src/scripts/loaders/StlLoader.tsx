@@ -12,7 +12,7 @@ class StlLoader {
 				callback(self.parse(this.response));
 			}
 		});
-		request.open('GET', '/meshes/map.stl', true);
+		request.open('GET', url, true);
 		request.setRequestHeader('Access-Control-Allow-Origin', '*');
 		request.setRequestHeader('Access-Control-Allow-Methods', '*');
 		request.send(null);

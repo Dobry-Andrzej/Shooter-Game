@@ -42,7 +42,7 @@ class Camera {
 		let center: vec3 = vec3.create();
 		let up: vec3 = vec3.create();
 		
-		vec3.set(eye, 40, 70, 40);
+		vec3.set(eye, 4, 7, 4);
 		vec3.set(center, 0, 0, 0);
 		vec3.set(up, 0, 1, 0);
 		
@@ -75,6 +75,42 @@ class Camera {
 	 *	*/
 	public get projectionMatrix () : mat4 {
 		return this._projectionMatrix;
+	}
+	
+	/*	* Funkcja do togglowania widoku
+		* @param {number} index
+	 *	*/
+	public toggleView(index: number) : void {
+		let eye: vec3 = vec3.create();
+		let center: vec3 = vec3.create();
+		let up: vec3 = vec3.create();
+		
+		switch (index) {
+			case 1:
+				vec3.set(eye, 4, 1, 4);
+				break;
+			case 2:
+				vec3.set(eye, 4, 1, 4);
+				break;
+			case 3:
+				vec3.set(eye, 0, 1, 4);
+				break;
+			case 4:
+				vec3.set(eye, -4, 1, 4);
+				break;
+			case 5:
+				vec3.set(eye, -4, 1, 4);
+				break;
+			case 0:
+			default:
+				vec3.set(eye, 4, 7, 4);
+				break;
+		}
+		
+		vec3.set(center, 0, 0, 0);
+		vec3.set(up, 0, 1, 0);
+		
+		mat4.lookAt(this._viewMatrix, eye, center, up);
 	}
 	
 	/*	* Konwersja z pozycji ekranu na pozycje w 3d

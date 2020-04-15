@@ -24,7 +24,7 @@ class StandardShader extends ShaderBase {
 			void main(void) {
 				vColor = aVertexColor;
 				
-				gl_Position = uProjectionMatrix * uModelMatrix * uViewMatrix * vec4(aVertexPosition, 1.0);
+				gl_Position = uProjectionMatrix * uViewMatrix * uModelMatrix * vec4(aVertexPosition, 1.0);
 			}
 		`;
 		this.fragmentSource = `
