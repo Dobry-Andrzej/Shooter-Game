@@ -71,11 +71,11 @@ const init = async function (canvas: HTMLCanvasElement) {
 		}
 	}, true);
 	
-	app.events.attachEvent(canvas, "mousewheel", function(event: WheelEvent) {
+	app.events.attachEvent(canvas, "wheel", function(event: WheelEvent) {
 		event.preventDefault();
 		
 		if (app != null) {
-			app.camera.zoom(event.deltaY / 125);
+			app.camera.zoom(Math.sign(event.deltaY));
 		}
 	});
 	
