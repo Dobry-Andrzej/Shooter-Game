@@ -18,8 +18,7 @@ class Game extends Component<Props> {
 
     render () {
         const userNameState = this.props.location.state;
-		const userName = userNameState ? userNameState.userName : "Guest";
-
+        const userName = userNameState ? userNameState.username : "Guest";
         return (
             <div className="titleGame">
                 <div>Let's start a game</div>
