@@ -53,7 +53,7 @@ class Editor {
 		if (distance >= 0) {
 			let mesh = assets[this._assetIndex].clone(this._main.gl);
 			
-			mesh.setPosition(vInt[0], vInt[1], vInt[2]);
+			mesh.setPosition(Math.floor(vInt[0] * 4) / 4 + 0.125, 0, Math.floor(vInt[2] * 4) / 4 + 0.125);
 			mesh.updateBuffers();
 			mesh.updateMatrices();
 			
