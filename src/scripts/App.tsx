@@ -40,7 +40,7 @@ class App {
 		this._events = new Events();
 		
 		this._assets = [];
-		this._assetNames = ["wall", "highWall", "barrel", "flowerAsset", "brokenWall3x4"];
+		this._assetNames = ["brokenWall3x4", "barrel", "flowerAsset"];
 		
 		this._rightPanelControls = new RightPanelControls();
 	}
