@@ -81,7 +81,7 @@ class Scene {
 		let grid = new Grid("grid", gl);
 		let plane = new Plane("plane", gl);
 		
-		grid.generate(50, 50, 25, 25);
+		grid.generate(5, 5, 20, 20);
 		
 		grid.setPosition(0, 0, 0);
 		grid.updateBuffers();
@@ -89,7 +89,7 @@ class Scene {
 		
 		this.add(grid);
 		
-		plane.generate(50, 50, 25, 25);
+		plane.generate(5, 5, 20, 20);
 		
 		plane.setPosition(0, 0, 0);
 		plane.updateBuffers();

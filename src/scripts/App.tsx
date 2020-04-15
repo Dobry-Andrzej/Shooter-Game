@@ -6,6 +6,9 @@ import Camera from './modules/Camera';
 import Editor from './modules/Editor';
 
 import Events from './modules/Events';
+import Mesh from './mesh/Mesh';
+
+import StlLoader from './loaders/StlLoader';
 
 class App {	
 	private _gl: WebGLRenderingContext;
@@ -18,6 +21,9 @@ class App {
 	private _events: Events;
 	
 	private _rightPanelControls: RightPanelControls;
+	
+	private _assets: Mesh[];
+	private _assetNames: string[];
 	
 	/*	* Tworzy nową instancję App
 		* @param {HTMLCanvasElement} canvas
@@ -32,6 +38,9 @@ class App {
 		this._editor = new Editor(this);
 		
 		this._events = new Events();
+		
+		this._assets = [];
+		this._assetNames = ["flowerAsset", "wall"];
 		
 		this._rightPanelControls = new RightPanelControls();
 	}
@@ -120,10 +129,24 @@ class App {
 		return this._events;
 	}
 	
+	/*	* Setter do assets
+		* @param {Mesh[]} assets
+	 *	*/
+	public set assets (assets: Mesh[]) {
+		this._assets = assets;
+	}
+	
+	/*	* Getter do assets
+		* @returns {Assets}
+	 *	*/
+	public get assets () : Mesh[] {
+		return this._assets;
+	}
+	
 	/*	* Stworzenie i przypisanie wszystkich składowych aplikacji
 		*
 	 *	*/
-	public initialize () : void {
+	public async initialize () : Promise <void> {
 		//Enable Depth Test
 		this._gl.enable(this._gl.DEPTH_TEST);
 		
@@ -139,6 +162,40 @@ class App {
 		this.animate();
 		
 		this._rightPanelControls.setHp(69);
+		
+		await this.loadAssets();
+	}
+	
+	/*	* Funkcja do ladowania modeli
+		* @returns {Promise<void>}
+	 *	*/
+	private loadAssets () : Promise <void> {
+		let stlloader: StlLoader = new StlLoader();
+		let index: number = 0;
+		let self: App = this;
+		
+		const loopOverAssets = function(resolve: any, reject: any) {
+			stlloader.load("/meshes/assets/" + self._assetNames[index] + ".stl", function(vertices: number[]) {
+				let mesh: Mesh = new Mesh(self._assetNames[index], self._gl);
+				
+				mesh.vertices = new Float32Array(vertices);
+				mesh.colors = new Float32Array(vertices.map((x, i) => i / vertices.length));
+				
+				self._assets.push(mesh);
+				
+				index++;
+				
+				if (index >= self._assetNames.length) {
+					resolve();
+				} else {
+					loopOverAssets(resolve, reject);
+				}
+			});
+		};
+		
+		return new Promise <void> (function(resolve, reject) {
+			loopOverAssets(resolve, reject);
+		});
 	}
 	
 	/*	* Funkcja do zczytywania wydarzenia od zmiany rozmiaru okna

@@ -115,7 +115,20 @@ class Mesh {
 		return this._transformData;
 	}
 	
-	/*	* Funkcja do zwracania zmieniania pozycji mesha
+	/*	* Funkcja do zwracania kopii objektu
+		* @param {WebGLRenderingContext} gl
+		* @returns {Mesh}
+	 *	*/
+	public clone (gl: WebGLRenderingContext) : Mesh {
+		let mesh = new Mesh(this._name + "_", gl);
+		
+		mesh.vertices = new Float32Array(this._vertices);
+		mesh.colors = new Float32Array(this._colors);
+		
+		return mesh;
+	}
+	
+	/*	* Funkcja do zmieniania pozycji mesha
 		* @param {number} x
 		* @param {number} y
 		* @param {number} z
@@ -124,7 +137,16 @@ class Mesh {
 		vec3.set(this._position, x, y, z);
 	}
 	
-	/*	* Funkcja do zwracania zmieniania rotacji mesha
+	/*	* Funkcja do zmieniania skali mesha
+		* @param {number} x
+		* @param {number} y
+		* @param {number} z
+	 *	*/
+	public setScale (x: number, y: number, z: number) : void {
+		vec3.set(this._scale, x, y, z);
+	}
+	
+	/*	* Funkcja do zmieniania rotacji mesha
 		* @param {number} x
 		* @param {number} y
 		* @param {number} z
@@ -143,9 +165,10 @@ class Mesh {
 	/*	* Sprawdza intersekcje miedzy rayem a trójkątami
 		* @param {vec3} origin
 		* @param {vec3} direction
+		* @param {vec3} vIntOut
 		* @returns {number}
 	 *	*/
-	public intersectTriangles (origin: vec3, direction: vec3) : number {
+	public intersectTriangles (origin: vec3, direction: vec3, vIntOut?: vec3) : number {
 		let i: number;
 		let v9: number;
 		let v18: number;
@@ -172,20 +195,15 @@ class Mesh {
 			if (distance == -1) continue;
 			
 			if (smallestDistance == -1 || smallestDistance > distance) {
+				
 				smallestDistance = distance;
 				triangleIndex = i;
+				
+				if (vIntOut) {
+					vec3.copy(vIntOut, vInt);
+				}
 			}
 		}
-		
-		let quadIndex: number = Math.floor(triangleIndex / 2);
-		
-		v18 = quadIndex * 18;
-		
-		for (i = 0; i < 18; i++) {
-			this._colors[v18 + i] = 0;
-		}
-		
-		this.updateColorBuffer();
 		
 		return smallestDistance;
 	}

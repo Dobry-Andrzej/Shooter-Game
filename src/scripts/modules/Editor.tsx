@@ -5,18 +5,37 @@ import { vec3 } from 'gl-matrix';
 
 class Editor {
 	private _main: App;
+	private _assetIndex: number;
 	
 	/*	* Tworzy nową instancję Editor
 		*
 	 *	*/
 	public constructor (main: App) {
 		this._main = main;
+		
+		this._assetIndex = 0;
+	}
+	
+	/*	* Setter do assetIndex
+		* @param {number} assetIndex
+	 *	*/
+	public set assetIndex (assetIndex: number) {
+		this._assetIndex = assetIndex;
+	}
+	
+	/*	* Getter do assetIndex
+		* @returns {number}
+	 *	*/
+	public get assetIndex () : number {
+		return this._assetIndex;
 	}
 	
 	/*	* Uaktualnie dany fragment mapy
 		* @param {MouseEvent} event
 	 *	*/
 	public tryToUpdateGridSquare (event: MouseEvent) : void {
+		let scene = this._main.scene;
+		let assets = this._main.assets;
 		let camera = this._main.camera;
 		let plane = this._main.scene.meshes[1];
 		
@@ -28,7 +47,18 @@ class Editor {
 		vec3.sub(vDir, vFar, vNear);
 		vec3.normalize(vDir, vDir);
 		
-		plane.intersectTriangles(vNear, vDir);
+		let vInt: vec3 = vec3.create();
+		let distance: number = plane.intersectTriangles(vNear, vDir, vInt);
+		
+		if (distance >= 0) {
+			let mesh = assets[this._assetIndex].clone(this._main.gl);
+			
+			mesh.setPosition(vInt[0], vInt[1], vInt[2]);
+			mesh.updateBuffers();
+			mesh.updateMatrices();
+			
+			scene.meshes.push(mesh);
+		}
 	}
 
 }
