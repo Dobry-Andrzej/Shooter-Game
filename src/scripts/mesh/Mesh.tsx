@@ -14,6 +14,8 @@ class Mesh {
 	private _renderData: RenderData;
 	private _transformData: TransformData;
 	
+	private _visible: boolean;
+	
 	private _vertices: Float32Array;
 	private _colors: Float32Array;
 	
@@ -31,6 +33,8 @@ class Mesh {
 		this._name = name;
 		this._renderData = new RenderData(this, gl);
 		this._transformData = new TransformData(this);
+		
+		this._visible = true;
 		
 		this._vertices = new Float32Array(0);
 		this._colors = new Float32Array(0);
@@ -56,6 +60,20 @@ class Mesh {
 	 *	*/
 	public get name () : string {
 		return this._name;
+	}
+	
+	/*	* Setter do visible
+		* @param {boolean} name
+	 *	*/
+	public set visible (visible: boolean) {
+		this._visible = visible;
+	}
+	
+	/*	* Getter do visible
+		* @returns {boolean}
+	 *	*/
+	public get visible () : boolean {
+		return this._visible;
 	}
 	
 	

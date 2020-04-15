@@ -40,7 +40,7 @@ class App {
 		this._events = new Events();
 		
 		this._assets = [];
-		this._assetNames = ["flowerAsset", "wall"];
+		this._assetNames = ["wall", "highWall", "barrel", "flowerAsset"];
 		
 		this._rightPanelControls = new RightPanelControls();
 	}
@@ -179,7 +179,7 @@ class App {
 				let mesh: Mesh = new Mesh(self._assetNames[index], self._gl);
 				
 				mesh.vertices = new Float32Array(vertices);
-				mesh.colors = new Float32Array(vertices.map((x, i) => i / vertices.length));
+				mesh.colors = new Float32Array(vertices.map((x, i) => (vertices.length - i - 1) / vertices.length));
 				
 				self._assets.push(mesh);
 				

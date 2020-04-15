@@ -61,7 +61,9 @@ class Scene {
 	public renderMeshes () : void {
 		let camera = this._main.camera;
 		for (let i: number = 0; i < this.meshes.length; i++) {
-			this._meshes[i].render(camera);
+			if (this._meshes[i].visible == true) {
+				this._meshes[i].render(camera);
+			}
 		}
 	}
 	
@@ -81,7 +83,7 @@ class Scene {
 		let grid = new Grid("grid", gl);
 		let plane = new Plane("plane", gl);
 		
-		grid.generate(5, 5, 20, 20);
+		grid.generate(10, 10, 40, 40);
 		
 		grid.setPosition(0, 0, 0);
 		grid.updateBuffers();
@@ -89,7 +91,7 @@ class Scene {
 		
 		this.add(grid);
 		
-		plane.generate(5, 5, 20, 20);
+		plane.generate(10, 10, 40, 40);
 		
 		plane.setPosition(0, 0, 0);
 		plane.updateBuffers();
