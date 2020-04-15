@@ -18,24 +18,26 @@ const init = async function (canvas: HTMLCanvasElement) {
 		if (app != null) {
 			app.editor.tryToUpdateGridSquare(event);
 		}
-	});
+	}, true);
 	
 	let viewIndex: number = 0;
-	app.events.attachEvent(document, "mousewheel", function(event: WheelEvent) {
+	app.events.attachEvent(canvas, "mousewheel", function(event: WheelEvent) {
+		event.preventDefault();
 		
 		if (app != null) {
 			viewIndex -= event.deltaY / 125;
 			viewIndex = Math.min(Math.max(Math.floor(viewIndex), 0), 5);
 			
-			app.camera.toggleView(viewIndex);	
+			app.camera.toggleView(viewIndex);
 		}
 	});
 	
 	app.events.attachEvent(document, "keydown", function(event: KeyboardEvent) {
-		// wsad 1234 z
+		// 12345678 wsad z
 		if (app == null) return;
 		
 		if (event.keyCode != 49 && event.keyCode != 50 && event.keyCode != 51 && event.keyCode != 52 && 
+			event.keyCode != 53 && event.keyCode != 54 && event.keyCode != 55 && event.keyCode != 56 &&
 			event.keyCode != 65 && event.keyCode != 68 && event.keyCode != 83 && event.keyCode != 87 &&
 			event.keyCode != 90) {
 			return;
@@ -48,8 +50,13 @@ const init = async function (canvas: HTMLCanvasElement) {
 			app.scene.meshes[0].visible = !app.scene.meshes[0].visible;
 		}
 		
-		if (event.keyCode == 49 || event.keyCode == 50 || event.keyCode == 51 || event.keyCode == 52) {
-			app.editor.assetIndex = event.keyCode - 49;
+		if (event.keyCode == 49 || event.keyCode == 50 || event.keyCode == 51 || event.keyCode == 52 ||
+			event.keyCode == 53 || event.keyCode == 54 || event.keyCode == 55 || event.keyCode == 56) {
+			let assetIndex: number = event.keyCode - 49;
+			
+			if (assetIndex < app.assets.length) {
+				app.editor.assetIndex = assetIndex;
+			}
 		}		
 		
 	});
