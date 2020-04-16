@@ -1,7 +1,6 @@
 import React, {Component} from 'react';
 import './Login.css';
 import Button from '@material-ui/core/Button';
-import Snackbar from '@material-ui/core/Snackbar';
 import history from "../../routing/History";
 import axios from "axios";
 
@@ -24,7 +23,7 @@ class Login extends Component<{}, AppState> {
 
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleChange = this.handleChange.bind(this);
-    }
+    };
 
     handleChange =(event: React.ChangeEvent<HTMLInputElement>) => {
         this.setState({ ...this.state, [event.currentTarget.name]: String(event.target.value) });
