@@ -25,3 +25,6 @@
     box-sizing: border-box;
     font-size: 14px;
 }
+.register-error {
+    color: red;
+}
