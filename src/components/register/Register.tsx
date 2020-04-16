@@ -1,139 +1,92 @@
 import React, { Component } from 'react';
 import './Register.css';
-import { useForm } from 'react-hook-form';
 import Button from '@material-ui/core/Button';
 import axios from "axios";
 import history from "../../routing/History";
 
-    const  Register = () => {
+interface AppState{
+    username: any,
+    password: any,
+    email: any
+}
 
-        let test = {
-            name: "",
-            surname: "",
-            login: "",
+class Register extends Component<{}, AppState> {
+
+    constructor(props: any) {
+        super(props);
+
+        this.state = {
+            username: "",
             password: "",
-            admin: "",
-            email: ""
+            email: "",
         };
-         axios.get('http://localhost:3000/users/users/').then(ret=>{
-            test = {
-                name: ret.data.name,
-                surname: ret.data.surname,
-                login: ret.data.login,
-                password: ret.data.password,
-                admin: ret.data.admin,
-                email: ret.data.email
-            };
 
-            console.log(ret);
+        this.handleSubmit = this.handleSubmit.bind(this);
+        this.handleChange = this.handleChange.bind(this);
+    };
+
+    handleChange =(event: React.ChangeEvent<HTMLInputElement>) => {
+        this.setState({ ...this.state, [event.currentTarget.name]: String(event.target.value) });
+    };
+
+    handleSubmit(event:any) {
+        const { username, password, email } = this.state;
+
+        axios.post('http://localhost:3000/users/add-user/', {
+            login: username,
+            password: password,
+            email: email
+        }).then((ret) => {
+            if (ret.status == 200) {
+                history.push({
+                    pathname: '/',
+                    state: {
+                        message: "Registered successfully!"
+                    }
+                });
+            }
+        }, (error) => {
+            if (error.response.status == 401) {
+                console.log('UNATHORIZED USER');
+            }
         });
-        const { register, handleSubmit,  errors } = useForm();
-        const options = {
-            headers: {"Access-Control-Allow-Origin" : "*"},
-            mode: 'cors',
-        };
+        event.preventDefault();
+    };
 
-        const onSubmit = async (data:any) => {
 
-            data.admin = false;
-            console.warn(data);
-                try {
-                    for(var i = 0; i < test.name.length ; i++) {
-                        if (test.login[i] === data.login || test.email[i] === data.email) {
-                            console.log("test");
-                        }
-                    }
-                    const response = await axios.post('http://localhost:3000/users/add-user/',{
-                        name:data.name,
-                        surname: data.surname,
-                        login: data.login,
-                        password: data.Password,
-                        admin: data.admin,
-                        email: data.email
-                    },options);
-                    if(response.status == 200){
-                        console.log("asdasdas")
-                        console.log('👉 Returned data:', response);
-                        //dodać okno że rejestracja przebiegła poprawnie//
-                        history.push("/Login");
-                    }
-                    console.log('👉 Returned data:', response);
-                } catch (e) {
-                    console.log(`😱 Axios request failed: ${e}`);
-                }
-        };
+    render() {
         return (
             <div className="menuContainer">
                 <div className="titleGame">Register to unlock ranked games!</div>
                 <div className="loginFormContainer">
-                    <form onSubmit={handleSubmit(onSubmit)} className="loginForm">
+                    <form onSubmit={ this.handleSubmit } className="loginForm">
                         <input type="text"
                                placeholder="Login"
-                               name="login"
-                               ref={register(
-                                   {
-                                       required: true ,
-                                       maxLength: 15,
-                                       minLength: 3
-                                   }
-                               )}
+                               name="username"
+                               value={this.state.username}
+                               onChange={this.handleChange}
                         />
-                        {errors.login && <p className="login-error">Login is required!</p>}
                         <input type="password"
                                placeholder="Password"
-                               name="Password"
-                               ref={register(
-                                   {
-                                       required: true,
-                                       maxLength: 20,
-                                       minLength: 6
-                                   }
-                               )}
+                               name="password"
+                               value={this.state.password}
+                               onChange={this.handleChange}
                         />
-                        {errors.Password && <p className="login-error">Password is required and must be longer than 6 characters!</p>}
                         <input type="text"
                                placeholder="Email"
                                name="email"
-                               ref={register(
-                                   {
-                                       required: true ,
-                                       maxLength: 30,
-                                       minLength: 6
-                                   }
-                               )}
+                               value={this.state.email}
+                               onChange={this.handleChange}
                         />
-                        {errors.email && <p className="login-error">email is required!</p>}
-                        <input type="text"
-                               placeholder="Name"
-                               name="name"
-                               ref={register(
-                                   {
-                                       required: true,
-                                       maxLength: 20,
-                                       minLength: 6
-                                   }
-                               )}
-                        />
-                        {errors.name && <p className="login-error">Name is required!</p>}
-                        <input type="text"
-                               placeholder="Surname"
-                               name="surname"
-                               ref={register(
-                                   {
-                                       required: true,
-                                       maxLength: 20,
-                                       minLength: 3
-                                   }
-                               )}
-                        />
-                        {errors.surname && <p className="login-error">Surname is required!</p>}
-                        <Button variant="contained" color="primary">Create</Button>
+                        <Button variant="contained" color="primary" type="submit">Create account</Button>
                         <p className="message"> Do you have an account?
                             <Button variant="contained" color="primary" size="small" onClick={() => history.push("/Login")}>Sign In</Button>
                         </p>
                     </form>
                 </div>
             </div>
-        )
+        );
     }
+
+}
 export default Register;
