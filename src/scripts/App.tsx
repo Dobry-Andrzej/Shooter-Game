@@ -40,7 +40,7 @@ class App {
 		this._events = new Events();
 		
 		this._assets = [];
-		this._assetNames = ["brokenWall3x4", "barrel", "flowerAsset"];
+		this._assetNames = ["brokenWall3x4", "brokenShed4x6", "barrel", "flowerAsset"];
 		
 		this._rightPanelControls = new RightPanelControls();
 	}
@@ -166,6 +166,15 @@ class App {
 		await this.loadAssets();
 	}
 	
+	/*	* Funkcja do zczytywania wydarzenia od zmiany rozmiaru okna
+		* @param {number} width
+		* @param {number} height
+	 *	*/
+	public resize (width: number, height: number) : void {
+		this._canvas.width = width;
+		this._canvas.height = height;
+	}
+	
 	/*	* Funkcja do ladowania modeli
 		* @returns {Promise<void>}
 	 *	*/
@@ -196,13 +205,6 @@ class App {
 		return new Promise <void> (function(resolve, reject) {
 			loopOverAssets(resolve, reject);
 		});
-	}
-	
-	/*	* Funkcja do zczytywania wydarzenia od zmiany rozmiaru okna
-		*
-	 *	*/
-	private resize () : void {
-		//
 	}
 	
 	/*	* Funkcja do animowania frame'a

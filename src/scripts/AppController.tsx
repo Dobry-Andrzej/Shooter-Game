@@ -11,6 +11,9 @@ let app: App | null = null;
 const init = async function (canvas: HTMLCanvasElement) {
 	if (app != null) return;
 	
+	canvas.width = window.innerWidth;
+	canvas.height = window.innerHeight;
+	
 	app = new App(canvas);
 	await app.initialize();
 	
@@ -21,6 +24,12 @@ const init = async function (canvas: HTMLCanvasElement) {
 	
 	let vStart: vec3 = vec3.create();
 	let vEnd: vec3 = vec3.create();
+	
+	app.events.attachEvent(window, "resize", function(event: Event) {
+		if (app != null) {
+			app.resize(window.innerWidth, window.innerHeight);
+		}
+	}, true);
 	
 	app.events.attachEvent(canvas, "contextmenu", function(event: Event) {
 		event.preventDefault();
@@ -119,6 +128,7 @@ const init = async function (canvas: HTMLCanvasElement) {
 		}		
 		
 	});
+	
 };
 
 export default {

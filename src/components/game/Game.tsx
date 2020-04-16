@@ -20,14 +20,20 @@ class Game extends Component<Props> {
         const userNameState = this.props.location.state;
         const userName = userNameState ? userNameState.username : "Guest";
         return (
-            <div className="titleGame">
-                <div>Let's start a game</div>
-                <p>Logged as: { userName }</p>
-                <canvas width="800" height="600" id="webGlcanvas" className="Main-Canvas"></canvas>
-				<RightPanel />
-            </div>
+			<div className="titleGame">
+				<canvas width="800" height="600" id="webGlcanvas" className="Main-Canvas"></canvas>
+				<div className="Game-Menu">
+					<div>Let's start a game</div>
+					<p>Logged as: { userName }</p>
+					<RightPanel />
+				</div>
+			</div>
         )
     }
 }
+
+/*
+	
+*/
 
 export default Game;
