@@ -12,3 +12,11 @@
 	left: 70%;
 	z-index: 1;
 }
+.Editor-Keys {
+	position: absolute;
+	left: 5%;
+	z-index: 1;
+	font-size: 0.7em !important;
+    text-align: left;
+	text-shadow: 1px 1px #c2c2c2;
+}

@@ -7,7 +7,7 @@ class RightPanel extends Component {
     public render() {
         return (
             <div className="rightPanelContainer">
-                <div className="titleRightPanel">Tu Będzie menu gry </div>
+                <div className="titleRightPanel"></div>
                 <div id="rightPanel">
 					<div>
 						<span>HP: <progress id="rightPanelHPProgress" value="0" max="100"> </progress> </span> <span id="rightPanelHP"> 0 </span><span> /100 </span>
