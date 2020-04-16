@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import './Register.css';
-import { useForm } from 'react-hook-form';
 import Button from '@material-ui/core/Button';
 import axios from "axios";
 import history from "../../routing/History";
