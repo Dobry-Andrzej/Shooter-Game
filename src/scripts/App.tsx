@@ -25,6 +25,10 @@ class App {
 	private _assets: Mesh[];
 	private _assetNames: string[];
 	
+	private _FPS: number;
+	private _previousTime: number;
+	
+	
 	/*	* Tworzy nową instancję App
 		* @param {HTMLCanvasElement} canvas
 	 *	*/
@@ -43,6 +47,9 @@ class App {
 		this._assetNames = ["brokenWall3x4", "brokenShed4x6", "barrel", "flowerAsset"];
 		
 		this._rightPanelControls = new RightPanelControls();
+		
+		this._FPS = 20;
+		this._previousTime = 0;
 	}
 	
 	/*	* Setter do gl
@@ -158,12 +165,15 @@ class App {
 		// Tworzenie mapy
 		this._scene.createMap();
 		
-		// Odpal animationFrame jak juz wszystko jest zainicjowane
-		this.animate();
+		//Ustawienie czasu startu animacji
+		this._previousTime = window.performance.now();
 		
 		this._rightPanelControls.setHp(69);
 		
 		await this.loadAssets();
+		
+		// Odpal animationFrame jak juz wszystko jest zainicjowane
+		this.animate();
 	}
 	
 	/*	* Funkcja do zczytywania wydarzenia od zmiany rozmiaru okna
@@ -187,8 +197,13 @@ class App {
 			stlloader.load("/meshes/assets/" + self._assetNames[index] + ".stl", function(vertices: number[]) {
 				let mesh: Mesh = new Mesh(self._assetNames[index], self._gl);
 				
+				mesh.visible = false;
+				
 				mesh.vertices = new Float32Array(vertices);
 				mesh.colors = new Float32Array(vertices.map((x, i) => (vertices.length - i - 1) / vertices.length));
+				
+				mesh.updateBuffers();
+				mesh.updateMatrices();
 				
 				self._assets.push(mesh);
 				
@@ -211,11 +226,29 @@ class App {
 		*
 	 *	*/
 	private animate () : void {
-		this._gl.clear(this._gl.COLOR_BUFFER_BIT);
+		let self: App = this;
 		
-		this._scene.renderMeshes();
+		requestAnimationFrame(function() {
+			self.animate();
+		});
 		
-		requestAnimationFrame(this.animate.bind(this));
+		let currentTime: number = window.performance.now();
+		let difference: number = currentTime - this._previousTime;
+		
+		if (difference > (1000 / this._FPS)) {
+			this._previousTime = currentTime - (difference % (1000 / this._FPS));
+			
+			this._gl.clear(this._gl.COLOR_BUFFER_BIT);
+		
+			this._scene.renderMeshes();
+			
+			let asset: Mesh = this._assets[this._editor.assetIndex];
+			
+			if (asset.visible == true) {
+				asset.render(this._camera);
+			}
+			
+		}
 	}
 
 }

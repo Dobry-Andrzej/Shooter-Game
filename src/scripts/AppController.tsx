@@ -60,15 +60,19 @@ const init = async function (canvas: HTMLCanvasElement) {
 		event.stopPropagation();
 		
 		if (app != null) {
-			vStart = app.camera.unproject(mouseXY[0], mouseXY[1], 0.0);
-			vEnd = app.camera.unproject(event.offsetX, event.offsetY, 0.0);
-			if (panEnabled == true) {				
-				app.camera.pan(vEnd[0] - vStart[0], vEnd[1] - vStart[1], vEnd[2] - vStart[2]);
-			} else if (rotationEnabled == true) {
-				app.camera.rotate(vEnd[0] - vStart[0], vEnd[1] - vStart[1], vEnd[2] - vStart[2]);
+			if (panEnabled == true || rotationEnabled == true) {
+				vStart = app.camera.unproject(mouseXY[0], mouseXY[1], 0.0);
+				vEnd = app.camera.unproject(event.offsetX, event.offsetY, 0.0);
+				if (panEnabled == true) {				
+					app.camera.pan(vEnd[0] - vStart[0], vEnd[1] - vStart[1], vEnd[2] - vStart[2]);
+				} else if (rotationEnabled == true) {
+					app.camera.rotate(vEnd[0] - vStart[0], vEnd[1] - vStart[1], vEnd[2] - vStart[2]);
+				}
+				
+				vec2.set(mouseXY, event.offsetX, event.offsetY);
+			} else {
+				app.editor.tryToPreviewOnGridSquare(event);
 			}
-			
-			vec2.set(mouseXY, event.offsetX, event.offsetY);
 		}
 	}, true);
 	
@@ -101,12 +105,13 @@ const init = async function (canvas: HTMLCanvasElement) {
 	});
 	
 	app.events.attachEvent(document, "keydown", function(event: KeyboardEvent) {
-		// 12345678 wsad z
+		// 12345678 wsad z eq
 		if (app == null) return;
 		
 		if (event.keyCode != 49 && event.keyCode != 50 && event.keyCode != 51 && event.keyCode != 52 && 
 			event.keyCode != 53 && event.keyCode != 54 && event.keyCode != 55 && event.keyCode != 56 &&
 			event.keyCode != 65 && event.keyCode != 68 && event.keyCode != 83 && event.keyCode != 87 &&
+			event.keyCode != 69 && event.keyCode != 81 &&
 			event.keyCode != 90) {
 			return;
 		}
@@ -116,11 +121,20 @@ const init = async function (canvas: HTMLCanvasElement) {
 		
 		if (event.keyCode == 90) {
 			app.scene.meshes[0].visible = !app.scene.meshes[0].visible;
-		}
-		
-		if (event.keyCode == 49 || event.keyCode == 50 || event.keyCode == 51 || event.keyCode == 52 ||
+		} else if (event.keyCode == 69) {
+			app.editor.rotateAsset(1);
+		} else if (event.keyCode == 81) {
+			app.editor.rotateAsset(-1);
+		} else if (event.keyCode == 49 || event.keyCode == 50 || event.keyCode == 51 || event.keyCode == 52 ||
 			event.keyCode == 53 || event.keyCode == 54 || event.keyCode == 55 || event.keyCode == 56) {
+			
+			let i: number;
 			let assetIndex: number = event.keyCode - 49;
+			let assetAmount: number = app.assets.length;
+			
+			for (i = 0; i < assetAmount; i++) {
+				app.assets[i].visible = false;
+			}
 			
 			if (assetIndex < app.assets.length) {
 				app.editor.assetIndex = assetIndex;

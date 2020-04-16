@@ -76,6 +76,48 @@ class Mesh {
 		return this._visible;
 	}
 	
+	/*	* Setter do position
+		* @param {vec3} position
+	 *	*/
+	public set position (position: vec3) {
+		this._position = position;
+	}
+	
+	/*	* Getter do position
+		* @returns {vec3}
+	 *	*/
+	public get position () : vec3 {
+		return this._position;
+	}
+	
+	/*	* Setter do scale
+		* @param {vec3} scale
+	 *	*/
+	public set scale (scale: vec3) {
+		this._scale = scale;
+	}
+	
+	/*	* Getter do scale
+		* @returns {vec3}
+	 *	*/
+	public get scale () : vec3 {
+		return this._scale;
+	}
+	
+	/*	* Setter do rotation
+		* @param {quat} rotation
+	 *	*/
+	public set rotation (rotation: quat) {
+		this._rotation = rotation;
+	}
+	
+	/*	* Getter do scale
+		* @returns {vec3}
+	 *	*/
+	public get rotation () : quat {
+		return this._rotation;
+	}
+	
 	
 	/*	* Setter do vertices
 		* @param {Float32Array} vertices
@@ -139,6 +181,12 @@ class Mesh {
 	 *	*/
 	public clone (gl: WebGLRenderingContext) : Mesh {
 		let mesh = new Mesh(this._name + "_", gl);
+		
+		mesh.visible = this._visible;
+		
+		mesh.position = this._position;
+		mesh.scale = this._scale;
+		mesh.rotation = this._rotation;
 		
 		mesh.vertices = new Float32Array(this._vertices);
 		mesh.colors = new Float32Array(this._colors);
