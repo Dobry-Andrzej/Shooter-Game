@@ -105,10 +105,11 @@ const init = async function (canvas: HTMLCanvasElement) {
 	});
 	
 	app.events.attachEvent(document, "keydown", function(event: KeyboardEvent) {
-		// 12345678 wsad z eq
+		// 012345678 wsad z eq
 		if (app == null) return;
 		
-		if (event.keyCode != 49 && event.keyCode != 50 && event.keyCode != 51 && event.keyCode != 52 && 
+		if (event.keyCode != 48 && 
+			event.keyCode != 49 && event.keyCode != 50 && event.keyCode != 51 && event.keyCode != 52 && 
 			event.keyCode != 53 && event.keyCode != 54 && event.keyCode != 55 && event.keyCode != 56 &&
 			event.keyCode != 65 && event.keyCode != 68 && event.keyCode != 83 && event.keyCode != 87 &&
 			event.keyCode != 69 && event.keyCode != 81 &&
@@ -125,18 +126,19 @@ const init = async function (canvas: HTMLCanvasElement) {
 			app.editor.rotateAsset(1);
 		} else if (event.keyCode == 81) {
 			app.editor.rotateAsset(-1);
-		} else if (event.keyCode == 49 || event.keyCode == 50 || event.keyCode == 51 || event.keyCode == 52 ||
+		} else if (event.keyCode == 48 ||
+			event.keyCode == 49 || event.keyCode == 50 || event.keyCode == 51 || event.keyCode == 52 ||
 			event.keyCode == 53 || event.keyCode == 54 || event.keyCode == 55 || event.keyCode == 56) {
 			
 			let i: number;
-			let assetIndex: number = event.keyCode - 49;
+			let assetIndex: number = event.keyCode - 48;
 			let assetAmount: number = app.assets.length;
 			
 			for (i = 0; i < assetAmount; i++) {
 				app.assets[i].visible = false;
 			}
 			
-			if (assetIndex < app.assets.length) {
+			if (assetIndex < app.assets.length + 1) {
 				app.editor.assetIndex = assetIndex;
 			}
 		}		

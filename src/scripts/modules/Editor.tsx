@@ -34,6 +34,9 @@ class Editor {
 		* @param {MouseEvent} event
 	 *	*/
 	public tryToUpdateGridSquare (event: MouseEvent) : void {
+		// W przypadku assetu 0, nie rób nic
+		if (this._assetIndex == 0) return;
+		
 		let scene = this._main.scene;
 		let assets = this._main.assets;
 		let camera = this._main.camera;
@@ -51,7 +54,7 @@ class Editor {
 		let distance: number = plane.intersectTriangles(vNear, vDir, vInt);
 		
 		if (distance >= 0) {
-			let mesh = assets[this._assetIndex].clone(this._main.gl);
+			let mesh = assets[this._assetIndex - 1].clone(this._main.gl);
 			
 			mesh.setPosition(Math.floor(vInt[0] * 4) / 4 + 0.125, 0, Math.floor(vInt[2] * 4) / 4 + 0.125);
 			mesh.updateBuffers();
@@ -65,6 +68,9 @@ class Editor {
 		* @param {MouseEvent} event
 	 *	*/
 	public tryToPreviewOnGridSquare (event: MouseEvent) : void {
+		// W przypadku assetu 0, nie rób nic
+		if (this._assetIndex == 0) return;
+		
 		let scene = this._main.scene;
 		let assets = this._main.assets;
 		let camera = this._main.camera;
@@ -82,7 +88,7 @@ class Editor {
 		let distance: number = plane.intersectTriangles(vNear, vDir, vInt);
 		
 		if (distance >= 0) {
-			let mesh = assets[this._assetIndex];
+			let mesh = assets[this._assetIndex - 1];
 			
 			mesh.visible = true;
 			
@@ -96,7 +102,10 @@ class Editor {
 		* @param {MouseEvent} event
 	 *	*/
 	public rotateAsset (sign: number) : void {
-		let mesh = this._main.assets[this._assetIndex];
+		// W przypadku assetu 0, nie rób nic
+		if (this._assetIndex == 0) return;
+		
+		let mesh = this._main.assets[this._assetIndex - 1];
 		let tmp_quat: quat = quat.create();
 			
 		mesh.visible = true;

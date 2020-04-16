@@ -48,7 +48,7 @@ class App {
 		
 		this._rightPanelControls = new RightPanelControls();
 		
-		this._FPS = 20;
+		this._FPS = 30;
 		this._previousTime = 0;
 	}
 	
@@ -226,11 +226,7 @@ class App {
 		*
 	 *	*/
 	private animate () : void {
-		let self: App = this;
-		
-		requestAnimationFrame(function() {
-			self.animate();
-		});
+		requestAnimationFrame(this.animate.bind(this));
 		
 		let currentTime: number = window.performance.now();
 		let difference: number = currentTime - this._previousTime;
@@ -242,10 +238,14 @@ class App {
 		
 			this._scene.renderMeshes();
 			
-			let asset: Mesh = this._assets[this._editor.assetIndex];
+			if (this._editor.assetIndex > 0) {
 			
-			if (asset.visible == true) {
-				asset.render(this._camera);
+				let asset: Mesh = this._assets[this._editor.assetIndex - 1];
+				
+				if (asset.visible == true) {
+					asset.render(this._camera);
+				}
+				
 			}
 			
 		}
