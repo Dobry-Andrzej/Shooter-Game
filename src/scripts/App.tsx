@@ -44,7 +44,7 @@ class App {
 		this._events = new Events();
 		
 		this._assets = [];
-		this._assetNames = ["brokenWall3x4", "brokenShed4x6", "mauzer2x2", "barrel", "flowerAsset"];
+		this._assetNames = ["brokenWall3x4", "brokenShed4x6", "mauzer2x2", "fence1x3", "brokenFence1x3", "barrel", "flowerAsset"];
 		
 		this._rightPanelControls = new RightPanelControls();
 		

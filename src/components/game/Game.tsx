@@ -31,8 +31,10 @@ class Game extends Component<Props> {
 					<p>1 - brokenWall3x4</p>
 					<p>2 - brokenShed4x6</p>
 					<p>3 - mauzer2x2</p>
-					<p>4 - barrel</p>
-					<p>5 - flower</p>
+					<p>4 - fence1x3</p>
+					<p>5 - brokenFence1x3</p>
+					<p>6 - barrel</p>
+					<p>7 - flower</p>
 					<p>0 - none</p>
 					<p>Q - rotate left</p>
 					<p>E - rotate right</p>
