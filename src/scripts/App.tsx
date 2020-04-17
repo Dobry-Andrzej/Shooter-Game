@@ -6,9 +6,9 @@ import Camera from './modules/Camera';
 import Editor from './modules/Editor';
 
 import Events from './modules/Events';
-import Mesh from './mesh/Mesh';
+import Assets from './modules/Assets';
 
-import StlLoader from './loaders/StlLoader';
+import Mesh from './mesh/Mesh';
 
 class App {	
 	private _gl: WebGLRenderingContext;
@@ -19,11 +19,9 @@ class App {
 	private _editor: Editor;
 	
 	private _events: Events;
+	private _assets: Assets;
 	
 	private _rightPanelControls: RightPanelControls;
-	
-	private _assets: Mesh[];
-	private _assetNames: string[];
 	
 	private _FPS: number;
 	private _previousTime: number;
@@ -42,9 +40,7 @@ class App {
 		this._editor = new Editor(this);
 		
 		this._events = new Events();
-		
-		this._assets = [];
-		this._assetNames = ["brokenWall3x4", "brokenShed4x6", "mauzer2x2", "fence1x3", "brokenFence1x3", "barrel", "flowerAsset"];
+		this._assets = new Assets(this);
 		
 		this._rightPanelControls = new RightPanelControls();
 		
@@ -137,16 +133,16 @@ class App {
 	}
 	
 	/*	* Setter do assets
-		* @param {Mesh[]} assets
+		* @param {Assets} assets
 	 *	*/
-	public set assets (assets: Mesh[]) {
+	public set assets (assets: Assets) {
 		this._assets = assets;
 	}
 	
 	/*	* Getter do assets
 		* @returns {Assets}
 	 *	*/
-	public get assets () : Mesh[] {
+	public get assets () : Assets {
 		return this._assets;
 	}
 	
@@ -170,7 +166,7 @@ class App {
 		
 		this._rightPanelControls.setHp(69);
 		
-		await this.loadAssets();
+		await this._assets.loadAssets(this._gl);
 		
 		// Odpal animationFrame jak juz wszystko jest zainicjowane
 		this.animate();
@@ -183,43 +179,6 @@ class App {
 	public resize (width: number, height: number) : void {
 		this._canvas.width = width;
 		this._canvas.height = height;
-	}
-	
-	/*	* Funkcja do ladowania modeli
-		* @returns {Promise<void>}
-	 *	*/
-	private loadAssets () : Promise <void> {
-		let stlloader: StlLoader = new StlLoader();
-		let index: number = 0;
-		let self: App = this;
-		
-		const loopOverAssets = function(resolve: any, reject: any) {
-			stlloader.load("/meshes/assets/" + self._assetNames[index] + ".stl", function(vertices: number[]) {
-				let mesh: Mesh = new Mesh(self._assetNames[index], self._gl);
-				
-				mesh.visible = false;
-				
-				mesh.vertices = new Float32Array(vertices);
-				mesh.colors = new Float32Array(vertices.map((x, i) => (vertices.length - i - 1) / vertices.length));
-				
-				mesh.updateBuffers();
-				mesh.updateMatrices();
-				
-				self._assets.push(mesh);
-				
-				index++;
-				
-				if (index >= self._assetNames.length) {
-					resolve();
-				} else {
-					loopOverAssets(resolve, reject);
-				}
-			});
-		};
-		
-		return new Promise <void> (function(resolve, reject) {
-			loopOverAssets(resolve, reject);
-		});
 	}
 	
 	/*	* Funkcja do animowania frame'a
@@ -235,15 +194,15 @@ class App {
 			this._previousTime = currentTime - (difference % (1000 / this._FPS));
 			
 			this._gl.clear(this._gl.COLOR_BUFFER_BIT);
-		
+			
 			this._scene.renderMeshes();
 			
-			if (this._editor.assetIndex > 0) {
+			let assetMesh: Mesh = this._assets.assetMeshes[this._assets.assetCategory][this._assets.assetIndex - 1];
 			
-				let asset: Mesh = this._assets[this._editor.assetIndex - 1];
+			if (assetMesh) {
 				
-				if (asset.visible == true) {
-					asset.render(this._camera);
+				if (assetMesh.visible == true) {
+					assetMesh.render(this._camera);
 				}
 				
 			}

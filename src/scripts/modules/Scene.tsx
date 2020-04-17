@@ -114,13 +114,13 @@ class Scene {
 			map.colors = new Float32Array(vertices.length);
 			
 			for (let i: number = 0; i < vertices.length; i += 3) {
-				map.colors[i] = 0.2 + vertices[i + 1] * 20;
-				map.colors[i + 1] = 0.2 + vertices[i + 1] * 20;
-				map.colors[i + 2] = 0.2 + vertices[i + 1] * 20;
+				map.colors[i] = 0.3 + vertices[i + 1] * 5;
+				map.colors[i + 1] = 0.3 + vertices[i + 1] * 5;
+				map.colors[i + 2] = 0.3 + vertices[i + 1] * 5;
 			}
 			
 			map.setPosition(0, -0.05, 0);
-			map.setScale(20, 10, 20);
+			map.setScale(20, 2, 20);
 			map.updateBuffers();
 			map.updateMatrices();
 			

@@ -42,7 +42,7 @@ const init = async function (canvas: HTMLCanvasElement) {
 		
 		if (app != null) {
 			if (event.which == 1) {
-				app.editor.tryToUpdateGridSquare(event);
+				app.assets.tryToUpdateGridSquare(event, undefined);
 			} else if (event.which == 2) {
 				panEnabled = true;
 				rotationEnabled = false;
@@ -68,11 +68,11 @@ const init = async function (canvas: HTMLCanvasElement) {
 				} else if (rotationEnabled == true) {
 					app.camera.rotate(vEnd[0] - vStart[0], vEnd[1] - vStart[1], vEnd[2] - vStart[2]);
 				}
-				
-				vec2.set(mouseXY, event.offsetX, event.offsetY);
 			} else {
-				app.editor.tryToPreviewOnGridSquare(event);
+				app.assets.tryToPreviewOnGridSquare(event, undefined);
 			}
+			
+			vec2.set(mouseXY, event.offsetX, event.offsetY);
 		}
 	}, true);
 	
@@ -105,43 +105,66 @@ const init = async function (canvas: HTMLCanvasElement) {
 	});
 	
 	app.events.attachEvent(document, "keydown", function(event: KeyboardEvent) {
-		// 012345678 wsad z eq
 		if (app == null) return;
 		
-		if (event.keyCode != 48 && 
-			event.keyCode != 49 && event.keyCode != 50 && event.keyCode != 51 && event.keyCode != 52 && 
-			event.keyCode != 53 && event.keyCode != 54 && event.keyCode != 55 && event.keyCode != 56 &&
-			event.keyCode != 65 && event.keyCode != 68 && event.keyCode != 83 && event.keyCode != 87 &&
-			event.keyCode != 69 && event.keyCode != 81 &&
-			event.keyCode != 90) {
-			return;
+		switch (event.keyCode) {
+			case 90: //Z
+				app.scene.meshes[0].visible = !app.scene.meshes[0].visible;
+				event.preventDefault();
+				break;
+			case 69: //Q
+				app.assets.rotateAsset(1);
+				event.preventDefault();
+				break;
+			case 81: //E
+				app.assets.rotateAsset(-1);
+				event.preventDefault();
+				break;
+			case 48: //0
+			case 49: //1
+			case 50: //2
+			case 51: //3
+			case 52: //4
+			case 53: //5
+			case 54: //6
+			case 55: //7
+			case 56: //8
+			case 57: //9
+				let i: number;
+				let assetIndex: number = event.keyCode - 48;
+			
+				app.assets.setActiveAssetIndex(assetIndex);
+				event.preventDefault();
+				break;
+			case 65: //A
+				app.assets.setActiveAssetCategory(0);
+				event.preventDefault();
+				break;
+			case 83: //S
+				app.assets.setActiveAssetCategory(1);
+				event.preventDefault();
+				break;
+			case 68: //D
+				app.assets.setActiveAssetCategory(2);
+				event.preventDefault();
+				break;
+			case 70: //F
+				app.assets.setActiveAssetCategory(3);
+				event.preventDefault();
+				break;
+			case 71: //G
+				app.assets.setActiveAssetCategory(4);
+				event.preventDefault();
+				break;
+			case 72: //H
+				app.assets.setActiveAssetCategory(5);
+				event.preventDefault();
+				break;
+			default:
+				break;
 		}
-		// w - 87, s - 83, d - 68, a - 65
-		// 1 - 49, 2 - 50, 3 - 51, 4 - 52
-		event.preventDefault();
 		
-		if (event.keyCode == 90) {
-			app.scene.meshes[0].visible = !app.scene.meshes[0].visible;
-		} else if (event.keyCode == 69) {
-			app.editor.rotateAsset(1);
-		} else if (event.keyCode == 81) {
-			app.editor.rotateAsset(-1);
-		} else if (event.keyCode == 48 ||
-			event.keyCode == 49 || event.keyCode == 50 || event.keyCode == 51 || event.keyCode == 52 ||
-			event.keyCode == 53 || event.keyCode == 54 || event.keyCode == 55 || event.keyCode == 56) {
-			
-			let i: number;
-			let assetIndex: number = event.keyCode - 48;
-			let assetAmount: number = app.assets.length;
-			
-			for (i = 0; i < assetAmount; i++) {
-				app.assets[i].visible = false;
-			}
-			
-			if (assetIndex < app.assets.length + 1) {
-				app.editor.assetIndex = assetIndex;
-			}
-		}		
+		app.assets.tryToPreviewOnGridSquare(undefined, mouseXY);
 		
 	});
 	

@@ -28,16 +28,16 @@ class Game extends Component<Props> {
 					<RightPanel />
 				</div>
 				<div className="Editor-Keys">
-					<p>1 - brokenWall3x4</p>
-					<p>2 - brokenShed4x6</p>
-					<p>3 - mauzer2x2</p>
-					<p>4 - fence1x3</p>
-					<p>5 - brokenFence1x3</p>
-					<p>6 - barrel</p>
-					<p>7 - flower</p>
-					<p>0 - none</p>
-					<p>Q - rotate left</p>
-					<p>E - rotate right</p>
+					<p>1 - 9: Toggle</p>
+					<p>0 : Empty</p>
+					<p>A : Buildings</p>
+					<p>S : Electricity</p>
+					<p>D : Misc</p>
+					<p>F : Terrain</p>
+					<p>G : Walls And Fences</p>
+					<p>Q : rotate left</p>
+					<p>E : rotate right</p>
+					<p>Z : grid toggle</p>
 				</div>
 			</div>
         )
