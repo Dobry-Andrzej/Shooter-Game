@@ -1,8 +1,11 @@
 
 import App from '../App';
+
 import Mesh from '../mesh/Mesh';
 import Grid from '../primitives/Grid';
 import Plane from '../primitives/Plane';
+
+import StlLoader from '../loaders/StlLoader';
 
 class Scene {
 	private _main: App;
@@ -78,10 +81,13 @@ class Scene {
 		*
 	 *	*/
 	public createMap () : void {
+		let self: Scene = this;
 		let gl = this._main.gl;
 		
 		let grid = new Grid("grid", gl);
 		let plane = new Plane("plane", gl);
+		
+		let stlloader = new StlLoader();
 		
 		grid.generate(10, 10, 40, 40);
 		
@@ -93,11 +99,34 @@ class Scene {
 		
 		plane.generate(10, 10, 40, 40);
 		
+		plane.visible = false;
+		
 		plane.setPosition(0, 0, 0);
 		plane.updateBuffers();
 		plane.updateMatrices();
 		
 		this.add(plane);
+		
+		stlloader.load("/meshes/map.stl", function(vertices: number[]) {
+			let map: Mesh = new Mesh("map", self._gl);
+			
+			map.vertices = new Float32Array(vertices);
+			map.colors = new Float32Array(vertices.length);
+			
+			for (let i: number = 0; i < vertices.length; i += 3) {
+				map.colors[i] = 0.2 + vertices[i + 1] * 20;
+				map.colors[i + 1] = 0.2 + vertices[i + 1] * 20;
+				map.colors[i + 2] = 0.2 + vertices[i + 1] * 20;
+			}
+			
+			map.setPosition(0, -0.05, 0);
+			map.setScale(20, 10, 20);
+			map.updateBuffers();
+			map.updateMatrices();
+			
+			self.add(map);
+			
+		});
 		
 	}
 
