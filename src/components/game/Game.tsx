@@ -38,6 +38,7 @@ class Game extends Component<Props> {
 					<p>Q : rotate left</p>
 					<p>E : rotate right</p>
 					<p>Z : grid toggle</p>
+					<p>X : color toggle</p>
 				</div>
 			</div>
         )

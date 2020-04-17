@@ -17,6 +17,8 @@ class Assets {
 	
 	private _assetMeshes: Mesh[][];
 	
+	private _coloringIndex: number;
+	
 	
 	/*	* Tworzy nową instancję Editor
 		*
@@ -37,6 +39,8 @@ class Assets {
 		this._assetIndex = 0;
 		
 		this._assetMeshes = [];
+		
+		this._coloringIndex = 0;
 	}
 	
 	/*	* Setter do assetCategory
@@ -79,6 +83,20 @@ class Assets {
 	 *	*/
 	public get assetMeshes () : Mesh[][] {
 		return this._assetMeshes;
+	}
+	
+	/*	* Setter do coloringIndex
+		* @param {number} coloringIndex
+	 *	*/
+	public set coloringIndex (coloringIndex: number) {
+		this._coloringIndex = coloringIndex;
+	}
+	
+	/*	* Getter do coloringIndex
+		* @returns {number}
+	 *	*/
+	public get coloringIndex () : number {
+		return this._coloringIndex;
 	}
 	
 	/*	* Funkcja do setowania indexu aktywnej kategorii
@@ -136,31 +154,8 @@ class Assets {
 				
 				mesh.vertices = new Float32Array(vertices);
 				
-				if (self._categoryNames[i] == "terrain") {
-					mesh.colors = new Float32Array(vertices.length);
-			
-					for (let i: number = 0; i < vertices.length; i += 3) {
-						mesh.colors[i] = 0.3 + vertices[i + 1] * 5;
-						mesh.colors[i + 1] = 0.3 + vertices[i + 1] * 5;
-						mesh.colors[i + 2] = 0.3 + vertices[i + 1] * 5;
-					}
-				} else if (self._categoryNames[i] == "electricity") {
-					mesh.colors = new Float32Array(vertices.length);
-			
-					for (let i: number = 0; i < vertices.length; i += 3) {
-						if (vertices[i + 1] > 1) {
-							mesh.colors[i] = vertices[i + 1] * 10;
-							mesh.colors[i + 1] = vertices[i + 1] * 10;
-							mesh.colors[i + 2] = vertices[i + 1] * 10;
-						} else {
-							mesh.colors[i] = 0.6 - vertices[i + 1] * 0.5;
-							mesh.colors[i + 1] = 0.6 - vertices[i + 1] * 0.5;
-							mesh.colors[i + 2] = 0.6 - vertices[i + 1] * 0.5;
-						}
-					}
-				} else {
-					mesh.colors = new Float32Array(vertices.map((x, i) => (vertices.length - i - 1) / vertices.length));
-				}
+				mesh.colorData.computeColorVariants();
+				mesh.colors = mesh.colorData.colorVariants[0];
 				
 				mesh.updateBuffers();
 				mesh.updateMatrices();
@@ -270,6 +265,8 @@ class Assets {
 				mesh.visible = true;
 				
 				mesh.setPosition(Math.floor(vInt[0] * 4) / 4 + 0.125, 0, Math.floor(vInt[2] * 4) / 4 + 0.125);
+				mesh.colors = mesh.colorData.colorVariants[this._coloringIndex];
+				
 				mesh.updateBuffers();
 				mesh.updateMatrices();
 			}

@@ -112,6 +112,12 @@ const init = async function (canvas: HTMLCanvasElement) {
 				app.scene.meshes[0].visible = !app.scene.meshes[0].visible;
 				event.preventDefault();
 				break;
+			case 88: //X
+				app.assets.coloringIndex++;
+				if (app.assets.coloringIndex > 4) {
+					app.assets.coloringIndex = 0;
+				}
+				break;
 			case 69: //Q
 				app.assets.rotateAsset(1);
 				event.preventDefault();

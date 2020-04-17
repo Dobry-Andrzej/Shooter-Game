@@ -3,6 +3,7 @@ import ShaderList from '../shader/ShaderList';
 
 import RenderData from './meshData/RenderData';
 import TransformData from './meshData/TransformData';
+import ColorData from './meshData/ColorData';
 
 import Camera from '../modules/Camera';
 
@@ -11,8 +12,10 @@ import { vec3, quat, mat4 } from 'gl-matrix';
 
 class Mesh {
 	private _name: string;
+	
 	private _renderData: RenderData;
 	private _transformData: TransformData;
+	private _colorData: ColorData;
 	
 	private _visible: boolean;
 	
@@ -31,8 +34,10 @@ class Mesh {
 	 *	*/
 	public constructor (name: string, gl: WebGLRenderingContext) {
 		this._name = name;
+		
 		this._renderData = new RenderData(this, gl);
 		this._transformData = new TransformData(this);
+		this._colorData = new ColorData(this);
 		
 		this._visible = true;
 		
@@ -148,7 +153,7 @@ class Mesh {
 	}
 	
 	/*	* Setter do renderData
-		* @param {RenderData} _renderData
+		* @param {RenderData} renderData
 	 *	*/
 	public set renderData (renderData: RenderData) {
 		this._renderData = renderData;
@@ -162,7 +167,7 @@ class Mesh {
 	}
 	
 	/*	* Setter do transformData
-		* @param {TransformData} _renderData
+		* @param {TransformData} transformData
 	 *	*/
 	public set transformData (transformData: TransformData) {
 		this._transformData = transformData;
@@ -173,6 +178,20 @@ class Mesh {
 	 *	*/
 	public get transformData () : TransformData {
 		return this._transformData;
+	}
+	
+	/*	* Setter do colorData
+		* @param {ColorData} colorData
+	 *	*/
+	public set colorData (colorData: ColorData) {
+		this._colorData = colorData;
+	}
+	
+	/*	* Getter do colorData
+		* @returns {ColorData}
+	 *	*/
+	public get colorData () : ColorData {
+		return this._colorData;
 	}
 	
 	/*	* Funkcja do zwracania kopii objektu
