@@ -61,8 +61,18 @@ class ColorData {
 		colorVariant = new Float32Array(vertices.length);
 		for (i = 0; i < vertices.length; i += 3) {
 			color = vertices[i + 1];
-			colorVariant[i] = color;
-			colorVariant[i + 1] = color;
+			colorVariant[i] = color + 0.02;
+			colorVariant[i + 1] = color + 0.02;
+			colorVariant[i + 2] = color;
+		}
+		
+		this._colorVariants.push(colorVariant);
+		
+		colorVariant = new Float32Array(vertices.length);
+		for (i = 0; i < vertices.length; i += 3) {
+			color = 0.2 + vertices[i + 1] * 0.8;
+			colorVariant[i] = color + 0.02;
+			colorVariant[i + 1] = color + 0.02;
 			colorVariant[i + 2] = color;
 		}
 		

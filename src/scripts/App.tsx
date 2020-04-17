@@ -150,10 +150,12 @@ class App {
 		*
 	 *	*/
 	public async initialize () : Promise <void> {
+		// Ustaw viewporta
+		this._gl.viewport(0, 0, this._canvas.width, this._canvas.height);
 		//Enable Depth Test
 		this._gl.enable(this._gl.DEPTH_TEST);
 		
-		this._gl.clearColor(0.9, 0.9, 0.9, 1);
+		this._gl.clearColor(0.6, 0.6, 0.6, 1);
 		
 		// Ustawienie viewporta
 		this._scene.initViewport();
@@ -179,6 +181,10 @@ class App {
 	public resize (width: number, height: number) : void {
 		this._canvas.width = width;
 		this._canvas.height = height;
+		
+		this._gl.viewport(0, 0, width, height);
+		
+		this._camera.setSize(width, height);
 	}
 	
 	/*	* Funkcja do animowania frame'a

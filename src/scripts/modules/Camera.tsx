@@ -86,12 +86,23 @@ class Camera {
 		return this._projectionMatrix;
 	}
 	
+	/*	* Funkcja do aktualizacji rozmiaru do perspektywy i viewportu
+		* @param {mat4} projectionMatrix
+	 *	*/
+	public setSize (width: number, height: number) {
+		mat4.identity(this._viewportMatrix);
+		mat4.scale(this._viewportMatrix, this._viewportMatrix, vec3.set(this._tmpVec3, 0.5 * width, 0.5 * height, 0.5));
+		mat4.translate(this._viewportMatrix, this._viewportMatrix, vec3.set(this._tmpVec3, 1.0, 1.0, 1.0));
+		
+		mat4.perspective(this._projectionMatrix, (Math.PI / 3), (width / height), 0.01, 1000);
+	}
+	
 	/*	* Funkcja do panowania kamery
 		* @param {number} deltaX
 		* @param {number} deltaY
 		* @param {number} deltaZ
 	 *	*/
-	public pan(deltaX: number, deltaY: number, deltaZ: number) : void {
+	public pan (deltaX: number, deltaY: number, deltaZ: number) : void {
 		vec3.set(this._tmpVec3, -deltaX * 1e3, -deltaY * 1e3, -deltaZ * 1e3);
 		
 		vec3.add(this._eye, this._eye, this._tmpVec3);
@@ -103,7 +114,7 @@ class Camera {
 	/*	* Funkcja do zoomowania kamery
 		* @param {number} delta
 	 *	*/
-	public zoom(delta: number) : void {
+	public zoom (delta: number) : void {
 		let distance: number = vec3.distance(this._eye, this._center);
 		
 		if (distance + delta > 0.1 && distance + delta < 20) {
@@ -121,7 +132,7 @@ class Camera {
 		* @param {number} deltaY
 		* @param {number} deltaZ
 	 *	*/
-	public rotate(deltaX: number, deltaY: number, deltaZ: number) : void {
+	public rotate (deltaX: number, deltaY: number, deltaZ: number) : void {
 		vec3.set(this._tmpVec3, -deltaX * 5e3, -deltaY * 5e3, -deltaZ * 5e3);
 		
 		vec3.add(this._eye, this._eye, this._tmpVec3);
@@ -134,7 +145,7 @@ class Camera {
 		* @param {number} mouseY
 		* @param {number} z
 	 *	*/
-	public unproject(mouseX: number, mouseY: number, z: number) {
+	public unproject (mouseX: number, mouseY: number, z: number) {
 		var out = vec3.create();
 		mat4.invert(this._tmpMatrix, this.computeWorldToScreenMatrix(this._tmpMatrix));
 		return vec3.transformMat4(out, vec3.set(out, mouseX, this._height - mouseY, z), this._tmpMatrix);
