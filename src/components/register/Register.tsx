@@ -11,7 +11,7 @@ interface AppState{
     usernameError: any,
     passwordError: any,
     emailError: any,
-    errors: []
+    errors: any
 }
 
 const validEmailRegex =
@@ -27,9 +27,9 @@ class Register extends Component<{}, AppState> {
             username: "",
             password: "",
             email: "",
-            usernameError: "",
-            passwordError: "",
-            emailError: "",
+            usernameError: " ",
+            passwordError: " ",
+            emailError: " ",
             errors: []
         };
 
@@ -45,18 +45,18 @@ class Register extends Component<{}, AppState> {
             case 'username':
                 uError = value.length < 5
                     ? 'Username must be 5 characters long!'
-                    : 'OK';
+                    : '';
                 this.setState({usernameError: uError});
                 break;
             case 'password':
                 pError = value.length < 8
                     ? 'Password must be 8 characters long!'
-                    : 'OK';
+                    : '';
                 this.setState({passwordError: pError});
                 break;
             case 'email':
                 eError = validEmailRegex.test(value)
-                    ? 'OK'
+                    ? ''
                     : 'Email is not valid!';
                 this.setState({emailError: eError});
                 break;
@@ -73,7 +73,6 @@ class Register extends Component<{}, AppState> {
             password: password,
             email: email
         }).then((ret) => {
-            console.warn(ret);
             if (ret.status == 200) {
                 history.push({
                     pathname: '/',
@@ -83,9 +82,10 @@ class Register extends Component<{}, AppState> {
                 });
             }
         }, (error) => {
-            console.warn(error);
-            if (error.response.status == 401) {
-                console.log('UNATHORIZED USER');
+            if (error.response.status == 409 && error.response.data.message == "This username is registered already!") {
+                this.setState({errors: "Username is already registered!"});
+            } else if (error.response.status == 409 && error.response.data.message == "Email address is registered!") {
+                this.setState({errors: "Email is already registered!"});
             }
         });
         event.preventDefault();
@@ -96,12 +96,13 @@ class Register extends Component<{}, AppState> {
 
         const { usernameError, passwordError, emailError } = this.state;
         const enabled =
-            usernameError == 'OK' && passwordError == 'OK' && emailError == 'OK';
+            usernameError == '' && passwordError == '' && emailError == '';
 
         return (
             <div className="menuContainer">
                 <div className="titleGame">Register to unlock ranked games!</div>
                 <div className="loginFormContainer">
+                    <p className="register-error"> {this.state.errors }</p>
                     <form onSubmit={ this.handleSubmit } className="loginForm">
                         <input type="text"
                                placeholder="Login"
