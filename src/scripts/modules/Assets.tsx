@@ -31,7 +31,7 @@ class Assets {
 			["brokenShed4x6"],
 			["barbedWireCenter", "barbedWireEdge", "barbedWireEnd", "barbedWirePole"],
 			["barrel", "flowerAsset", "mauzer2x2"],
-			["grassPatch", "grassPatch4x4", "grassLoose", "grassLoose2x2"],
+			["grassPatch", "grassPatch4x4", "grassLoose", "grassLoose2x2", "stones2x4"],
 			["brokenFence1x3", "brokenWall3x4", "fence1x3"]
 		];
 		
