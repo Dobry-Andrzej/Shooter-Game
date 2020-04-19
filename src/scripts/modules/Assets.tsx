@@ -30,9 +30,9 @@ class Assets {
 		this._assetNames = [
 			["brokenShed4x6"],
 			["barbedWireCenter", "barbedWireEdge", "barbedWireEnd", "barbedWirePole"],
-			["barrel", "flowerAsset", "mauzer2x2"],
+			["barrel", "flower", "mauzer2x2"],
 			["grassPatch", "grassPatch4x4", "grassLoose", "grassLoose2x2", "stones2x4"],
-			["brokenFence1x3", "brokenWall3x4", "fence1x3"]
+			["brokenWall3x4", "fence1x3", "brokenFence1x3"]
 		];
 		
 		this._assetCategory = 0;
@@ -215,7 +215,7 @@ class Assets {
 			let mesh = this._assetMeshes[this._assetCategory][this._assetIndex - 1].clone(this._main.gl);
 			
 			if (mesh) {
-				mesh.setPosition(Math.floor(vInt[0] * 4) / 4 + 0.125, 0, Math.floor(vInt[2] * 4) / 4 + 0.125);
+				mesh.setPosition(Math.floor(vInt[0]) + 0.5, 0, Math.floor(vInt[2]) + 0.5);
 				mesh.updateBuffers();
 				mesh.updateMatrices();
 				
@@ -264,7 +264,7 @@ class Assets {
 			if (mesh) {
 				mesh.visible = true;
 				
-				mesh.setPosition(Math.floor(vInt[0] * 4) / 4 + 0.125, 0, Math.floor(vInt[2] * 4) / 4 + 0.125);
+				mesh.setPosition(Math.floor(vInt[0]) + 0.5, 0, Math.floor(vInt[2]) + 0.5);
 				mesh.colors = mesh.colorData.colorVariants[this._coloringIndex];
 				
 				mesh.updateBuffers();

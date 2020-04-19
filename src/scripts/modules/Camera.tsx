@@ -45,7 +45,7 @@ class Camera {
 		mat4.scale(this._viewportMatrix, this._viewportMatrix, vec3.set(this._tmpVec3, 0.5 * this._width, 0.5 * this._height, 0.5));
 		mat4.translate(this._viewportMatrix, this._viewportMatrix, vec3.set(this._tmpVec3, 1.0, 1.0, 1.0));
 		
-		mat4.perspective(this._projectionMatrix, (Math.PI / 3), (this._width / this._height), 0.01, 1000);
+		mat4.perspective(this._projectionMatrix, (Math.PI / 3), (this._width / this._height), 0.01, 1e6);
 		
 		this._eye = vec3.create();
 		this._center = vec3.create();
