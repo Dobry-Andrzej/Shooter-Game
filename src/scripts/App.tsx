@@ -203,12 +203,16 @@ class App {
 			
 			this._scene.renderMeshes();
 			
-			let assetMesh: Mesh = this._assets.assetMeshes[this._assets.assetCategory][this._assets.assetIndex - 1];
+			if (this._assets.assetIndex > 0) {
 			
-			if (assetMesh) {
+				let assetMesh: Mesh = this._assets.assetMeshes[this._assets.assetCategory][this._assets.assetIndex - 1];
 				
-				if (assetMesh.visible == true) {
-					assetMesh.render(this._camera);
+				if (assetMesh) {
+					
+					if (assetMesh.visible == true) {
+						assetMesh.render(this._camera);
+					}
+					
 				}
 				
 			}

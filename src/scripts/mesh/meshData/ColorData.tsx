@@ -36,7 +36,7 @@ class ColorData {
 		let i: number;
 		let color: number;
 		let colorVariant: Float32Array;
-		let vertices: Float32Array = this._mesh.vertices;
+		let vertices: Float32Array = this._mesh.vertexData.vertices;
 		
 		colorVariant = new Float32Array(vertices.length);
 		for (i = 0; i < vertices.length; i += 3) {

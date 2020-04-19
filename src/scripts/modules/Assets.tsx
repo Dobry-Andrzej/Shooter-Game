@@ -4,7 +4,7 @@ import Mesh from '../mesh/Mesh';
 
 import StlLoader from '../loaders/StlLoader';
 
-import { vec2, vec3, quat } from 'gl-matrix';
+import { quat } from 'gl-matrix';
 
 class Assets {
 	private _main: App;
@@ -16,8 +16,6 @@ class Assets {
 	private _assetIndex: number;
 	
 	private _assetMeshes: Mesh[][];
-	
-	private _coloringIndex: number;
 	
 	
 	/*	* Tworzy nową instancję Editor
@@ -39,8 +37,6 @@ class Assets {
 		this._assetIndex = 0;
 		
 		this._assetMeshes = [];
-		
-		this._coloringIndex = 0;
 	}
 	
 	/*	* Setter do assetCategory
@@ -83,20 +79,6 @@ class Assets {
 	 *	*/
 	public get assetMeshes () : Mesh[][] {
 		return this._assetMeshes;
-	}
-	
-	/*	* Setter do coloringIndex
-		* @param {number} coloringIndex
-	 *	*/
-	public set coloringIndex (coloringIndex: number) {
-		this._coloringIndex = coloringIndex;
-	}
-	
-	/*	* Getter do coloringIndex
-		* @returns {number}
-	 *	*/
-	public get coloringIndex () : number {
-		return this._coloringIndex;
 	}
 	
 	/*	* Funkcja do setowania indexu aktywnej kategorii
@@ -152,11 +134,13 @@ class Assets {
 				
 				mesh.visible = false;
 				
-				mesh.vertices = new Float32Array(vertices);
-				
+				mesh.faceData.populateFromTriangleCoords(new Float32Array(vertices));
 				mesh.colorData.computeColorVariants();
-				mesh.colors = mesh.colorData.colorVariants[0];
+				mesh.vertexData.vertexColors = mesh.colorData.colorVariants[0];
 				
+				mesh.faceData.computeTriangles();
+				
+				mesh.renderData.updateRenderingArrays();
 				mesh.updateBuffers();
 				mesh.updateMatrices();
 				
@@ -177,102 +161,6 @@ class Assets {
 		});
 	}
 	
-	/*	* Uaktualnia dany fragment mapy
-		* @param {MouseEvent} event?
-		* @param {vec2} position?
-	 *	*/
-	public tryToUpdateGridSquare (event?: MouseEvent, position?: vec2) : void {
-		// W przypadku assetu 0, nie rób nic
-		if (this._assetIndex == 0) return;
-		
-		let scene = this._main.scene;
-		let assets = this._main.assets;
-		let camera = this._main.camera;
-		let plane = this._main.scene.meshes[1];
-		
-		let vNear: vec3;
-		let vFar: vec3;
-		
-		if (event) {
-			vNear = camera.unproject(event.offsetX, event.offsetY, 0.0);
-			vFar = camera.unproject(event.offsetX, event.offsetY, 0.1);
-		} else if (position) {
-			vNear = camera.unproject(position[0], position[1], 0.0);
-			vFar = camera.unproject(position[0], position[1], 0.1);
-		} else {
-			return;
-		}
-		
-		let vDir: vec3 = vec3.create();
-		
-		vec3.sub(vDir, vFar, vNear);
-		vec3.normalize(vDir, vDir);
-		
-		let vInt: vec3 = vec3.create();
-		let distance: number = plane.intersectTriangles(vNear, vDir, vInt);
-		
-		if (distance >= 0) {
-			let mesh = this._assetMeshes[this._assetCategory][this._assetIndex - 1].clone(this._main.gl);
-			
-			if (mesh) {
-				mesh.setPosition(Math.floor(vInt[0]) + 0.5, 0, Math.floor(vInt[2]) + 0.5);
-				mesh.updateBuffers();
-				mesh.updateMatrices();
-				
-				scene.meshes.push(mesh);
-			}
-		}
-	}
-	
-	/*	* Pokazuje podglad na aktualnym fragmencie mapy
-		* @param {MouseEvent} event?
-		* @param {vec2} position?
-	 *	*/
-	public tryToPreviewOnGridSquare (event?: MouseEvent, position?: vec2) : void {
-		// W przypadku assetu 0, nie rób nic
-		if (this._assetIndex == 0) return;
-		
-		let scene = this._main.scene;
-		let assets = this._main.assets;
-		let camera = this._main.camera;
-		let plane = this._main.scene.meshes[1];
-		
-		let vNear: vec3;
-		let vFar: vec3;
-		
-		if (event) {
-			vNear = camera.unproject(event.offsetX, event.offsetY, 0.0);
-			vFar = camera.unproject(event.offsetX, event.offsetY, 0.1);
-		} else if (position) {
-			vNear = camera.unproject(position[0], position[1], 0.0);
-			vFar = camera.unproject(position[0], position[1], 0.1);
-		} else {
-			return;
-		}
-		
-		let vDir: vec3 = vec3.create();
-		
-		vec3.sub(vDir, vFar, vNear);
-		vec3.normalize(vDir, vDir);
-		
-		let vInt: vec3 = vec3.create();
-		let distance: number = plane.intersectTriangles(vNear, vDir, vInt);
-		
-		if (distance >= 0) {
-			let mesh = this._assetMeshes[this._assetCategory][this._assetIndex - 1];
-			
-			if (mesh) {
-				mesh.visible = true;
-				
-				mesh.setPosition(Math.floor(vInt[0]) + 0.5, 0, Math.floor(vInt[2]) + 0.5);
-				mesh.colors = mesh.colorData.colorVariants[this._coloringIndex];
-				
-				mesh.updateBuffers();
-				mesh.updateMatrices();
-			}
-		}
-	}
-	
 	/*	* Pokazuje podglad na aktualnym fragmencie mapy
 		* @param {MouseEvent} event
 	 *	*/
@@ -288,6 +176,7 @@ class Assets {
 		quat.fromEuler(tmp_quat, 0, 90 * sign, 0);
 		quat.mul(mesh.rotation, mesh.rotation, tmp_quat);
 		
+		mesh.renderData.updateRenderingArrays();
 		mesh.updateBuffers();
 		mesh.updateMatrices();
 	}

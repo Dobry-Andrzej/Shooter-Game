@@ -21,81 +21,136 @@ class Plane extends Mesh {
 		* @param {number} segmentsY
 	 *	*/
 	public generate (width: number, height: number, segmentsX: number, segmentsY: number) : void {
-		let x: number;
-		let y: number;
+		let x: number, y: number,
+			triangleId: number, faceId: number,
+			t3: number, t9: number, f4: number, v3: number,
+			
+			offset: number = 0,
 		
-		let xstep: number = width / segmentsX;
-		let ystep: number = height / segmentsY;
-		let halfWidth: number = width / 2;
-		let halfHeight: number = height / 2;
+			xstep: number = width / segmentsX,
+			ystep: number = height / segmentsY,
+			halfWidth: number = width / 2,
+			halfHeight: number = height / 2,
 		
-		let vertices: number[] = [];
-		let colors: number[] = [];
-		let offset: number = 0;
+			vertexAmount: number = (segmentsX + 1) * (segmentsY + 1),
+			quadAmount: number = segmentsX * segmentsY,
 		
-		let len: number = (2 * segmentsX * segmentsY) * 9;
+			vertices = new Float32Array(vertexAmount * 3),
+			vertexColors = new Float32Array(vertexAmount * 3),
 		
-		vertices.length = len;
-		colors.length = len;
+			faces = new Int32Array(quadAmount * 4),
+			triangles = new Uint32Array(quadAmount * 3 * 2),
+			
+			verticesToRender = new Float32Array(quadAmount * 2 * 9),
+			colorsToRender = new Float32Array(quadAmount * 2 * 9);
 		
-		for (x = 0; x < segmentsX; x++) {
-			for (y = 0; y < segmentsY; y++) {
-				// Pierwszy trójkąt
+		for (x = 0; x <= segmentsX; x++) {
+			for (y = 0; y <= segmentsY; y++) {
 				vertices[offset] = -halfWidth + x * xstep;
 				vertices[offset + 1] = 0;
 				vertices[offset + 2] = -halfHeight + y * ystep;
 				
-				vertices[offset + 3] = -halfWidth + (x + 1) * xstep;
-				vertices[offset + 4] = 0;
-				vertices[offset + 5] = -halfHeight + y * ystep;
-				
-				vertices[offset + 6] = -halfWidth + (x + 1) * xstep;
-				vertices[offset + 7] = 0;
-				vertices[offset + 8] = -halfHeight + (y + 1) * ystep;
-				
-				colors[offset] = 0.2;
-				colors[offset + 1] = 0.2;
-				colors[offset + 2] = 0.2;
-				
-				colors[offset + 3] = 0.2;
-				colors[offset + 4] = 0.2;
-				colors[offset + 5] = 0.2;
-				
-				colors[offset + 6] = 0.2;
-				colors[offset + 7] = 0.2;
-				colors[offset + 8] = 0.2;
-				
-				// Drugi trójkąt
-				vertices[offset + 9] = -halfWidth + x * xstep;
-				vertices[offset + 10] = 0;
-				vertices[offset + 11] = -halfHeight + y * ystep;
-				
-				vertices[offset + 12] = -halfWidth + (x + 1) * xstep;
-				vertices[offset + 13] = 0;
-				vertices[offset + 14] = -halfHeight + (y + 1) * ystep;
-				
-				vertices[offset + 15] = -halfWidth + x * xstep;
-				vertices[offset + 16] = 0;
-				vertices[offset + 17] = -halfHeight + (y + 1) * ystep;
-				
-				colors[offset + 9] = 0.2;
-				colors[offset + 10] = 0.2;
-				colors[offset + 11] = 0.2;
-				
-				colors[offset + 12] = 0.2;
-				colors[offset + 13] = 0.2;
-				colors[offset + 14] = 0.2;
-				
-				colors[offset + 15] = 0.2;
-				colors[offset + 16] = 0.2;
-				colors[offset + 17] = 0.2;
-				
-				offset += 18;
+				offset += 3;
 			}
 		}
 		
-		this.vertices = new Float32Array(vertices);
-		this.colors = new Float32Array(colors);
+		for (x = 0; x < segmentsX; x++) {
+			for (y = 0; y < segmentsY; y++) {
+				faceId = x * segmentsY + y;
+				f4 = faceId * 4;
+				
+				faces[f4] = x * (segmentsY + 1) + y;
+				faces[f4 + 1] = (x + 1) * (segmentsY + 1) + y;
+				faces[f4 + 2] = (x + 1) * (segmentsY + 1) + y + 1;
+				faces[f4 + 3] = x * (segmentsY + 1) + y + 1;
+				
+				triangleId = faceId * 2;
+				t3 = triangleId * 3;
+				t9 = triangleId * 9;
+				
+				triangles[t3] = faces[f4];
+				triangles[t3 + 1] = faces[f4 + 1];
+				triangles[t3 + 2] = faces[f4 + 2];
+				
+				v3 = faces[f4] * 3;
+				
+				verticesToRender[t9] = vertices[v3];
+				verticesToRender[t9 + 1] = vertices[v3 + 1];
+				verticesToRender[t9 + 2] = vertices[v3 + 2];
+				
+				colorsToRender[t9] = faceId / quadAmount;
+				colorsToRender[t9 + 1] = faceId / quadAmount;
+				colorsToRender[t9 + 2] = faceId / quadAmount;
+				
+				v3 = faces[f4 + 1] * 3;
+				
+				verticesToRender[t9 + 3] = vertices[v3];
+				verticesToRender[t9 + 4] = vertices[v3 + 1];
+				verticesToRender[t9 + 5] = vertices[v3 + 2];
+				
+				colorsToRender[t9 + 3] = faceId / quadAmount;
+				colorsToRender[t9 + 4] = faceId / quadAmount;
+				colorsToRender[t9 + 5] = faceId / quadAmount;
+				
+				v3 = faces[f4 + 2] * 3;
+				
+				verticesToRender[t9 + 6] = vertices[v3];
+				verticesToRender[t9 + 7] = vertices[v3 + 1];
+				verticesToRender[t9 + 8] = vertices[v3 + 2];
+				
+				colorsToRender[t9 + 6] = faceId / quadAmount;
+				colorsToRender[t9 + 7] = faceId / quadAmount;
+				colorsToRender[t9 + 8] = faceId / quadAmount;
+				
+				
+				triangleId = faceId * 2 + 1;
+				t3 = triangleId * 3;
+				t9 = triangleId * 9;
+				
+				triangles[t3] = faces[f4];
+				triangles[t3 + 1] = faces[f4 + 2];
+				triangles[t3 + 2] = faces[f4 + 3];
+				
+				v3 = faces[f4] * 3;
+				
+				verticesToRender[t9] = vertices[v3];
+				verticesToRender[t9 + 1] = vertices[v3 + 1];
+				verticesToRender[t9 + 2] = vertices[v3 + 2];
+				
+				colorsToRender[t9] = faceId / quadAmount;
+				colorsToRender[t9 + 1] = faceId / quadAmount;
+				colorsToRender[t9 + 2] = faceId / quadAmount;
+				
+				v3 = faces[f4 + 2] * 3;
+				
+				verticesToRender[t9 + 3] = vertices[v3];
+				verticesToRender[t9 + 4] = vertices[v3 + 1];
+				verticesToRender[t9 + 5] = vertices[v3 + 2];
+				
+				colorsToRender[t9 + 3] = faceId / quadAmount;
+				colorsToRender[t9 + 4] = faceId / quadAmount;
+				colorsToRender[t9 + 5] = faceId / quadAmount;
+				
+				v3 = faces[f4 + 3] * 3;
+				
+				verticesToRender[t9 + 6] = vertices[v3];
+				verticesToRender[t9 + 7] = vertices[v3 + 1];
+				verticesToRender[t9 + 8] = vertices[v3 + 2];
+				
+				colorsToRender[t9 + 6] = faceId / quadAmount;
+				colorsToRender[t9 + 7] = faceId / quadAmount;
+				colorsToRender[t9 + 8] = faceId / quadAmount;
+			}
+		}
+		
+		this.vertexData.vertices = vertices;
+		this.vertexData.vertexColors = vertexColors;
+		
+		this.faceData.faces = faces;
+		this.faceData.triangles = triangles;
+		
+		this.renderData.verticesToRender = verticesToRender;
+		this.renderData.colorsToRender = colorsToRender;
 	}
 	
 }

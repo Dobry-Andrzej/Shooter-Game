@@ -89,7 +89,7 @@ class Scene {
 		
 		let stlloader = new StlLoader();
 		
-		grid.generate(70, 70, 70, 70);
+		grid.generate(50, 50, 50, 50);
 		
 		grid.setPosition(0, 0, 0);
 		grid.updateBuffers();
@@ -97,9 +97,7 @@ class Scene {
 		
 		this.add(grid);
 		
-		plane.generate(70, 70, 70, 70);
-		
-		plane.visible = false;
+		plane.generate(50, 50, 50, 50);
 		
 		plane.setPosition(0, 0, 0);
 		plane.updateBuffers();
@@ -110,16 +108,18 @@ class Scene {
 		stlloader.load("/meshes/map.stl", function(vertices: number[]) {
 			let map: Mesh = new Mesh("map", self._gl);
 			
-			map.vertices = new Float32Array(vertices);
-			map.colors = new Float32Array(vertices.length);
+			map.faceData.populateFromTriangleCoords(new Float32Array(vertices));
 			
-			for (let i: number = 0; i < vertices.length; i += 3) {
-				map.colors[i] = 0.3 + vertices[i + 1] * 2;
-				map.colors[i + 1] = 0.3 + vertices[i + 1] * 2;
-				map.colors[i + 2] = 0.3 + vertices[i + 1] * 2;
+			for (let i: number = 0; i < map.vertexData.vertices.length; i += 3) {
+				map.vertexData.vertexColors[i] = 0.3 + map.vertexData.vertices[i + 1] * 2;
+				map.vertexData.vertexColors[i + 1] = 0.3 + map.vertexData.vertices[i + 1] * 2;
+				map.vertexData.vertexColors[i + 2] = 0.3 + map.vertexData.vertices[i + 1] * 2;
 			}
 			
 			map.setPosition(0, -0.2, 0);
+			
+			map.faceData.computeTriangles();
+			map.renderData.updateRenderingArrays();
 			map.updateBuffers();
 			map.updateMatrices();
 			

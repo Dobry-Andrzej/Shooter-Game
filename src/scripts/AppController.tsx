@@ -42,7 +42,7 @@ const init = async function (canvas: HTMLCanvasElement) {
 		
 		if (app != null) {
 			if (event.which == 1) {
-				app.assets.tryToUpdateGridSquare(event, undefined);
+				app.editor.tryToUpdateGridSquare(event, undefined);
 			} else if (event.which == 2) {
 				panEnabled = true;
 				rotationEnabled = false;
@@ -69,7 +69,7 @@ const init = async function (canvas: HTMLCanvasElement) {
 					app.camera.rotate(vEnd[0] - vStart[0], vEnd[1] - vStart[1], vEnd[2] - vStart[2]);
 				}
 			} else {
-				app.assets.tryToPreviewOnGridSquare(event, undefined);
+				app.editor.tryToPreviewOnGridSquare(event, undefined);
 			}
 			
 			vec2.set(mouseXY, event.offsetX, event.offsetY);
@@ -110,12 +110,13 @@ const init = async function (canvas: HTMLCanvasElement) {
 		switch (event.keyCode) {
 			case 90: //Z
 				app.scene.meshes[0].visible = !app.scene.meshes[0].visible;
+				app.scene.meshes[1].visible = !app.scene.meshes[1].visible;
 				event.preventDefault();
 				break;
 			case 88: //X
-				app.assets.coloringIndex++;
-				if (app.assets.coloringIndex > 4) {
-					app.assets.coloringIndex = 0;
+				app.editor.coloringIndex++;
+				if (app.editor.coloringIndex > 4) {
+					app.editor.coloringIndex = 0;
 				}
 				break;
 			case 69: //Q
@@ -170,7 +171,7 @@ const init = async function (canvas: HTMLCanvasElement) {
 				break;
 		}
 		
-		app.assets.tryToPreviewOnGridSquare(undefined, mouseXY);
+		app.editor.tryToPreviewOnGridSquare(undefined, mouseXY);
 		
 	});
 	

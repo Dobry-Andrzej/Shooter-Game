@@ -165,10 +165,9 @@ class ShaderBase {
 	private drawBuffer (mesh: Mesh) : void {
 		let gl = mesh.renderData.gl;
 		
-		gl.drawArrays(this._primitives[this._primitiveType], 0, mesh.getVertexAmount());
+		gl.drawArrays(this._primitives[this._primitiveType], 0, mesh.renderData.getVertexToRenderAmount());
 		
 		gl.bindBuffer(gl.ARRAY_BUFFER, null);
-		//gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, null);
 
 		this.unbindAttributes();
 	}

@@ -1,6 +1,8 @@
 
 import ShaderList from '../shader/ShaderList';
 
+import VertexData from './meshData/VertexData';
+import FaceData from './meshData/FaceData';
 import RenderData from './meshData/RenderData';
 import TransformData from './meshData/TransformData';
 import ColorData from './meshData/ColorData';
@@ -13,14 +15,13 @@ import { vec3, quat, mat4 } from 'gl-matrix';
 class Mesh {
 	private _name: string;
 	
+	private _vertexData: VertexData;
+	private _faceData: FaceData;
 	private _renderData: RenderData;
 	private _transformData: TransformData;
 	private _colorData: ColorData;
 	
 	private _visible: boolean;
-	
-	private _vertices: Float32Array;
-	private _colors: Float32Array;
 	
 	private _matrix: mat4;
 	
@@ -35,14 +36,13 @@ class Mesh {
 	public constructor (name: string, gl: WebGLRenderingContext) {
 		this._name = name;
 		
+		this._vertexData = new VertexData(this);
+		this._faceData = new FaceData(this);
 		this._renderData = new RenderData(this, gl);
 		this._transformData = new TransformData(this);
 		this._colorData = new ColorData(this);
 		
 		this._visible = true;
-		
-		this._vertices = new Float32Array(0);
-		this._colors = new Float32Array(0);
 		
 		this._matrix = mat4.create();
 		
@@ -123,33 +123,32 @@ class Mesh {
 		return this._rotation;
 	}
 	
-	
-	/*	* Setter do vertices
-		* @param {Float32Array} vertices
+	/*	* Setter do vertexData
+		* @param {VertexData} vertexData
 	 *	*/
-	public set vertices (vertices: Float32Array) {
-		this._vertices = vertices;
+	public set vertexData (vertexData: VertexData) {
+		this._vertexData = vertexData;
 	}
 	
-	/*	* Getter do vertices
-		* @returns {Float32Array}
+	/*	* Getter do vertexData
+		* @returns {VertexData}
 	 *	*/
-	public get vertices () : Float32Array {
-		return this._vertices;
+	public get vertexData () : VertexData {
+		return this._vertexData;
 	}
 	
-	/*	* Setter do colors
-		* @param {Float32Array} colors
+	/*	* Setter do faceData
+		* @param {FaceData} faceData
 	 *	*/
-	public set colors (colors: Float32Array) {
-		this._colors = colors;
+	public set faceData (faceData: FaceData) {
+		this._faceData = faceData;
 	}
 	
-	/*	* Getter do colors
-		* @returns {Float32Array}
+	/*	* Getter do faceData
+		* @returns {FaceData}
 	 *	*/
-	public get colors () : Float32Array {
-		return this._colors;
+	public get faceData () : FaceData {
+		return this._faceData;
 	}
 	
 	/*	* Setter do renderData
@@ -207,8 +206,8 @@ class Mesh {
 		mesh.scale = this._scale;
 		mesh.rotation = this._rotation;
 		
-		mesh.vertices = new Float32Array(this._vertices);
-		mesh.colors = new Float32Array(this._colors);
+		mesh.vertexData = this._vertexData.clone(mesh);
+		mesh.faceData = this._faceData.clone(mesh);
 		
 		return mesh;
 	}
@@ -240,49 +239,58 @@ class Mesh {
 		quat.fromEuler(this._rotation, x, y, z);
 	}
 	
-	/*	* Funkcja do zwracania vertexAmount
-		* @returns {number[]}
-	 *	*/
-	public getVertexAmount () : number {
-		return this._vertices.length / 3;
-	}
-	
 	/*	* Sprawdza intersekcje miedzy rayem a trójkątami
 		* @param {vec3} origin
 		* @param {vec3} direction
 		* @param {vec3} vIntOut
 		* @returns {number}
 	 *	*/
-	public intersectTriangles (origin: vec3, direction: vec3, vIntOut?: vec3) : number {
+	public intersect (origin: vec3, direction: vec3, vIntOut?: vec3) : number {
 		let i: number;
-		let v9: number;
+		let f4: number;
+		let v3: number;
 		
 		let distance: number;
 		let smallestDistance: number = -1;
-		let triangleIndex: number = -1;
 		
 		let vA: vec3 = vec3.create();
 		let vB: vec3 = vec3.create();
 		let vC: vec3 = vec3.create();
 		let vInt: vec3 = vec3.create();
 		
-		let triangleAmount: number = this.getVertexAmount() / 3;
+		let faces: Int32Array = this._faceData.faces;
+		let vertices: Float32Array = this._vertexData.vertices;
 		
-		for (i = 0; i < triangleAmount; i++) {
-			v9 = i * 9;
+		let faceAmount: number = this._faceData.getFaceAmount();
+		
+		for (i = 0; i < faceAmount; i++) {
+			f4 = i * 4;
 			
-			vec3.set(vA, this._vertices[v9], this._vertices[v9 + 1], this._vertices[v9 + 2]);
-			vec3.set(vB, this._vertices[v9 + 3], this._vertices[v9 + 4], this._vertices[v9 + 5]);
-			vec3.set(vC, this._vertices[v9 + 6], this._vertices[v9 + 7], this._vertices[v9 + 8]);
+			v3 = faces[f4] * 3;
+			vec3.set(vA, vertices[v3], vertices[v3 + 1], vertices[v3 + 2]);
+			v3 = faces[f4 + 1] * 3;
+			vec3.set(vB, vertices[v3], vertices[v3 + 1], vertices[v3 + 2]);
+			v3 = faces[f4 + 2] * 3;
+			vec3.set(vC, vertices[v3], vertices[v3 + 1], vertices[v3 + 2]);
 			
 			distance = GeoMath.intersectTriangle(origin, direction, vA, vB, vC, vInt);
+			
+			if (faces[f4 + 3] >= 0 && distance == -1) {
+				v3 = faces[f4] * 3;
+				vec3.set(vA, vertices[v3], vertices[v3 + 1], vertices[v3 + 2]);
+				v3 = faces[f4 + 2] * 3;
+				vec3.set(vB, vertices[v3], vertices[v3 + 1], vertices[v3 + 2]);
+				v3 = faces[f4 + 3] * 3;
+				vec3.set(vC, vertices[v3], vertices[v3 + 1], vertices[v3 + 2]);
+			
+				distance = GeoMath.intersectTriangle(origin, direction, vA, vB, vC, vInt);
+			}
 			
 			if (distance == -1) continue;
 			
 			if (smallestDistance == -1 || smallestDistance > distance) {
 				
 				smallestDistance = distance;
-				triangleIndex = i;
 				
 				if (vIntOut) {
 					vec3.copy(vIntOut, vInt);
@@ -293,26 +301,12 @@ class Mesh {
 		return smallestDistance;
 	}
 	
-	/*	* Aktualizuje wszystkie buffery na podstawie topologii
+	/*	* Aktualizuje wszystkie buffery na podstawie tablic do renderingu
 		*
 	 *	*/
 	public updateBuffers () : void {
-		this.updateVertexBuffer();
-		this.updateColorBuffer();
-	}
-	
-	/*	* Aktualizuje vertex buffer na podstawie _vertices
-		*
-	 *	*/
-	public updateVertexBuffer () : void {
-		this._renderData.vertexBuffer.update(this._vertices, this.getVertexAmount() * 3);
-	}
-	
-	/*	* Aktualizuje color buffer na podstawie _colors
-		*
-	 *	*/
-	public updateColorBuffer () : void {
-		this._renderData.colorBuffer.update(this._colors, this.getVertexAmount() * 3);
+		this._renderData.updateVertexBuffer();
+		this._renderData.updateColorBuffer();
 	}
 	
 	/*	* Aktualizuje macierze na podstawie pozycji, rotacji, skali i kamery
