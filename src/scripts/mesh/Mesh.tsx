@@ -68,7 +68,7 @@ class Mesh {
 	}
 	
 	/*	* Setter do visible
-		* @param {boolean} name
+		* @param {boolean} visible
 	 *	*/
 	public set visible (visible: boolean) {
 		this._visible = visible;
@@ -198,7 +198,7 @@ class Mesh {
 		* @returns {Mesh}
 	 *	*/
 	public clone (gl: WebGLRenderingContext) : Mesh {
-		let mesh = new Mesh(this._name + "_", gl);
+		let mesh = new Mesh(this._name, gl);
 		
 		mesh.visible = this._visible;
 		
@@ -310,6 +310,7 @@ class Mesh {
 	public updateBuffers () : void {
 		this._renderData.updateVertexBuffer();
 		this._renderData.updateColorBuffer();
+		this._renderData.updateNormalBuffer();
 	}
 	
 	/*	* Aktualizuje macierze na podstawie pozycji, rotacji, skali i kamery

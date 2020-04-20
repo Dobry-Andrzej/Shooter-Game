@@ -70,8 +70,8 @@ const computeNormal = function(vA: vec3, vB: vec3, vC: vec3) : vec3 {
 	let edge1: vec3 = vec3.create();
 	let normal: vec3 = vec3.create();
 	
-	vec3.sub(edge0, vC, vA);
-	vec3.sub(edge1, vB, vA);
+	vec3.sub(edge0, vA, vB);
+	vec3.sub(edge1, vB, vC);
 	
 	vec3.cross(normal, edge0, edge1);
 	vec3.normalize(normal, normal);

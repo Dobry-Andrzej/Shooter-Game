@@ -113,12 +113,23 @@ class ColorData {
 		
 		colorVariant = new Float32Array(vertices.length);
 		for (i = 0; i < vertices.length; i += 3) {
-			colorVariant[i] = vertexNormals[i];
-			colorVariant[i + 1] = vertexNormals[i + 1];
-			colorVariant[i + 2] = vertexNormals[i + 2];
+			colorVariant[i] = 0.5 + 0.5 * vertexNormals[i];
+			colorVariant[i + 1] = 0.5 + 0.5 * vertexNormals[i + 1];
+			colorVariant[i + 2] = 0.5 + 0.5 * vertexNormals[i + 2];
 		}
 		
 		this._colorVariants.push(colorVariant);
+		
+		colorVariant = new Float32Array(vertices.length);
+		for (i = 0; i < vertices.length; i += 3) {
+			color = 0.2 * vertices[i + 1] + 0.7 * (i / vertices.length) + 0.1;
+			colorVariant[i] = color;
+			colorVariant[i + 1] = 0.2;
+			colorVariant[i + 2] = 0.2;
+		}
+		
+		this._colorVariants.push(colorVariant);
+		
 	}
 	
 }

@@ -72,6 +72,7 @@ class Editor {
 				mesh.setPosition(Math.floor(vInt[0]) + 0.5, 0, Math.floor(vInt[2]) + 0.5);
 				
 				mesh.renderData.updateRenderingArrays();
+				
 				mesh.updateBuffers();
 				mesh.updateMatrices();
 				

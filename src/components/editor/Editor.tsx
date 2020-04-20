@@ -13,7 +13,7 @@ class Editor extends Component<Props> {
 
         const canvas = document.getElementById('webGlcanvas') as HTMLCanvasElement;
 
-        AppController.init(canvas);
+        AppController.enableEditorEvents(canvas);
     }
 
     render () {

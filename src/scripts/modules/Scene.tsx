@@ -2,6 +2,7 @@
 import App from '../App';
 
 import Mesh from '../mesh/Mesh';
+import Player from '../player/Player';
 import Grid from '../primitives/Grid';
 import Plane from '../primitives/Plane';
 
@@ -12,6 +13,7 @@ class Scene {
 	private _gl: WebGLRenderingContext;
 	
 	private _meshes: Mesh[];
+	private _players: Player[];
 	
 	/*	* Tworzy nową instancję Scene
 		* @param {App} main
@@ -21,6 +23,7 @@ class Scene {
 		this._gl = main.gl;
 		
 		this._meshes = [];
+		this._players = [];
 	}
 	
 	/*	* Setter do main
@@ -51,6 +54,20 @@ class Scene {
 		return this._meshes;
 	}
 	
+	/*	* Setter do players
+		* @param {Player[]} players
+	 *	*/
+	public set players (players: Player[]) {
+		this._players = players;
+	}
+	
+	/*	* Getter do players
+		* @returns {Player[]}
+	 *	*/
+	public get players () : Player[] {
+		return this._players;
+	}
+	
 	public initViewport () : void {
 		let gl = this._main.gl;
 		let canvas = this._main.canvas;
@@ -63,9 +80,15 @@ class Scene {
 	 *	*/
 	public renderMeshes () : void {
 		let camera = this._main.camera;
-		for (let i: number = 0; i < this.meshes.length; i++) {
+		for (let i: number = 0; i < this._meshes.length; i++) {
 			if (this._meshes[i].visible == true) {
 				this._meshes[i].render(camera);
+			}
+		}
+		for (let i: number = 0; i < this._players.length; i++) {
+			let model: Mesh | undefined = this._players[i].model;
+			if (model) {
+				model.render(camera);
 			}
 		}
 	}
@@ -120,6 +143,7 @@ class Scene {
 			
 			map.vertexData.computeVertexFaceRings();
 			map.vertexData.computeVertexNormals();
+			
 			map.renderData.updateRenderingArrays();
 			
 			map.updateBuffers();

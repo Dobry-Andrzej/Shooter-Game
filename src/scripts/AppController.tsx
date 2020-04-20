@@ -5,17 +5,20 @@ import { vec2, vec3 } from 'gl-matrix';
 
 let app: App | null = null;
 
-/*	* Function to initialize the app and events
+/*	* Function to initialize the app and events for editing mode
 	* @param {HTMLCanvasElement} canvas
  *	*/
-const init = async function (canvas: HTMLCanvasElement) {
-	if (app != null) return;
-	
+const enableEditorEvents = async function (canvas: HTMLCanvasElement) {
 	canvas.width = window.innerWidth;
 	canvas.height = window.innerHeight;
 	
-	app = new App(canvas);
-	await app.initialize();
+	if (app == null) {
+		app = new App(canvas);
+		await app.initialize();
+	}
+	if (app == null) {
+		return;
+	}
 	
 	let panEnabled: boolean = false;
 	let rotationEnabled: boolean = false;
@@ -115,9 +118,10 @@ const init = async function (canvas: HTMLCanvasElement) {
 				break;
 			case 88: //X
 				app.editor.coloringIndex++;
-				if (app.editor.coloringIndex > 6) {
+				if (app.editor.coloringIndex > 7) {
 					app.editor.coloringIndex = 0;
 				}
+				event.preventDefault();
 				break;
 			case 69: //Q
 				app.assets.rotateAsset(1);
@@ -177,7 +181,64 @@ const init = async function (canvas: HTMLCanvasElement) {
 	
 };
 
+/*	* Function to initialize the app and events for gaming mode
+	* @param {HTMLCanvasElement} canvas
+ *	*/
+const enableGameEvents = async function (canvas: HTMLCanvasElement) {
+	canvas.width = window.innerWidth;
+	canvas.height = window.innerHeight;
+	
+	if (app == null) {	
+		app = new App(canvas);
+		await app.initialize();
+		app.game.addPlayer();
+	}
+	
+	if (app == null) {
+		return;
+	}
+	
+	if (app == null) return;
+		
+	app.events.attachEvent(document, "keydown", function(event: KeyboardEvent) {
+		if (app == null) return;
+		
+		switch (event.keyCode) {
+			case 87: //W
+				app.game.player.move(1, 0);
+				event.preventDefault();
+				break;
+			case 83: //S
+				app.game.player.move(-1, 0);
+				event.preventDefault();
+				break;
+			case 65: // A
+				app.game.player.move(0, -1);
+				event.preventDefault();
+				break;
+			case 68: //D
+				app.game.player.move(0, 1);
+				event.preventDefault();
+				break;
+			default:
+				break;
+		}
+	});
+	
+};
+
+/*	* Function to clear the events from app
+	*
+ *	*/
+const clear = function () : void {
+	if (app != null) {
+		app.events.detachAllEvents();
+	}
+};
+
 export default {
-	init: init,
+	enableEditorEvents: enableEditorEvents,
+	enableGameEvents: enableGameEvents,
+	clear: clear,
 	app: app
 };

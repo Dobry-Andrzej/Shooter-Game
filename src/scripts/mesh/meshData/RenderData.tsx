@@ -8,9 +8,11 @@ class RenderData {
 	
 	private _verticesToRender: Float32Array;
 	private _colorsToRender: Float32Array;
+	private _normalsToRender: Float32Array;
 	
 	private _vertexBuffer: Buffer;
 	private _colorBuffer: Buffer;
+	private _normalBuffer: Buffer;
 	
 	private _shaderType: number;
 	
@@ -24,9 +26,11 @@ class RenderData {
 		
 		this._verticesToRender = new Float32Array(0);
 		this._colorsToRender = new Float32Array(0);
+		this._normalsToRender = new Float32Array(0);
 		
-		this._vertexBuffer = new Buffer(gl, gl.ARRAY_BUFFER, gl.DYNAMIC_DRAW);
-		this._colorBuffer = new Buffer(gl, gl.ARRAY_BUFFER, gl.DYNAMIC_DRAW);
+		this._vertexBuffer = new Buffer(gl, gl.ARRAY_BUFFER, gl.STATIC_DRAW);
+		this._colorBuffer = new Buffer(gl, gl.ARRAY_BUFFER, gl.STATIC_DRAW);
+		this._normalBuffer = new Buffer(gl, gl.ARRAY_BUFFER, gl.STATIC_DRAW);
 		
 		this._shaderType = 0;
 	}
@@ -73,6 +77,20 @@ class RenderData {
 		return this._colorsToRender;
 	}
 	
+	/*	* Setter do normalsToRender
+		* @param {Float32Array} normalsToRender
+	 *	*/
+	public set normalsToRender (normalsToRender: Float32Array) {
+		this._normalsToRender = normalsToRender;
+	}
+	
+	/*	* Getter do normalsToRender
+		* @returns {Float32Array}
+	 *	*/
+	public get normalsToRender () : Float32Array {
+		return this._normalsToRender;
+	}
+	
 	/*	* Setter do vertexBuffer
 		* @param {Buffer} buffer
 	 *	*/
@@ -91,7 +109,7 @@ class RenderData {
 		* @param {Buffer} buffer
 	 *	*/
 	public set colorBuffer (colorBuffer: Buffer) {
-		this._vertexBuffer = colorBuffer;
+		this._colorBuffer = colorBuffer;
 	}
 	
 	/*	* Getter do colorBuffer
@@ -99,6 +117,20 @@ class RenderData {
 	 *	*/
 	public get colorBuffer () : Buffer {
 		return this._colorBuffer;
+	}
+	
+	/*	* Setter do normalBuffer
+		* @param {Buffer} buffer
+	 *	*/
+	public set normalBuffer (normalBuffer: Buffer) {
+		this._normalBuffer = normalBuffer;
+	}
+	
+	/*	* Getter do normalBuffer
+		* @returns {Buffer}
+	 *	*/
+	public get normalBuffer () : Buffer {
+		return this._normalBuffer;
 	}
 	
 	/*	* Setter do shaderType
@@ -125,6 +157,7 @@ class RenderData {
 		
 		renderData.verticesToRender = new Float32Array(this._verticesToRender);
 		renderData.colorsToRender = new Float32Array(this._colorsToRender);
+		renderData.normalsToRender = new Float32Array(this._normalsToRender);
 		
 		renderData.shaderType = this._shaderType;
 		
@@ -146,10 +179,12 @@ class RenderData {
 			t3: number, t9: number, v3: number,
 			vertices: Float32Array = this._mesh.vertexData.vertices,
 			vertexColors: Float32Array = this._mesh.vertexData.vertexColors,
+			vertexNormals: Float32Array = this._mesh.vertexData.vertexNormals,
 			triangleAmount: number = this._mesh.faceData.getTriangleAmount(),
 			triangles: Uint32Array = this._mesh.faceData.triangles,
 			coords = new Float32Array(triangleAmount * 9),
-			colors = new Float32Array(triangleAmount * 9);
+			colors = new Float32Array(triangleAmount * 9),
+			normals = new Float32Array(triangleAmount * 9);
 			
 		for (i = 0; i < triangleAmount; i++) {
 			t3 = i * 3;
@@ -164,6 +199,10 @@ class RenderData {
 			colors[t9 + 1] = vertexColors[v3 + 1];
 			colors[t9 + 2] = vertexColors[v3 + 2];
 			
+			normals[t9] = vertexNormals[v3];
+			normals[t9 + 1] = vertexNormals[v3 + 1];
+			normals[t9 + 2] = vertexNormals[v3 + 2];
+			
 			v3 = triangles[t3 + 1] * 3;
 			coords[t9 + 3] = vertices[v3];
 			coords[t9 + 4] = vertices[v3 + 1];
@@ -173,6 +212,10 @@ class RenderData {
 			colors[t9 + 4] = vertexColors[v3 + 1];
 			colors[t9 + 5] = vertexColors[v3 + 2];
 			
+			normals[t9 + 3] = vertexNormals[v3];
+			normals[t9 + 4] = vertexNormals[v3 + 1];
+			normals[t9 + 5] = vertexNormals[v3 + 2];
+			
 			v3 = triangles[t3 + 2] * 3;
 			coords[t9 + 6] = vertices[v3];
 			coords[t9 + 7] = vertices[v3 + 1];
@@ -181,10 +224,15 @@ class RenderData {
 			colors[t9 + 6] = vertexColors[v3];
 			colors[t9 + 7] = vertexColors[v3 + 1];
 			colors[t9 + 8] = vertexColors[v3 + 2];
+			
+			normals[t9 + 6] = vertexNormals[v3];
+			normals[t9 + 7] = vertexNormals[v3 + 1];
+			normals[t9 + 8] = vertexNormals[v3 + 2];
 		}
 		
 		this._verticesToRender = coords;
 		this._colorsToRender = colors;
+		this._normalsToRender = normals;
 	}
 	
 	/*	* Aktualizuje vertex buffer na podstawie _verticesToRender
@@ -199,6 +247,13 @@ class RenderData {
 	 *	*/
 	public updateColorBuffer () : void {
 		this._colorBuffer.update(this._colorsToRender, this.getVertexToRenderAmount() * 3);
+	}
+	
+	/*	* Aktualizuje normalBuffer na podstawie _normalsToRender
+		*
+	 *	*/
+	public updateNormalBuffer () : void {
+		this._normalBuffer.update(this._normalsToRender, this.getVertexToRenderAmount() * 3);
 	}
 	
 }

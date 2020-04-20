@@ -37,18 +37,24 @@ class Plane extends Mesh {
 		
 			vertices = new Float32Array(vertexAmount * 3),
 			vertexColors = new Float32Array(vertexAmount * 3),
+			vertexNormals = new Float32Array(vertexAmount * 3),
 		
 			faces = new Int32Array(quadAmount * 4),
 			triangles = new Uint32Array(quadAmount * 3 * 2),
 			
 			verticesToRender = new Float32Array(quadAmount * 2 * 9),
-			colorsToRender = new Float32Array(quadAmount * 2 * 9);
+			colorsToRender = new Float32Array(quadAmount * 2 * 9),
+			normalsToRender = new Float32Array(quadAmount * 2 * 9);
 		
 		for (x = 0; x <= segmentsX; x++) {
 			for (y = 0; y <= segmentsY; y++) {
 				vertices[offset] = -halfWidth + x * xstep;
 				vertices[offset + 1] = 0;
 				vertices[offset + 2] = -halfHeight + y * ystep;
+				
+				vertexNormals[offset] = 0;
+				vertexNormals[offset + 1] = 1;
+				vertexNormals[offset + 2] = 0;
 				
 				offset += 3;
 			}
@@ -82,6 +88,10 @@ class Plane extends Mesh {
 				colorsToRender[t9 + 1] = faceId / quadAmount;
 				colorsToRender[t9 + 2] = faceId / quadAmount;
 				
+				normalsToRender[t9] = vertexNormals[v3];
+				normalsToRender[t9 + 1] = vertexNormals[v3 + 1];
+				normalsToRender[t9 + 2] = vertexNormals[v3 + 2];
+				
 				v3 = faces[f4 + 1] * 3;
 				
 				verticesToRender[t9 + 3] = vertices[v3];
@@ -92,6 +102,10 @@ class Plane extends Mesh {
 				colorsToRender[t9 + 4] = faceId / quadAmount;
 				colorsToRender[t9 + 5] = faceId / quadAmount;
 				
+				normalsToRender[t9 + 3] = vertexNormals[v3];
+				normalsToRender[t9 + 4] = vertexNormals[v3 + 1];
+				normalsToRender[t9 + 5] = vertexNormals[v3 + 2];
+				
 				v3 = faces[f4 + 2] * 3;
 				
 				verticesToRender[t9 + 6] = vertices[v3];
@@ -101,6 +115,10 @@ class Plane extends Mesh {
 				colorsToRender[t9 + 6] = faceId / quadAmount;
 				colorsToRender[t9 + 7] = faceId / quadAmount;
 				colorsToRender[t9 + 8] = faceId / quadAmount;
+				
+				normalsToRender[t9 + 6] = vertexNormals[v3];
+				normalsToRender[t9 + 7] = vertexNormals[v3 + 1];
+				normalsToRender[t9 + 8] = vertexNormals[v3 + 2];
 				
 				
 				triangleId = faceId * 2 + 1;
@@ -121,6 +139,10 @@ class Plane extends Mesh {
 				colorsToRender[t9 + 1] = faceId / quadAmount;
 				colorsToRender[t9 + 2] = faceId / quadAmount;
 				
+				normalsToRender[t9] = vertexNormals[v3];
+				normalsToRender[t9 + 1] = vertexNormals[v3 + 1];
+				normalsToRender[t9 + 2] = vertexNormals[v3 + 2];
+				
 				v3 = faces[f4 + 2] * 3;
 				
 				verticesToRender[t9 + 3] = vertices[v3];
@@ -131,6 +153,10 @@ class Plane extends Mesh {
 				colorsToRender[t9 + 4] = faceId / quadAmount;
 				colorsToRender[t9 + 5] = faceId / quadAmount;
 				
+				normalsToRender[t9 + 3] = vertexNormals[v3];
+				normalsToRender[t9 + 4] = vertexNormals[v3 + 1];
+				normalsToRender[t9 + 5] = vertexNormals[v3 + 2];
+				
 				v3 = faces[f4 + 3] * 3;
 				
 				verticesToRender[t9 + 6] = vertices[v3];
@@ -140,17 +166,24 @@ class Plane extends Mesh {
 				colorsToRender[t9 + 6] = faceId / quadAmount;
 				colorsToRender[t9 + 7] = faceId / quadAmount;
 				colorsToRender[t9 + 8] = faceId / quadAmount;
+				
+				normalsToRender[t9 + 6] = vertexNormals[v3];
+				normalsToRender[t9 + 7] = vertexNormals[v3 + 1];
+				normalsToRender[t9 + 8] = vertexNormals[v3 + 2];
 			}
 		}
 		
 		this.vertexData.vertices = vertices;
 		this.vertexData.vertexColors = vertexColors;
+		this.vertexData.vertexNormals = vertexNormals;
 		
 		this.faceData.faces = faces;
 		this.faceData.triangles = triangles;
 		
 		this.renderData.verticesToRender = verticesToRender;
 		this.renderData.colorsToRender = colorsToRender;
+		this.renderData.normalsToRender = normalsToRender;
+		
 	}
 	
 }

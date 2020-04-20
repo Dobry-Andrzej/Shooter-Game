@@ -4,6 +4,8 @@ import Camera from '../modules/Camera';
 
 import Attribute from './../render/Attribute';
 
+import { mat3, mat4 } from 'gl-matrix';
+
 class ShaderBase {
 	private _vertexSource: string;
 	private _fragmentSource: string;
@@ -126,6 +128,9 @@ class ShaderBase {
 		
 		this._attributes.aVertexPosition = new Attribute(gl, program, 'aVertexPosition', 3, gl.FLOAT);
 		this._attributes.aVertexColor = new Attribute(gl, program, 'aVertexColor', 3, gl.FLOAT);
+		if (this.primitiveType == "triangles") {
+			this._attributes.aVertexNormal = new Attribute(gl, program, 'aVertexNormal', 3, gl.FLOAT);
+		}
 	}
 	
 	/*	* Funkcja do zainicjowania uniformów do shadera
@@ -137,6 +142,7 @@ class ShaderBase {
 		this._uniforms.uProjectionMatrix = gl.getUniformLocation(program, 'uProjectionMatrix');
 		this._uniforms.uViewMatrix = gl.getUniformLocation(program, 'uViewMatrix');
 		this._uniforms.uModelMatrix = gl.getUniformLocation(program, 'uModelMatrix');
+		this._uniforms.uNormalMatrix = gl.getUniformLocation(program, 'uNormalMatrix');
 	}
 	
 	/*	* Funkcja do zainicjowania atrybutów do shadera
@@ -145,6 +151,9 @@ class ShaderBase {
 	private bindAttributes (mesh: Mesh) : void {
 		this._attributes.aVertexPosition.bindToBuffer(mesh.renderData.vertexBuffer);
 		this._attributes.aVertexColor.bindToBuffer(mesh.renderData.colorBuffer);
+		if (this.primitiveType == "triangles") {
+			this._attributes.aVertexNormal.bindToBuffer(mesh.renderData.normalBuffer);
+		}
 	}
 	
 	/*	* Funkcja do zainicjowania atrybutów do shadera
@@ -157,6 +166,11 @@ class ShaderBase {
 		gl.uniformMatrix4fv(this._uniforms.uProjectionMatrix, false, camera.projectionMatrix);
 		gl.uniformMatrix4fv(this._uniforms.uViewMatrix, false, camera.viewMatrix);
 		gl.uniformMatrix4fv(this._uniforms.uModelMatrix, false, mesh.transformData.matrix);
+		let matrixView: mat4 = mat4.create();
+		mat4.mul(matrixView, camera.viewMatrix, mesh.transformData.matrix);
+		let normalMatrix: mat3 = mat3.create();
+		mat3.normalFromMat4(normalMatrix, matrixView);
+		gl.uniformMatrix3fv(this._uniforms.uNormalMatrix, false, normalMatrix);
 	}
 	
 	/*	* Funkcja do zainicjowania atrybutów do shadera

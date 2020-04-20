@@ -4,6 +4,7 @@ import RightPanelControls from './RightPanelControls';
 import Scene from './modules/Scene';
 import Camera from './modules/Camera';
 import Editor from './modules/Editor';
+import Game from './modules/Game';
 
 import Events from './modules/Events';
 import Assets from './modules/Assets';
@@ -17,6 +18,7 @@ class App {
 	private _scene: Scene;
 	private _camera: Camera;
 	private _editor: Editor;
+	private _game: Game;
 	
 	private _events: Events;
 	private _assets: Assets;
@@ -38,6 +40,7 @@ class App {
 		this._scene = new Scene(this);
 		this._camera = new Camera(this);
 		this._editor = new Editor(this);
+		this._game = new Game(this);
 		
 		this._events = new Events();
 		this._assets = new Assets(this);
@@ -118,6 +121,20 @@ class App {
 		return this._editor;
 	}
 	
+	/*	* Setter do game
+		* @param {Game} game
+	 *	*/
+	public set game (game: Game) {
+		this._game = game;
+	}
+	
+	/*	* Getter do game
+		* @returns {Game}
+	 *	*/
+	public get game () : Game {
+		return this._game;
+	}
+	
 	/*	* Setter do events
 		* @param {Events} events
 	 *	*/
@@ -169,6 +186,7 @@ class App {
 		this._rightPanelControls.setHp(69);
 		
 		await this._assets.loadAssets(this._gl);
+		await this._game.loadModels(this._gl);
 		
 		// Odpal animationFrame jak juz wszystko jest zainicjowane
 		this.animate();

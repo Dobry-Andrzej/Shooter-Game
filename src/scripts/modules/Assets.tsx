@@ -100,7 +100,7 @@ class Assets {
 		}
 	}
 	
-	/*	* Funkcja do ladowania modeli
+	/*	* Funkcja do ladowania assetów
 		* @param {WebGLRenderingContext} gl
 		* @returns {Promise<void>}
 	 *	*/

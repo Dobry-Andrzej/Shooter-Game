@@ -166,20 +166,20 @@ class VertexData {
 			
 			v1 = faces[f4];
 			v2 = v1 * 2;
-			vertexFaceIds[vertexFaceStartCount[v2] + (--vertexFaceCounts[v1])] = v1;
+			vertexFaceIds[vertexFaceStartCount[v2] + (--vertexFaceCounts[v1])] = i;
 			
 			v1 = faces[f4 + 1];
 			v2 = v1 * 2;
-			vertexFaceIds[vertexFaceStartCount[v2] + (--vertexFaceCounts[v1])] = v1;
+			vertexFaceIds[vertexFaceStartCount[v2] + (--vertexFaceCounts[v1])] = i;
 			
 			v1 = faces[f4 + 2];
 			v2 = v1 * 2;
-			vertexFaceIds[vertexFaceStartCount[v2] + (--vertexFaceCounts[v1])] = v1;
+			vertexFaceIds[vertexFaceStartCount[v2] + (--vertexFaceCounts[v1])] = i;
 			
 			if (faces[f4 + 3] >= 0) {
 				v1 = faces[f4 + 3];
 				v2 = v1 * 2;
-				vertexFaceIds[vertexFaceStartCount[v2] + (--vertexFaceCounts[v1])] = v1;
+				vertexFaceIds[vertexFaceStartCount[v2] + (--vertexFaceCounts[v1])] = i;
 			}
 		}
 		
@@ -209,7 +209,6 @@ class VertexData {
 			vec3.set(vertexNormal, 0, 0, 0);
 			
 			v2 = i * 2;
-			v3 = i * 3;
 			
 			start = vertexFaceStartCount[v2];
 			end = start + vertexFaceStartCount[v2 + 1];
@@ -229,6 +228,8 @@ class VertexData {
 			}
 			
 			vec3.normalize(vertexNormal, vertexNormal);
+			
+			v3 = i * 3;
 			
 			vertexNormals[v3] = vertexNormal[0];
 			vertexNormals[v3 + 1] = vertexNormal[1];

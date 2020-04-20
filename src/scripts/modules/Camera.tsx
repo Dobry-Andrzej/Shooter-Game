@@ -51,7 +51,7 @@ class Camera {
 		this._center = vec3.create();
 		this._up = vec3.create();
 		
-		vec3.set(this._eye, 4, 7, 4);
+		vec3.set(this._eye, 0, 7, -1);
 		vec3.set(this._center, 0, 0, 0);
 		vec3.set(this._up, 0, 1, 0);
 		
@@ -117,7 +117,7 @@ class Camera {
 	public zoom (delta: number) : void {
 		let distance: number = vec3.distance(this._eye, this._center);
 		
-		if (distance + delta > 0.1 && distance + delta < 20) {
+		if (distance + delta > 0.1 && distance + delta < 50) {
 		
 			vec3.sub(this._tmpVec3, this._eye, this._center);
 			vec3.normalize(this._tmpVec3, this._tmpVec3);

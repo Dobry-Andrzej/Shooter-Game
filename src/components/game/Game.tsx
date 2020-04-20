@@ -13,7 +13,7 @@ class Game extends Component<Props> {
 
         const canvas = document.getElementById('webGlcanvas') as HTMLCanvasElement;
 
-        AppController.init(canvas);
+        AppController.enableGameEvents(canvas);
     }
 
     render () {
