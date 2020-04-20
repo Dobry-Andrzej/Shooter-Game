@@ -208,6 +208,9 @@ class Mesh {
 		
 		mesh.vertexData = this._vertexData.clone(mesh);
 		mesh.faceData = this._faceData.clone(mesh);
+		mesh.renderData = this._renderData.clone(mesh, gl);
+		mesh.transformData = this._transformData.clone(mesh);
+		mesh.colorData = this._colorData.clone(mesh);
 		
 		return mesh;
 	}

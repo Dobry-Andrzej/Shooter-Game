@@ -59,6 +59,27 @@ const intersectTriangle = (function () {
 	}
 })();
 
+/*	* Function to compute face normals
+	* @param {vec3} vA
+	* @param {vec3} vB
+	* @param {vec3} vC
+	* @returns {vec3}
+ *	*/
+const computeNormal = function(vA: vec3, vB: vec3, vC: vec3) : vec3 {
+	let edge0: vec3 = vec3.create();
+	let edge1: vec3 = vec3.create();
+	let normal: vec3 = vec3.create();
+	
+	vec3.sub(edge0, vC, vA);
+	vec3.sub(edge1, vB, vA);
+	
+	vec3.cross(normal, edge0, edge1);
+	vec3.normalize(normal, normal);
+	
+	return normal;
+};
+
 export default {
-	intersectTriangle: intersectTriangle
+	intersectTriangle: intersectTriangle,
+	computeNormal: computeNormal
 };

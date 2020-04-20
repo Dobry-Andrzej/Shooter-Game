@@ -31,6 +31,20 @@ class TransformData {
 		return this._matrix;
 	}
 	
+	/*	* Funkcja do zwracania kopii TransformData
+		* @param {Mesh} mesh
+		* @returns {TransformData}
+	 *	*/
+	public clone (mesh: Mesh) : TransformData {
+		var transformData = new TransformData(mesh);
+		
+		let matrix = mat4.create();
+		mat4.copy(matrix, this._matrix);
+		transformData.matrix = matrix;
+		
+		return transformData;
+	}
+	
 	/*	* Aktualizuje macierze
 		* @param {vec3} position
 		* @param {quat} rotation

@@ -115,7 +115,7 @@ const init = async function (canvas: HTMLCanvasElement) {
 				break;
 			case 88: //X
 				app.editor.coloringIndex++;
-				if (app.editor.coloringIndex > 4) {
+				if (app.editor.coloringIndex > 6) {
 					app.editor.coloringIndex = 0;
 				}
 				break;

@@ -111,15 +111,17 @@ class Scene {
 			map.faceData.populateFromTriangleCoords(new Float32Array(vertices));
 			
 			for (let i: number = 0; i < map.vertexData.vertices.length; i += 3) {
-				map.vertexData.vertexColors[i] = 0.3 + map.vertexData.vertices[i + 1] * 2;
-				map.vertexData.vertexColors[i + 1] = 0.3 + map.vertexData.vertices[i + 1] * 2;
-				map.vertexData.vertexColors[i + 2] = 0.3 + map.vertexData.vertices[i + 1] * 2;
+				map.vertexData.vertexColors[i] = 0.3 + map.vertexData.vertices[i + 1] * 0.5;
+				map.vertexData.vertexColors[i + 1] = 0.3 + map.vertexData.vertices[i + 1] * 0.5;
+				map.vertexData.vertexColors[i + 2] = 0.3 + map.vertexData.vertices[i + 1] * 0.5;
 			}
 			
-			map.setPosition(0, -0.2, 0);
+			map.setPosition(0, -0.5, 0);
 			
-			map.faceData.computeTriangles();
+			map.vertexData.computeVertexFaceRings();
+			map.vertexData.computeVertexNormals();
 			map.renderData.updateRenderingArrays();
+			
 			map.updateBuffers();
 			map.updateMatrices();
 			

@@ -77,16 +77,18 @@ class FaceData {
 	 *	*/
 	public populateFromTriangleCoords (coords: Float32Array) : void {
 		let i: number,
-			t9: number, f4: number, v3: number,
+			t3: number, t9: number, f4: number, v3: number,
 			key: string, vertexIndex: number,
 			faceAmount: number = coords.length / 3,
 			faces = new Int32Array(4 * coords.length / 3),
+			triangles = new Uint32Array(coords.length),
 			vertexCount: number = 0,
 			vertices = new Float32Array(coords.length),
 			vertexMap: {[key: string]: number} = {},
 			upscale: number = 1e5;
 		
 		for (i = 0; i < faceAmount; i++) {
+			t3 = i * 3;
 			t9 = i * 9;
 			f4 = i * 4;
 			
@@ -147,12 +149,18 @@ class FaceData {
 			
 			faces[f4 + 2] = vertexIndex;
 			faces[f4 + 3] = -1;
+			
+			triangles[t3] = faces[f4];
+			triangles[t3 + 1] = faces[f4 + 1];
+			triangles[t3 + 2] = faces[f4 + 2];
 		}
 		
 		this._mesh.vertexData.vertices = new Float32Array(vertices.subarray(0, vertexCount * 3));
 		this._mesh.vertexData.vertexColors = new Float32Array(vertexCount * 3);
+		this._mesh.vertexData.vertexNormals = new Float32Array(vertexCount * 3);
 		
 		this._mesh.faceData.faces = faces;
+		this._mesh.faceData.triangles = triangles;
 	}
 	
 	/*	* Funkcja do populacji trójkątów z geometrii

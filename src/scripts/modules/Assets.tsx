@@ -135,12 +135,15 @@ class Assets {
 				mesh.visible = false;
 				
 				mesh.faceData.populateFromTriangleCoords(new Float32Array(vertices));
+				
+				mesh.vertexData.computeVertexFaceRings();
+				mesh.vertexData.computeVertexNormals();
+				
 				mesh.colorData.computeColorVariants();
 				mesh.vertexData.vertexColors = mesh.colorData.colorVariants[0];
 				
-				mesh.faceData.computeTriangles();
-				
 				mesh.renderData.updateRenderingArrays();
+				
 				mesh.updateBuffers();
 				mesh.updateMatrices();
 				
@@ -176,7 +179,6 @@ class Assets {
 		quat.fromEuler(tmp_quat, 0, 90 * sign, 0);
 		quat.mul(mesh.rotation, mesh.rotation, tmp_quat);
 		
-		mesh.renderData.updateRenderingArrays();
 		mesh.updateBuffers();
 		mesh.updateMatrices();
 	}

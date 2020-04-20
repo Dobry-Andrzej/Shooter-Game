@@ -115,6 +115,22 @@ class RenderData {
 		return this._shaderType;
 	}
 	
+	/*	* Funkcja do zwracania kopii RenderData
+		* @param {Mesh} mesh
+		* @param {WebGLRenderingContext} gl
+		* @returns {RenderData}
+	 *	*/
+	public clone (mesh: Mesh, gl: WebGLRenderingContext) : RenderData {
+		var renderData = new RenderData(mesh, gl);
+		
+		renderData.verticesToRender = new Float32Array(this._verticesToRender);
+		renderData.colorsToRender = new Float32Array(this._colorsToRender);
+		
+		renderData.shaderType = this._shaderType;
+		
+		return renderData;
+	}
+	
 	/*	* Funkcja do zwracania ilosc explodowanych vertexów
 		* @returns {number}
 	 *	*/

@@ -29,6 +29,18 @@ class ColorData {
 		return this._colorVariants;
 	}
 	
+	/*	* Funkcja do zwracania kopii ColorData
+		* @param {Mesh} mesh
+		* @returns {ColorData}
+	 *	*/
+	public clone (mesh: Mesh) : ColorData {
+		var colorData = new ColorData(mesh);
+		
+		colorData.colorVariants = this._colorVariants.slice();
+		
+		return colorData;
+	}
+	
 	/*	* Oblicza varianty colorów dla mesha
 		* @param {Mesh) mesh
 	 *	*/
@@ -37,6 +49,7 @@ class ColorData {
 		let color: number;
 		let colorVariant: Float32Array;
 		let vertices: Float32Array = this._mesh.vertexData.vertices;
+		let vertexNormals: Float32Array = this._mesh.vertexData.vertexNormals;
 		
 		colorVariant = new Float32Array(vertices.length);
 		for (i = 0; i < vertices.length; i += 3) {
@@ -94,6 +107,15 @@ class ColorData {
 			colorVariant[i] = color;
 			colorVariant[i + 1] = color;
 			colorVariant[i + 2] = color;
+		}
+		
+		this._colorVariants.push(colorVariant);
+		
+		colorVariant = new Float32Array(vertices.length);
+		for (i = 0; i < vertices.length; i += 3) {
+			colorVariant[i] = vertexNormals[i];
+			colorVariant[i + 1] = vertexNormals[i + 1];
+			colorVariant[i + 2] = vertexNormals[i + 2];
 		}
 		
 		this._colorVariants.push(colorVariant);
