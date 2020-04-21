@@ -3,8 +3,14 @@ import Menu from '../menu/Menu';
 import Navbar from '../navbar/Navbar'
 import "./Home.css";
 
-export default class Home extends Component {
+interface Props {
+    location: any
+}
+
+export default class Home extends Component<Props> {
     render() {
+        var token = localStorage.getItem("token");
+        console.warn(token);
         return (
             <div>
                  <Navbar />

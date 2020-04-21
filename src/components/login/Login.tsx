@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import './Login.css';
 import Button from '@material-ui/core/Button';
+import Navbar from '../navbar/Navbar';
 import history from "../../routing/History";
 import axios from "axios";
 
@@ -27,7 +28,7 @@ class Login extends Component<{}, AppState> {
 
     handleChange =(event: React.ChangeEvent<HTMLInputElement>) => {
         this.setState({ ...this.state, [event.currentTarget.name]: String(event.target.value) });
-    }
+    };
 
     handleSubmit(event:any) {
         const { username, password, loginErrors } = this.state;
@@ -38,12 +39,13 @@ class Login extends Component<{}, AppState> {
         }).then((ret) => {
             if (ret.status == 201) {
                 history.push({
-                    pathname: '/Game',
+                    pathname: '/',
                     state: {
                         access_token: ret.data,
                         username: username
                     }
                 });
+                localStorage.setItem("token", ret.data.access_token);
             }
         }, (error) => {
             if (error.response.status == 401) {
@@ -58,7 +60,7 @@ class Login extends Component<{}, AppState> {
         return (
             <div className="Login">
                 <div className="menuContainer">
-                    <div className="titleGame">Sign In and Shoot Someone!</div>
+                    <Navbar/>
                     <div className="loginFormContainer">
                         <h2 className="login-error">{ this.state.loginErrors }</h2>
                         <form onSubmit={this.handleSubmit} className="loginForm">

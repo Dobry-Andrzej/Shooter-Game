@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import './Register.css';
 import Button from '@material-ui/core/Button';
+import Navbar from '../navbar/Navbar';
 import axios from "axios";
 import history from "../../routing/History";
 
@@ -93,14 +94,13 @@ class Register extends Component<{}, AppState> {
 
 
     render() {
-
         const { usernameError, passwordError, emailError } = this.state;
         const enabled =
             usernameError == '' && passwordError == '' && emailError == '';
 
         return (
             <div className="menuContainer">
-                <div className="titleGame">Register to unlock ranked games!</div>
+                <Navbar/>
                 <div className="loginFormContainer">
                     <p className="register-error"> {this.state.errors }</p>
                     <form onSubmit={ this.handleSubmit } className="loginForm">
