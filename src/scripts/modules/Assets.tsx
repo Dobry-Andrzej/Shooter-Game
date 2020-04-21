@@ -151,8 +151,8 @@ class Assets {
 				
 				if (self._main.mode == "game") {
 				
-					for (let k: number = 0; k < 20; k++) {
-						let copy: Mesh = mesh.clone(gl);
+					for (let k: number = 0; k < 50; k++) {
+						let copy: Mesh = mesh.shallowClone(gl);
 						
 						copy.visible = true;
 						

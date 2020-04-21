@@ -125,8 +125,8 @@ class Game {
 		
 		let position: vec3 = this._player.model.position;
 		
-		vec3.scale(this._xTranslation, this._player.forward, this._player.movement[0] * 0.1);
-		vec3.scale(this._yTranslation, this._player.side, this._player.movement[2] * 0.1);
+		vec3.scale(this._xTranslation, this._player.forward, this._player.movement[0] * 0.15);
+		vec3.scale(this._yTranslation, this._player.side, this._player.movement[2] * 0.15);
 		
 		let vLen: number = vec3.len(this._player.movement);
 		let factor: number = vLen == 0 ? 0 : 1 / vLen;
