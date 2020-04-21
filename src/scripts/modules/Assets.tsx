@@ -149,6 +149,23 @@ class Assets {
 				
 				self._assetMeshes[i].push(mesh);
 				
+				if (self._main.mode == "game") {
+				
+					for (let k: number = 0; k < 20; k++) {
+						let copy: Mesh = mesh.clone(gl);
+						
+						copy.visible = true;
+						
+						copy.setPosition(-10 + Math.random() * 20, 0, -10 * Math.random() * 20);
+						
+						copy.updateBuffers();
+						copy.updateMatrices();
+						
+						self._main.scene.meshes.push(copy);
+					}
+					
+				}
+				
 				j++;
 				
 				if (j >= self._assetNames[i].length) {

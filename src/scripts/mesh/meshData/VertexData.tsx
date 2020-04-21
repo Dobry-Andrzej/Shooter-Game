@@ -109,6 +109,9 @@ class VertexData {
 		vertexData.vertexColors = new Float32Array(this._vertexColors);
 		vertexData.vertexNormals = new Float32Array(this._vertexNormals);
 		
+		vertexData.vertexFaceStartCount = new Uint32Array(this._vertexFaceStartCount);
+		vertexData.vertexFaceIds = new Uint32Array(this._vertexFaceIds);
+		
 		return vertexData;
 	}
 	

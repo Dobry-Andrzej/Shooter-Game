@@ -27,19 +27,6 @@ class Game extends Component<Props> {
 					<p>Logged as: { userName }</p>
 					<RightPanel />
 				</div>
-				<div className="Editor-Keys">
-					<p>1 - 9: Toggle</p>
-					<p>0 : Empty</p>
-					<p>A : Buildings</p>
-					<p>S : Electricity</p>
-					<p>D : Misc</p>
-					<p>F : Terrain</p>
-					<p>G : Walls And Fences</p>
-					<p>Q : rotate left</p>
-					<p>E : rotate right</p>
-					<p>Z : grid toggle</p>
-					<p>X : color toggle</p>
-				</div>
 			</div>
         )
     }
