@@ -4,7 +4,7 @@ import { vec3 } from 'gl-matrix';
 /*	* Closure function
 	* @returns {(vec3, vec3, vec3, vec3, vec3, vec3) => number}
  *	*/
-const intersectTriangle = (function () {
+const intersectTriangle = (function () : (origin: vec3, dir: vec3, vA: vec3, vB: vec3, vC: vec3, vInt?: vec3) => number {
 	let epsilon = 1e-15;
 	let edge0: vec3 = vec3.create();
 	let edge1: vec3 = vec3.create();

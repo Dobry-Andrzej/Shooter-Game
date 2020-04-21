@@ -22,11 +22,6 @@ class Editor extends Component<Props> {
         return (
 			<div className="titleGame">
 				<canvas width="800" height="600" id="webGlcanvas" className="Main-Canvas"></canvas>
-				<div className="Game-Menu">
-					<div>Let's start a game</div>
-					<p>Logged as: { userName }</p>
-					<RightPanel />
-				</div>
 				<div className="Editor-Keys">
 					<p>1 - brokenWall3x4</p>
 					<p>2 - brokenShed4x6</p>

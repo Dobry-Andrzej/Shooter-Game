@@ -6,12 +6,17 @@ import Player from '../player/Player';
 
 import StlLoader from '../loaders/StlLoader';
 
+import { vec3 } from 'gl-matrix';
+
 class Game {
 	private _main: App;
 	private _player: Player;
 	
 	private _modelNames: string[];	
 	private _modelMeshes: Mesh[];
+	
+	private _xTranslation: vec3;
+	private _yTranslation: vec3;
 	
 	/*	* Tworzy nową instancję Editor
 		*
@@ -23,6 +28,23 @@ class Game {
 		
 		this._modelNames = ["soldier"];
 		this._modelMeshes = [];
+		
+		this._xTranslation = vec3.create();
+		this._yTranslation = vec3.create();
+	}
+	
+	/*	* Setter do main
+		* @param {App} main
+	 *	*/
+	public set main (main: App) {
+		this._main = main;
+	}
+	
+	/*	* Getter do main
+		* @returns {App}
+	 *	*/
+	public get main () : App {
+		return this._main;
 	}
 	
 	/*	* Setter do player
@@ -94,7 +116,32 @@ class Game {
 		
 		this._main.scene.players.push(this._player);
 	}
-
+	
+	/*	* Klauzula do animacji w grze
+		* @returns {() => void}
+	 *	*/
+	public animate () : void {
+		if (!this._player.model) return;
+		
+		let position: vec3 = this._player.model.position;
+		
+		vec3.scale(this._xTranslation, this._player.forward, this._player.movement[0] * 0.15);
+		vec3.scale(this._yTranslation, this._player.side, this._player.movement[2] * 0.15);
+		
+		let vLen: number = vec3.len(this._player.movement);
+		let factor: number = vLen == 0 ? 0 : 1 / vLen;
+		
+		this._player.model.setPosition(
+			position[0] + this._xTranslation[0] * factor + this._yTranslation[0] * factor,
+			position[1] + this._xTranslation[1] * factor + this._yTranslation[1] * factor,
+			position[2] + this._xTranslation[2] * factor + this._yTranslation[2] * factor
+		);
+		
+		this._player.model.updateBuffers();
+		this._player.model.updateMatrices();
+		
+		this._main.camera.followPlayer(this._main.game.player);
+	};
 }
 
 export default Game;

@@ -12,13 +12,8 @@ const enableEditorEvents = async function (canvas: HTMLCanvasElement) {
 	canvas.width = window.innerWidth;
 	canvas.height = window.innerHeight;
 	
-	if (app == null) {
-		app = new App(canvas);
-		await app.initialize();
-	}
-	if (app == null) {
-		return;
-	}
+	app = new App(canvas, "editor");
+	await app.initialize();
 	
 	let panEnabled: boolean = false;
 	let rotationEnabled: boolean = false;
@@ -114,22 +109,18 @@ const enableEditorEvents = async function (canvas: HTMLCanvasElement) {
 			case 90: //Z
 				app.scene.meshes[0].visible = !app.scene.meshes[0].visible;
 				app.scene.meshes[1].visible = !app.scene.meshes[1].visible;
-				event.preventDefault();
 				break;
 			case 88: //X
 				app.editor.coloringIndex++;
 				if (app.editor.coloringIndex > 7) {
 					app.editor.coloringIndex = 0;
 				}
-				event.preventDefault();
 				break;
 			case 69: //Q
 				app.assets.rotateAsset(1);
-				event.preventDefault();
 				break;
 			case 81: //E
 				app.assets.rotateAsset(-1);
-				event.preventDefault();
 				break;
 			case 48: //0
 			case 49: //1
@@ -145,38 +136,32 @@ const enableEditorEvents = async function (canvas: HTMLCanvasElement) {
 				let assetIndex: number = event.keyCode - 48;
 			
 				app.assets.setActiveAssetIndex(assetIndex);
-				event.preventDefault();
 				break;
 			case 65: //A
 				app.assets.setActiveAssetCategory(0);
-				event.preventDefault();
 				break;
 			case 83: //S
 				app.assets.setActiveAssetCategory(1);
-				event.preventDefault();
 				break;
 			case 68: //D
 				app.assets.setActiveAssetCategory(2);
-				event.preventDefault();
 				break;
 			case 70: //F
 				app.assets.setActiveAssetCategory(3);
-				event.preventDefault();
 				break;
 			case 71: //G
 				app.assets.setActiveAssetCategory(4);
-				event.preventDefault();
 				break;
 			case 72: //H
 				app.assets.setActiveAssetCategory(5);
-				event.preventDefault();
 				break;
 			default:
-				break;
+				return;
 		}
 		
 		app.editor.tryToPreviewOnGridSquare(undefined, mouseXY);
-		
+		event.preventDefault();
+		event.stopPropagation();
 	});
 	
 };
@@ -187,44 +172,73 @@ const enableEditorEvents = async function (canvas: HTMLCanvasElement) {
 const enableGameEvents = async function (canvas: HTMLCanvasElement) {
 	canvas.width = window.innerWidth;
 	canvas.height = window.innerHeight;
+		
+	app = new App(canvas, "game");
 	
-	if (app == null) {	
-		app = new App(canvas);
-		await app.initialize();
-		app.game.addPlayer();
-	}
+	await app.initialize();
+	app.game.addPlayer();
 	
-	if (app == null) {
-		return;
-	}
-	
-	if (app == null) return;
+	app.events.attachEvent(canvas, "mousemove", function(event: MouseEvent) {
+		if (app == null) return;
+		
+		event.preventDefault();
+		event.stopPropagation();
+		
+		app.game.player.turn(event);
+		
+	}, true);
 		
 	app.events.attachEvent(document, "keydown", function(event: KeyboardEvent) {
 		if (app == null) return;
 		
 		switch (event.keyCode) {
 			case 87: //W
-				app.game.player.move(1, 0);
+				app.game.player.startMove(1, 0);
+				break;
+			case 83: //S
+				app.game.player.startMove(-1, 0);
+				break;
+			case 65: // A
+				app.game.player.startMove(0, -1);
+				break;
+			case 68: //D
+				app.game.player.startMove(0, 1);
+				break;
+			default:
+				return;
+		}
+		
+		event.preventDefault();
+		event.stopPropagation();
+	});
+	
+	app.events.attachEvent(document, "keyup", function(event: KeyboardEvent) {
+		if (app == null) return;
+		
+		switch (event.keyCode) {
+			case 87: //W
+				app.game.player.stopMove(1, 0);
 				event.preventDefault();
 				break;
 			case 83: //S
-				app.game.player.move(-1, 0);
+				app.game.player.stopMove(-1, 0);
 				event.preventDefault();
 				break;
 			case 65: // A
-				app.game.player.move(0, -1);
+				app.game.player.stopMove(0, -1);
 				event.preventDefault();
 				break;
 			case 68: //D
-				app.game.player.move(0, 1);
+				app.game.player.stopMove(0, 1);
 				event.preventDefault();
 				break;
 			default:
-				break;
+				return;
 		}
+		
+		event.preventDefault();
+		event.stopPropagation();
 	});
-	
 };
 
 /*	* Function to clear the events from app

@@ -90,7 +90,6 @@ class Editor {
 		// W przypadku assetu 0, nie rób nic
 		if (assets.assetIndex == 0) return;
 		
-		let scene = this._main.scene;
 		let camera = this._main.camera;
 		let plane = this._main.scene.meshes[1];
 		

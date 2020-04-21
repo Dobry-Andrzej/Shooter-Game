@@ -202,15 +202,37 @@ class Mesh {
 		
 		mesh.visible = this._visible;
 		
-		mesh.position = this._position;
-		mesh.scale = this._scale;
-		mesh.rotation = this._rotation;
+		vec3.copy(mesh.position, this._position);
+		vec3.copy(mesh.scale, this._scale);
+		quat.copy(mesh.rotation, this._rotation);
 		
 		mesh.vertexData = this._vertexData.clone(mesh);
 		mesh.faceData = this._faceData.clone(mesh);
 		mesh.renderData = this._renderData.clone(mesh, gl);
 		mesh.transformData = this._transformData.clone(mesh);
 		mesh.colorData = this._colorData.clone(mesh);
+		
+		return mesh;
+	}
+	
+	/*	* Funkcja do zwracania płytkiej kopii objektu
+		* @param {WebGLRenderingContext} gl
+		* @returns {Mesh}
+	 *	*/
+	public shallowClone (gl: WebGLRenderingContext) : Mesh {
+		let mesh = new Mesh(this._name, gl);
+		
+		mesh.visible = this._visible;
+		
+		vec3.copy(mesh.position, this._position);
+		vec3.copy(mesh.scale, this._scale);
+		quat.copy(mesh.rotation, this._rotation);
+		
+		mesh.vertexData = this._vertexData;
+		mesh.faceData = this._faceData;
+		mesh.renderData = this._renderData;
+		mesh.transformData = this._transformData.clone(mesh);
+		mesh.colorData = this._colorData;
 		
 		return mesh;
 	}

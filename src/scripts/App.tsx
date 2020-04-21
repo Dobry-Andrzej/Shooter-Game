@@ -15,6 +15,8 @@ class App {
 	private _gl: WebGLRenderingContext;
 	private _canvas: HTMLCanvasElement;
 	
+	private _mode: string;
+	
 	private _scene: Scene;
 	private _camera: Camera;
 	private _editor: Editor;
@@ -31,11 +33,13 @@ class App {
 	
 	/*	* Tworzy nową instancję App
 		* @param {HTMLCanvasElement} canvas
+		* @param {string} mode
 	 *	*/
-	public constructor (canvas: HTMLCanvasElement) {
+	public constructor (canvas: HTMLCanvasElement, mode: string) {
 		this._canvas = canvas;
-		
 		this._gl = canvas.getContext('webgl') as WebGLRenderingContext;
+		
+		this._mode = mode;
 		
 		this._scene = new Scene(this);
 		this._camera = new Camera(this);
@@ -77,6 +81,20 @@ class App {
 	 *	*/
 	public get canvas () : HTMLCanvasElement {
 		return this._canvas;
+	}
+	
+	/*	* Setter do mode
+		* @param {string} mode
+	 *	*/
+	public set mode (mode: string) {
+		this._mode = mode;
+	}
+	
+	/*	* Getter do mode
+		* @returns {string}
+	 *	*/
+	public get mode () : string {
+		return this._mode;
 	}
 	
 	/*	* Setter do scene
@@ -216,6 +234,8 @@ class App {
 		
 		if (difference > (1000 / this._FPS)) {
 			this._previousTime = currentTime - (difference % (1000 / this._FPS));
+			
+			this._game.animate();
 			
 			this._gl.clear(this._gl.COLOR_BUFFER_BIT);
 			
