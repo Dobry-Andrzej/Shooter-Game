@@ -140,7 +140,7 @@ class Assets {
 				mesh.vertexData.computeVertexNormals();
 				
 				mesh.colorData.computeColorVariants();
-				mesh.vertexData.vertexColors = mesh.colorData.colorVariants[0];
+				mesh.vertexData.vertexColors = mesh.colorData.colorVariants[5];
 				
 				mesh.renderData.updateRenderingArrays();
 				
@@ -151,12 +151,12 @@ class Assets {
 				
 				if (self._main.mode == "game") {
 				
-					for (let k: number = 0; k < 50; k++) {
+					for (let k: number = 0; k < 10; k++) {
 						let copy: Mesh = mesh.shallowClone(gl);
 						
 						copy.visible = true;
 						
-						copy.setPosition(-10 + Math.random() * 20, 0, -10 * Math.random() * 20);
+						copy.setPosition(-10.5 + Math.round(Math.random() * 50), 0, -10.5 + Math.round(Math.random() * 50));
 						
 						copy.updateBuffers();
 						copy.updateMatrices();

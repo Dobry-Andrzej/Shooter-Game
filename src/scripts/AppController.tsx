@@ -178,6 +178,17 @@ const enableGameEvents = async function (canvas: HTMLCanvasElement) {
 	await app.initialize();
 	app.game.addPlayer();
 	
+	app.events.attachEvent(window, "resize", function(event: Event) {
+		if (app != null) {
+			app.resize(window.innerWidth, window.innerHeight);
+		}
+	}, true);
+	
+	app.events.attachEvent(canvas, "contextmenu", function(event: Event) {
+		event.preventDefault();
+		event.stopPropagation();
+	});
+	
 	app.events.attachEvent(canvas, "mousemove", function(event: MouseEvent) {
 		if (app == null) return;
 		

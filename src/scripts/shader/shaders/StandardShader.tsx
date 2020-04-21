@@ -27,7 +27,7 @@ class StandardShader extends ShaderBase {
 			void main(void) {
 				vNormal = aVertexNormal;
 				
-				float nDotVP = max(0., dot(normalize(vNormal), normalize(vec3(.1, .5, .9))));
+				float nDotVP = max(0., dot(normalize(vNormal), normalize(vec3(.4, .5, .4))));
 				
 				vColor = vec3(.4, .4, .4) * nDotVP * aVertexColor;
 				
