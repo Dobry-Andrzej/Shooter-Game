@@ -5,7 +5,10 @@ class FaceData {
 	private _mesh: Mesh;
 	
 	private _faces: Int32Array;
+	private _faceColors: Float32Array;
+	
 	private _triangles: Uint32Array;
+	private _triangleColors: Float32Array;
 	
 	/*	* Tworzy nową instancję FaceData
 		* @param {Mesh) mesh
@@ -14,11 +17,14 @@ class FaceData {
 		this._mesh = mesh;
 		
 		this._faces = new Int32Array(0);
+		this._faceColors = new Float32Array(0);
+		
 		this._triangles = new Uint32Array(0);
+		this._triangleColors = new Float32Array(0);
 	}
 	
 	/*	* Setter do faces
-		* @param {Float32Array} faces
+		* @param {Int32Array} faces
 	 *	*/
 	public set faces (faces: Int32Array) {
 		this._faces = faces;
@@ -29,6 +35,20 @@ class FaceData {
 	 *	*/
 	public get faces () : Int32Array {
 		return this._faces;
+	}
+	
+	/*	* Setter do faceColors
+		* @param {Float32Array} faceColors
+	 *	*/
+	public set faceColors (faceColors: Float32Array) {
+		this._faceColors = faceColors;
+	}
+	
+	/*	* Getter do faceColors
+		* @returns {Float32Array}
+	 *	*/
+	public get faceColors () : Float32Array {
+		return this._faceColors;
 	}
 	
 	/*	* Setter do triangles
@@ -45,6 +65,20 @@ class FaceData {
 		return this._triangles;
 	}
 	
+	/*	* Setter do triangleColors
+		* @param {Float32Array} triangleColors
+	 *	*/
+	public set triangleColors (triangleColors: Float32Array) {
+		this._triangleColors = triangleColors;
+	}
+	
+	/*	* Getter do triangleColors
+		* @returns {Float32Array}
+	 *	*/
+	public get triangleColors () : Float32Array {
+		return this._triangleColors;
+	}
+	
 	/*	* Funkcja do zwracania kopii FaceData
 		* @param {Mesh} mesh
 		* @returns {FaceData}
@@ -53,7 +87,10 @@ class FaceData {
 		var faceData = new FaceData(mesh);
 		
 		faceData.faces = new Int32Array(this._faces);
+		faceData.faceColors = new Float32Array(this._faceColors);
+		
 		faceData.triangles = new Uint32Array(this._triangles);
+		faceData.triangleColors = new Float32Array(this._triangleColors);
 		
 		return faceData;
 	}
@@ -160,7 +197,10 @@ class FaceData {
 		this._mesh.vertexData.vertexNormals = new Float32Array(vertexCount * 3);
 		
 		this._mesh.faceData.faces = faces;
+		this._mesh.faceData.faceColors = new Float32Array(faceAmount * 3);
+		
 		this._mesh.faceData.triangles = triangles;
+		this._mesh.faceData.triangleColors = new Float32Array(faceAmount * 3);
 	}
 	
 	/*	* Funkcja do populacji trójkątów z geometrii
@@ -172,6 +212,7 @@ class FaceData {
 			faceAmount: number = this.getFaceAmount(),
 			faces: Int32Array = this._faces,
 			triangles = new Uint32Array(faceAmount * 3 * 2),
+			triangleColors = new Float32Array(faceAmount * 3 * 2),
 			triangleCount: number = 0;
 			
 		for (i = 0; i < faceAmount; i++) {
@@ -199,6 +240,7 @@ class FaceData {
 		}
 		
 		this.triangles = new Uint32Array(triangles.subarray(0, triangleCount * 3));
+		this._triangleColors = new Float32Array(triangleColors.subarray(0, triangleCount * 3));
 	}
 	
 }

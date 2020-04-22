@@ -1,6 +1,8 @@
 
 import App from '../App';
 
+import Plane from '../primitives/Plane';
+
 import { vec2, vec3 } from 'gl-matrix';
 
 class Editor {
@@ -63,9 +65,9 @@ class Editor {
 		vec3.normalize(vDir, vDir);
 		
 		let vInt: vec3 = vec3.create();
-		let distance: number = plane.intersect(vNear, vDir, vInt);
+		let faceId: number = plane.intersect(vNear, vDir, vInt);
 		
-		if (distance >= 0) {
+		if (faceId >= 0) {
 			let mesh = assets.assetMeshes[assets.assetCategory][assets.assetIndex - 1].clone(this._main.gl);
 			
 			if (mesh) {
@@ -91,7 +93,7 @@ class Editor {
 		if (assets.assetIndex == 0) return;
 		
 		let camera = this._main.camera;
-		let plane = this._main.scene.meshes[1];
+		let plane = this._main.scene.meshes[1] as Plane;
 		
 		let vNear: vec3;
 		let vFar: vec3;
@@ -112,10 +114,11 @@ class Editor {
 		vec3.normalize(vDir, vDir);
 		
 		let vInt: vec3 = vec3.create();
-		let distance: number = plane.intersect(vNear, vDir, vInt);
+		let faceId: number = plane.intersect(vNear, vDir, vInt);
 		
-		if (distance >= 0) {
+		if (faceId >= 0) {
 			let mesh = assets.assetMeshes[assets.assetCategory][assets.assetIndex - 1];
+			let squares = assets.assetSquares[assets.assetCategory][assets.assetIndex - 1];
 			
 			if (mesh) {
 				mesh.visible = true;
@@ -126,6 +129,16 @@ class Editor {
 				mesh.renderData.updateRenderingArrays();
 				mesh.updateBuffers();
 				mesh.updateMatrices();
+				
+				plane.clearHighlight();
+				for (let x: number = squares[0] + 1; x < squares[1]; x++) {
+					for (let y: number = squares[2] + 1; y < squares[3]; y++) {
+						plane.highlightSquare(faceId, x, y);
+					}
+				}
+				
+				plane.updateBuffers();
+				plane.updateMatrices();
 			}
 		}
 	}

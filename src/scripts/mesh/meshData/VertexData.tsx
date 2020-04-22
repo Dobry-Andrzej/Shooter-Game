@@ -2,7 +2,7 @@
 import Mesh from '../Mesh';
 
 import GeoMath from '../../math/GeoMath';
-import { vec3 } from 'gl-matrix';
+import { vec3, quat } from 'gl-matrix';
 
 class VertexData {
 	private _mesh: Mesh;
@@ -13,6 +13,9 @@ class VertexData {
 	
 	private _vertexFaceStartCount: Uint32Array;
 	private _vertexFaceIds: Uint32Array;
+	
+	private _min: vec3;
+	private _max: vec3;
 	
 	/*	* Tworzy nową instancję VertexData
 		* @param {Mesh) mesh
@@ -26,6 +29,9 @@ class VertexData {
 		
 		this._vertexFaceStartCount = new Uint32Array(0);
 		this._vertexFaceIds = new Uint32Array(0);
+		
+		this._min = vec3.create();
+		this._max = vec3.create();
 	}
 	
 	/*	* Setter do vertices
@@ -98,6 +104,34 @@ class VertexData {
 		return this._vertexFaceIds;
 	}
 	
+	/*	* Setter do min
+		* @param {vec3} min
+	 *	*/
+	public set min (min: vec3) {
+		this._min = min;
+	}
+	
+	/*	* Getter do min
+		* @returns {vec3}
+	 *	*/
+	public get min () : vec3 {
+		return this._min;
+	}
+	
+	/*	* Setter do max
+		* @param {vec3} max
+	 *	*/
+	public set max (max: vec3) {
+		this._max = max;
+	}
+	
+	/*	* Getter do max
+		* @returns {vec3}
+	 *	*/
+	public get max () : vec3 {
+		return this._max;
+	}
+	
 	/*	* Funkcja do zwracania kopii VertexData
 		* @param {Mesh} mesh
 		* @returns {VertexData}
@@ -111,6 +145,9 @@ class VertexData {
 		
 		vertexData.vertexFaceStartCount = new Uint32Array(this._vertexFaceStartCount);
 		vertexData.vertexFaceIds = new Uint32Array(this._vertexFaceIds);
+		
+		vec3.copy(vertexData.min, this._min);
+		vec3.copy(vertexData.max, this._max);
 		
 		return vertexData;
 	}
@@ -240,6 +277,53 @@ class VertexData {
 		}
 		
 		this._vertexNormals = vertexNormals;
+	}
+	
+	/*	* Funkcja do obliczania bounding boxu
+		* @param {number[]} squares?
+	 *	*/
+	public computeBoundingBox (squares? : number[]) : void {
+		let i: number, v3: number,
+			sign: number, val: number,
+			vertexAmount = this.getVertexAmount(),
+			vertices = this._vertices,
+			rotation: quat = this._mesh.rotation,
+			vertex: vec3 = vec3.create();
+			
+		vec3.set(this._min, 1e6, 1e6, 1e6);
+		vec3.set(this._max, -1e6, -1e6, -1e6);
+		
+		for (i = 0; i < vertexAmount; i++) {
+			v3 = i * 3;
+			
+			vec3.set(vertex, vertices[v3], vertices[v3 + 1], vertices[v3 + 2]);
+			vec3.transformQuat(vertex, vertex, rotation);
+			
+			vec3.min(this._min, this._min, vertex);
+			vec3.max(this._max, this._max, vertex);
+		}
+		
+		if (squares) {
+			sign = Math.sign(this._min[0]);
+			val = Math.ceil(Math.abs(this._min[0]));
+			
+			squares[0] = sign * val;
+			
+			sign = Math.sign(this._max[0]);
+			val = Math.ceil(Math.abs(this._max[0]));
+			
+			squares[1] = sign * val;
+			
+			sign = Math.sign(this._min[2]);
+			val = Math.ceil(Math.abs(this._min[2]));
+			
+			squares[2] = sign * val;
+			
+			sign = Math.sign(this._max[2]);
+			val = Math.ceil(Math.abs(this._max[2]));
+			
+			squares[3] = sign * val;
+		}
 	}
 	
 }

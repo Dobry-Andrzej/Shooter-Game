@@ -149,9 +149,9 @@ class Player {
 		vec3.sub(vDir, vFar, vNear);
 		vec3.normalize(vDir, vDir);
 		
-		let distance: number = plane.intersect(vNear, vDir, this._lookAt);
+		let faceId: number = plane.intersect(vNear, vDir, this._lookAt);
 		
-		if (distance >= 0) {
+		if (faceId >= 0) {
 			vec3.set(vDir, 0, 1, 0);
 			
 			vec3.sub(this._forward, this._lookAt, this._model.position);
