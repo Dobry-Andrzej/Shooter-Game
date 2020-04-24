@@ -12,6 +12,8 @@ class Assets {
 	private _categoryNames: string[];
 	private _assetNames: string[][];
 	
+	private _assetSquares: number[][][];
+	
 	private _assetCategory: number;
 	private _assetIndex: number;
 	
@@ -33,10 +35,32 @@ class Assets {
 			["brokenWall3x4", "fence1x3", "brokenFence1x3"]
 		];
 		
+		this._assetSquares = [
+			[[0, 0, 0, 0]],
+			[[0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]],
+			[[0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]],
+			[[0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]],
+			[[0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]]
+		];
+		
 		this._assetCategory = 0;
 		this._assetIndex = 0;
 		
 		this._assetMeshes = [];
+	}
+	
+	/*	* Setter do assetSquares
+		* @param {number[][][]} assetSquares
+	 *	*/
+	public set assetSquares (assetSquares: number[][][]) {
+		this._assetSquares = assetSquares;
+	}
+	
+	/*	* Getter do assetSquares
+		* @returns {number[][][]}
+	 *	*/
+	public get assetSquares () : number[][][] {
+		return this._assetSquares;
 	}
 	
 	/*	* Setter do assetCategory
@@ -140,7 +164,9 @@ class Assets {
 				mesh.vertexData.computeVertexNormals();
 				
 				mesh.colorData.computeColorVariants();
-				mesh.vertexData.vertexColors = mesh.colorData.colorVariants[0];
+				mesh.vertexData.vertexColors = mesh.colorData.colorVariants[5];
+				
+				mesh.vertexData.computeBoundingBox(self._assetSquares[i][j]);
 				
 				mesh.renderData.updateRenderingArrays();
 				
@@ -151,12 +177,12 @@ class Assets {
 				
 				if (self._main.mode == "game") {
 				
-					for (let k: number = 0; k < 50; k++) {
+					for (let k: number = 0; k < 10; k++) {
 						let copy: Mesh = mesh.shallowClone(gl);
 						
 						copy.visible = true;
 						
-						copy.setPosition(-10 + Math.random() * 20, 0, -10 * Math.random() * 20);
+						copy.setPosition(-10.5 + Math.round(Math.random() * 50), 0, -10.5 + Math.round(Math.random() * 50));
 						
 						copy.updateBuffers();
 						copy.updateMatrices();
@@ -189,12 +215,16 @@ class Assets {
 		if (this._assetIndex == 0) return;
 		
 		let mesh = this._assetMeshes[this._assetCategory][this._assetIndex - 1];
+		let squares = this._assetSquares[this._assetCategory][this._assetIndex - 1];
+		
 		let tmp_quat: quat = quat.create();
 			
 		mesh.visible = true;
 		
 		quat.fromEuler(tmp_quat, 0, 90 * sign, 0);
 		quat.mul(mesh.rotation, mesh.rotation, tmp_quat);
+		
+		mesh.vertexData.computeBoundingBox(squares);
 		
 		mesh.updateBuffers();
 		mesh.updateMatrices();

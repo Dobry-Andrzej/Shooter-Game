@@ -277,6 +277,7 @@ class Mesh {
 		
 		let distance: number;
 		let smallestDistance: number = -1;
+		let faceId: number = -1;
 		
 		let vA: vec3 = vec3.create();
 		let vB: vec3 = vec3.create();
@@ -316,6 +317,7 @@ class Mesh {
 			if (smallestDistance == -1 || smallestDistance > distance) {
 				
 				smallestDistance = distance;
+				faceId = i;
 				
 				if (vIntOut) {
 					vec3.copy(vIntOut, vInt);
@@ -323,7 +325,7 @@ class Mesh {
 			}
 		}
 		
-		return smallestDistance;
+		return faceId;
 	}
 	
 	/*	* Aktualizuje wszystkie buffery na podstawie tablic do renderingu

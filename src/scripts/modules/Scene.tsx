@@ -114,6 +114,8 @@ class Scene {
 		
 		grid.generate(50, 50, 50, 50);
 		
+		grid.visible = this._main.mode == "editor";
+		
 		grid.setPosition(0, 0, 0);
 		grid.updateBuffers();
 		grid.updateMatrices();
@@ -121,6 +123,8 @@ class Scene {
 		this.add(grid);
 		
 		plane.generate(50, 50, 50, 50);
+		
+		plane.visible = this._main.mode == "editor";
 		
 		plane.setPosition(0, 0, 0);
 		plane.updateBuffers();

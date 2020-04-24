@@ -14,6 +14,8 @@ class RenderData {
 	private _colorBuffer: Buffer;
 	private _normalBuffer: Buffer;
 	
+	private _useFaceColors: boolean;
+	
 	private _shaderType: number;
 	
 	/*	* Tworzy nową instancję RenderData
@@ -31,6 +33,8 @@ class RenderData {
 		this._vertexBuffer = new Buffer(gl, gl.ARRAY_BUFFER, gl.STATIC_DRAW);
 		this._colorBuffer = new Buffer(gl, gl.ARRAY_BUFFER, gl.STATIC_DRAW);
 		this._normalBuffer = new Buffer(gl, gl.ARRAY_BUFFER, gl.STATIC_DRAW);
+		
+		this._useFaceColors = false;
 		
 		this._shaderType = 0;
 	}
@@ -133,11 +137,25 @@ class RenderData {
 		return this._normalBuffer;
 	}
 	
+	/*	* Setter do useFaceColors
+		* @param {boolean} useFaceColors
+	 *	*/
+	public set useFaceColors (useFaceColors: boolean) {
+		this._useFaceColors = useFaceColors;
+	}
+	
+	/*	* Getter do useFaceColors
+		* @returns {boolean}
+	 *	*/
+	public get useFaceColors () : boolean {
+		return this._useFaceColors;
+	}
+	
 	/*	* Setter do shaderType
 		* @param {number} shaderType
 	 *	*/
-	public set shaderType (_shaderType: number) {
-		this._shaderType = _shaderType;
+	public set shaderType (shaderType: number) {
+		this._shaderType = shaderType;
 	}
 	
 	/*	* Getter do shaderType
@@ -182,6 +200,7 @@ class RenderData {
 			vertexNormals: Float32Array = this._mesh.vertexData.vertexNormals,
 			triangleAmount: number = this._mesh.faceData.getTriangleAmount(),
 			triangles: Uint32Array = this._mesh.faceData.triangles,
+			triangleColors: Float32Array = this._mesh.faceData.triangleColors,
 			coords = new Float32Array(triangleAmount * 9),
 			colors = new Float32Array(triangleAmount * 9),
 			normals = new Float32Array(triangleAmount * 9);
@@ -195,9 +214,15 @@ class RenderData {
 			coords[t9 + 1] = vertices[v3 + 1];
 			coords[t9 + 2] = vertices[v3 + 2];
 			
-			colors[t9] = vertexColors[v3];
-			colors[t9 + 1] = vertexColors[v3 + 1];
-			colors[t9 + 2] = vertexColors[v3 + 2];
+			if (this._useFaceColors == true) {
+				colors[t9] = triangleColors[t3];
+				colors[t9 + 1] = triangleColors[t3 + 1];
+				colors[t9 + 2] = triangleColors[t3 + 2];
+			} else {
+				colors[t9] = vertexColors[v3];
+				colors[t9 + 1] = vertexColors[v3 + 1];
+				colors[t9 + 2] = vertexColors[v3 + 2];
+			}
 			
 			normals[t9] = vertexNormals[v3];
 			normals[t9 + 1] = vertexNormals[v3 + 1];
@@ -208,9 +233,15 @@ class RenderData {
 			coords[t9 + 4] = vertices[v3 + 1];
 			coords[t9 + 5] = vertices[v3 + 2];
 			
-			colors[t9 + 3] = vertexColors[v3];
-			colors[t9 + 4] = vertexColors[v3 + 1];
-			colors[t9 + 5] = vertexColors[v3 + 2];
+			if (this._useFaceColors == true) {
+				colors[t9 + 3] = triangleColors[t3];
+				colors[t9 + 4] = triangleColors[t3 + 1];
+				colors[t9 + 5] = triangleColors[t3 + 2];
+			} else {
+				colors[t9 + 3] = vertexColors[v3];
+				colors[t9 + 4] = vertexColors[v3 + 1];
+				colors[t9 + 5] = vertexColors[v3 + 2];
+			}
 			
 			normals[t9 + 3] = vertexNormals[v3];
 			normals[t9 + 4] = vertexNormals[v3 + 1];
@@ -221,9 +252,15 @@ class RenderData {
 			coords[t9 + 7] = vertices[v3 + 1];
 			coords[t9 + 8] = vertices[v3 + 2];
 			
-			colors[t9 + 6] = vertexColors[v3];
-			colors[t9 + 7] = vertexColors[v3 + 1];
-			colors[t9 + 8] = vertexColors[v3 + 2];
+			if (this._useFaceColors == true) {
+				colors[t9 + 6] = triangleColors[t3];
+				colors[t9 + 7] = triangleColors[t3 + 1];
+				colors[t9 + 8] = triangleColors[t3 + 2];
+			} else {
+				colors[t9 + 6] = vertexColors[v3];
+				colors[t9 + 7] = vertexColors[v3 + 1];
+				colors[t9 + 8] = vertexColors[v3 + 2];
+			}
 			
 			normals[t9 + 6] = vertexNormals[v3];
 			normals[t9 + 7] = vertexNormals[v3 + 1];
