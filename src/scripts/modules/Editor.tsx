@@ -44,7 +44,7 @@ class Editor {
 		
 		let scene = this._main.scene;
 		let camera = this._main.camera;
-		let plane = this._main.scene.meshes[1];
+		let plane = this._main.scene.meshes[1] as Plane;
 		
 		let vNear: vec3;
 		let vFar: vec3;
@@ -67,8 +67,10 @@ class Editor {
 		let vInt: vec3 = vec3.create();
 		let faceId: number = plane.intersect(vNear, vDir, vInt);
 		
-		if (faceId >= 0) {
+		if (faceId >= 0 && plane.hasUsedSquares == false) {
 			let mesh = assets.assetMeshes[assets.assetCategory][assets.assetIndex - 1].clone(this._main.gl);
+			let squares = assets.assetSquares[assets.assetCategory][assets.assetIndex - 1];
+			let squareValue = assets.assetSquareValues[assets.assetCategory][assets.assetIndex - 1];
 			
 			if (mesh) {
 				mesh.setPosition(Math.floor(vInt[0]) + 0.5, 0, Math.floor(vInt[2]) + 0.5);
@@ -79,6 +81,13 @@ class Editor {
 				mesh.updateMatrices();
 				
 				scene.meshes.push(mesh);
+				
+				for (let x: number = squares[0] + 1; x < squares[1]; x++) {
+					for (let y: number = squares[2] + 1; y < squares[3]; y++) {
+						plane.updateSquareValue(faceId, x, y, squareValue);
+					}
+				}
+				
 			}
 		}
 	}
@@ -119,6 +128,7 @@ class Editor {
 		if (faceId >= 0) {
 			let mesh = assets.assetMeshes[assets.assetCategory][assets.assetIndex - 1];
 			let squares = assets.assetSquares[assets.assetCategory][assets.assetIndex - 1];
+			let squareValue = assets.assetSquareValues[assets.assetCategory][assets.assetIndex - 1];
 			
 			if (mesh) {
 				mesh.visible = true;
@@ -133,7 +143,7 @@ class Editor {
 				plane.clearHighlight();
 				for (let x: number = squares[0] + 1; x < squares[1]; x++) {
 					for (let y: number = squares[2] + 1; y < squares[3]; y++) {
-						plane.highlightSquare(faceId, x, y);
+						plane.highlightSquare(faceId, x, y, squareValue);
 					}
 				}
 				

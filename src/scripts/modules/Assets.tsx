@@ -13,6 +13,7 @@ class Assets {
 	private _assetNames: string[][];
 	
 	private _assetSquares: number[][][];
+	private _assetSquareValues: number[][];
 	
 	private _assetCategory: number;
 	private _assetIndex: number;
@@ -43,6 +44,14 @@ class Assets {
 			[[0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]]
 		];
 		
+		this._assetSquareValues = [
+			[2],
+			[2, 2, 2, 2],
+			[2, 2, 2],
+			[1, 1, 1, 1, 2],
+			[2, 2, 2]
+		];
+		
 		this._assetCategory = 0;
 		this._assetIndex = 0;
 		
@@ -61,6 +70,20 @@ class Assets {
 	 *	*/
 	public get assetSquares () : number[][][] {
 		return this._assetSquares;
+	}
+	
+	/*	* Setter do assetSquareValues
+		* @param {number[][]} assetSquareValues
+	 *	*/
+	public set assetSquareValues (assetSquareValues: number[][]) {
+		this._assetSquareValues = assetSquareValues;
+	}
+	
+	/*	* Getter do assetSquareValues
+		* @returns {number[][]}
+	 *	*/
+	public get assetSquareValues () : number[][] {
+		return this._assetSquareValues;
 	}
 	
 	/*	* Setter do assetCategory

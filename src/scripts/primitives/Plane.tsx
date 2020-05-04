@@ -1,12 +1,16 @@
 
 import Mesh from '../mesh/Mesh';
 
+import { vec3 } from 'gl-matrix';
+
 class Plane extends Mesh {
 	private _segmentsX: number;
 	private _segmentsY: number;
 	
 	private _highlightedSquares: number[];
+	
 	private _squareUsage: Uint8Array;
+	private _hasUsedSquares: boolean;
 	
 	/*	* Tworzy nową instancję Plane
 		* @param {string} name
@@ -23,7 +27,9 @@ class Plane extends Mesh {
 		this._segmentsY = 0;
 		
 		this._highlightedSquares = [];
-		this._squareUsage = new Uint8Array(this.faceData.getFaceAmount());
+		
+		this._squareUsage = new Uint8Array(0);
+		this._hasUsedSquares = false;
 	}
 	
 	/*	* Setter do squareUsage
@@ -38,6 +44,20 @@ class Plane extends Mesh {
 	 *	*/
 	public get squareUsage () : Uint8Array {
 		return this._squareUsage;
+	}
+	
+	/*	* Setter do hasUsedSquares
+		* @param {boolean} hasUsedSquares
+	 *	*/
+	public set hasUsedSquares (hasUsedSquares: boolean) {
+		this._hasUsedSquares = hasUsedSquares;
+	}
+	
+	/*	* Getter do hasUsedSquares
+		* @returns {boolean}
+	 *	*/
+	public get hasUsedSquares () : boolean {
+		return this._hasUsedSquares;
 	}
 	
 	/*	* Generuje siatke na podstawie podanych wymiarów
@@ -73,7 +93,9 @@ class Plane extends Mesh {
 			
 			verticesToRender = new Float32Array(quadAmount * 2 * 9),
 			colorsToRender = new Float32Array(quadAmount * 2 * 9),
-			normalsToRender = new Float32Array(quadAmount * 2 * 9);
+			normalsToRender = new Float32Array(quadAmount * 2 * 9),
+			
+			squareUsage = new Uint8Array(quadAmount);
 		
 		for (x = 0; x <= segmentsX; x++) {
 			for (y = 0; y <= segmentsY; y++) {
@@ -231,6 +253,8 @@ class Plane extends Mesh {
 		this.renderData.colorsToRender = colorsToRender;
 		this.renderData.normalsToRender = normalsToRender;
 		
+		this._squareUsage = squareUsage;
+		
 	}
 	
 	/*	* Clear highlighta na planie
@@ -278,50 +302,72 @@ class Plane extends Mesh {
 		}
 		
 		this._highlightedSquares.length = 0;
+		this._hasUsedSquares = false;
 	}
 	
 	/*	* Highlight na planie
-		* @param {number} squareId
+		* @param {number} originId
 		* @param {number} xoffset
 		* @param {number} yoffset
+		* @param {number} val
 	 *	*/
-	public highlightSquare (squareId: number, xoffset: number, yoffset: number) : void {
+	public highlightSquare (originId: number, xoffset: number, yoffset: number, val: number) : void {
 		let t9: number,
-			faceId: number, triangleId: number;
+			squareId: number, triangleId: number,
+			color: vec3 = vec3.create();
 			
-		faceId = squareId + xoffset * this._segmentsY + yoffset;
+		squareId = originId + xoffset * this._segmentsY + yoffset;
 		
-		triangleId = faceId * 2;
+		if (this._squareUsage[squareId] >= val) {
+			vec3.set(color, 1, 0, 0);
+			this._hasUsedSquares = true;
+		} else {
+			vec3.set(color, 0, 1, 0);
+		}
+		
+		triangleId = squareId * 2;
 		t9 = triangleId * 9;
 		
-		this.renderData.colorsToRender[t9] = 0;
-		this.renderData.colorsToRender[t9 + 1] = 1;
-		this.renderData.colorsToRender[t9 + 2] = 0;
+		this.renderData.colorsToRender[t9] = color[0];
+		this.renderData.colorsToRender[t9 + 1] = color[1];
+		this.renderData.colorsToRender[t9 + 2] = color[2];
 		
-		this.renderData.colorsToRender[t9 + 3] = 0;
-		this.renderData.colorsToRender[t9 + 4] = 1;
-		this.renderData.colorsToRender[t9 + 5] = 0;
+		this.renderData.colorsToRender[t9 + 3] = color[0];
+		this.renderData.colorsToRender[t9 + 4] = color[1];
+		this.renderData.colorsToRender[t9 + 5] = color[2];
 		
-		this.renderData.colorsToRender[t9 + 6] = 0;
-		this.renderData.colorsToRender[t9 + 7] = 1;
-		this.renderData.colorsToRender[t9 + 8] = 0;
+		this.renderData.colorsToRender[t9 + 6] = color[0];
+		this.renderData.colorsToRender[t9 + 7] = color[1];
+		this.renderData.colorsToRender[t9 + 8] = color[2];
 		
-		triangleId = faceId * 2 + 1;
+		triangleId = squareId * 2 + 1;
 		t9 = triangleId * 9;
 		
-		this.renderData.colorsToRender[t9] = 0;
-		this.renderData.colorsToRender[t9 + 1] = 1;
-		this.renderData.colorsToRender[t9 + 2] = 0;
+		this.renderData.colorsToRender[t9] = color[0];
+		this.renderData.colorsToRender[t9 + 1] = color[1];
+		this.renderData.colorsToRender[t9 + 2] = color[2];
 		
-		this.renderData.colorsToRender[t9 + 3] = 0;
-		this.renderData.colorsToRender[t9 + 4] = 1;
-		this.renderData.colorsToRender[t9 + 5] = 0;
+		this.renderData.colorsToRender[t9 + 3] = color[0];
+		this.renderData.colorsToRender[t9 + 4] = color[1];
+		this.renderData.colorsToRender[t9 + 5] = color[2];
 		
-		this.renderData.colorsToRender[t9 + 6] = 0;
-		this.renderData.colorsToRender[t9 + 7] = 1;
-		this.renderData.colorsToRender[t9 + 8] = 0;
+		this.renderData.colorsToRender[t9 + 6] = color[0];
+		this.renderData.colorsToRender[t9 + 7] = color[1];
+		this.renderData.colorsToRender[t9 + 8] = color[2];
 		
-		this._highlightedSquares.push(faceId);
+		this._highlightedSquares.push(squareId);
+	}
+	
+	/*	* Zmiana stanu pól
+		* @param {number} originId
+		* @param {number} xoffset
+		* @param {number} yoffset
+		* @param {number} val
+	 *	*/
+	public updateSquareValue (originId: number, xoffset: number, yoffset: number, val: number) : void {
+		let squareId: number = originId + xoffset * this._segmentsY + yoffset;
+		
+		this._squareUsage[squareId] = val;
 	}
 	
 }
