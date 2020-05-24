@@ -205,6 +205,9 @@ class App {
 		
 		await this._assets.loadAssets(this._gl);
 		await this._game.loadModels(this._gl);
+		if (this._mode == "game") {
+			await this._editor.loadMap("map0");
+		}
 		
 		// Odpal animationFrame jak juz wszystko jest zainicjowane
 		this.animate();

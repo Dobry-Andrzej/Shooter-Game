@@ -3,7 +3,7 @@ import App from '../App';
 
 import Plane from '../primitives/Plane';
 
-import { vec2, vec3 } from 'gl-matrix';
+import { vec2, vec3, quat } from 'gl-matrix';
 
 class Editor {
 	private _main: App;
@@ -150,6 +150,106 @@ class Editor {
 				plane.updateBuffers();
 				plane.updateMatrices();
 			}
+		}
+	}
+	
+	/*	* Zapisuje mape do pliku tekstowego
+		*
+	 *	*/
+	public saveMap () : void {
+		let meshes = this._main.scene.meshes;
+		let strArray: string[] = [];
+		
+		for (let i: number = 3; i < meshes.length; i++) {
+			let mesh = meshes[i];
+			
+			let str = "";
+			str += mesh.name + ";"
+			str += mesh.position[0] + "," + mesh.position[1] + "," + mesh.position[2] + ";";
+			str += mesh.rotation[0] + "," + mesh.rotation[1] + "," + mesh.rotation[2] + "," + mesh.rotation[3] + "\n";
+			
+			strArray.push(str);
+		}
+		
+		let a = document.createElement("a");
+		let file = new Blob(strArray, {type: 'text/plain'});
+		a.href = URL.createObjectURL(file);
+		a.download = 'map0.txt';
+		a.click();
+	}
+	
+	/*	* Wczytuje mape z pliku tekstowego
+		* @param {WebGLRenderingContext} gl
+		* @param {string} name
+	 *	*/
+	public loadMap (name: string) : void {
+		let url: string = "/maps/" + name + ".txt";
+		
+		let request = new XMLHttpRequest();
+		let self: Editor = this;
+		
+		request.addEventListener('load', function() {
+			self.addAssetsFromString(this.response);
+		});
+		request.open('GET', url, true);
+		request.responseType = "text";
+		request.setRequestHeader('Access-Control-Allow-Origin', '*');
+		request.setRequestHeader('Access-Control-Allow-Methods', '*');
+		request.send(null);
+	}
+	
+	/*	* Wczytuje mape z pliku tekstowego
+		* @param {WebGLRenderingContext} gl
+		* @param {string} assetStr
+	 *	*/
+	private addAssetsFromString(assetStr: string) {
+		let i: number,
+			name: string,
+			strArr: string[] = assetStr.split("\n"),
+			attStrArr: string[],
+			posStrArr: string[],
+			rotStrArr: string[];
+			
+		let scene = this._main.scene;
+		let assets = this._main.assets;
+		let plane = this._main.scene.meshes[1] as Plane;
+		
+		for (i = 0; i < strArr.length; i++) {
+			if (strArr[i].length == 0) continue;
+			
+			attStrArr = strArr[i].split(";");
+			
+			name = attStrArr[0];
+			
+			let mesh = assets.getAssetByName(name).clone(this._main.gl);
+			let squares = assets.assetSquares[assets.assetCategory][assets.assetIndex - 1];
+			let squareValue = assets.assetSquareValues[assets.assetCategory][assets.assetIndex - 1];
+			
+			mesh.visible = true;
+			
+			posStrArr = attStrArr[1].split(",");
+			rotStrArr = attStrArr[2].split(",");
+			
+			mesh.setPosition(
+				parseFloat(posStrArr[0]),
+				parseFloat(posStrArr[1]),
+				parseFloat(posStrArr[2])
+			);
+			
+			quat.set(
+				mesh.rotation,
+				parseFloat(rotStrArr[0]),
+				parseFloat(rotStrArr[1]),
+				parseFloat(rotStrArr[2]),
+				parseFloat(rotStrArr[3])
+			);
+				
+			mesh.renderData.updateRenderingArrays();
+			
+			mesh.updateBuffers();
+			mesh.updateMatrices();
+			
+			scene.meshes.push(mesh);
 		}
 	}
 

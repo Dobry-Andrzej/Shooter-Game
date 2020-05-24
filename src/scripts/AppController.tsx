@@ -122,6 +122,9 @@ const enableEditorEvents = async function (canvas: HTMLCanvasElement) {
 			case 81: //E
 				app.assets.rotateAsset(-1);
 				break;
+			case 67: //C
+				app.editor.saveMap();
+				break;
 			case 48: //0
 			case 49: //1
 			case 50: //2

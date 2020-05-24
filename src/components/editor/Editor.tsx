@@ -23,16 +23,16 @@ class Editor extends Component<Props> {
 			<div className="titleGame">
 				<canvas width="800" height="600" id="webGlcanvas" className="Main-Canvas"></canvas>
 				<div className="Editor-Keys">
-					<p>1 - brokenWall3x4</p>
-					<p>2 - brokenShed4x6</p>
-					<p>3 - mauzer2x2</p>
-					<p>4 - fence1x3</p>
-					<p>5 - brokenFence1x3</p>
-					<p>6 - barrel</p>
-					<p>7 - flower</p>
-					<p>0 - none</p>
+					<p>A - buildings</p>
+					<p>S - barbed</p>
+					<p>D - misc</p>
+					<p>F - terrain</p>
+					<p>G - walls</p>
 					<p>Q - rotate left</p>
 					<p>E - rotate right</p>
+					<p>Z - toggle grid</p>
+					<p>X - toggle colors</p>
+					<p>C - save map</p>
 				</div>
 			</div>
         )

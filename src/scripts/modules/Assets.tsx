@@ -198,23 +198,6 @@ class Assets {
 				
 				self._assetMeshes[i].push(mesh);
 				
-				if (self._main.mode == "game") {
-				
-					for (let k: number = 0; k < 10; k++) {
-						let copy: Mesh = mesh.shallowClone(gl);
-						
-						copy.visible = true;
-						
-						copy.setPosition(-10.5 + Math.round(Math.random() * 50), 0, -10.5 + Math.round(Math.random() * 50));
-						
-						copy.updateBuffers();
-						copy.updateMatrices();
-						
-						self._main.scene.meshes.push(copy);
-					}
-					
-				}
-				
 				j++;
 				
 				if (j >= self._assetNames[i].length) {
@@ -251,6 +234,25 @@ class Assets {
 		
 		mesh.updateBuffers();
 		mesh.updateMatrices();
+	}
+	
+	/*	* Znajduje asset na podstawie nazwy
+		* @param {string} name
+		* @returns {Mesh}
+	 *	*/
+	public getAssetByName (name: string) : Mesh {
+		let i: number,
+			j: number,
+			assetMeshes = this._assetMeshes;
+			
+		for (i = 0; i < assetMeshes.length; i++) {
+			for (j = 0; j < assetMeshes[i].length; j++) {
+				if (assetMeshes[i][j].name == name) {
+					return assetMeshes[i][j];
+				}
+			}
+		}
+		return assetMeshes[0][0];
 	}
 
 }
