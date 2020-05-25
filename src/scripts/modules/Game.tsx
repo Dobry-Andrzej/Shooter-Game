@@ -26,7 +26,7 @@ class Game {
 		
 		this._player = new Player("player", this);
 		
-		this._modelNames = ["soldier"];
+		this._modelNames = ["tracks"];
 		this._modelMeshes = [];
 		
 		this._xTranslation = vec3.create();
