@@ -165,6 +165,8 @@ class Player {
 		this._movement[0] = xsign;
 		this._movement[2] = ysign;
 		
+		if (xsign == 0 && ysign == 0) return;
+		
 		let vDir: vec3 = vec3.create();
 		vec3.set(vDir, 0, 1, 0);
 		
