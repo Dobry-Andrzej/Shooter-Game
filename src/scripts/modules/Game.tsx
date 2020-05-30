@@ -15,9 +15,6 @@ class Game {
 	private _modelNames: string[];	
 	private _modelMeshes: Mesh[];
 	
-	private _xTranslation: vec3;
-	private _yTranslation: vec3;
-	
 	/*	* Tworzy nową instancję Editor
 		*
 	 *	*/
@@ -26,11 +23,8 @@ class Game {
 		
 		this._player = new Player("player", this);
 		
-		this._modelNames = ["tracks"];
+		this._modelNames = ["tracks", "gun"];
 		this._modelMeshes = [];
-		
-		this._xTranslation = vec3.create();
-		this._yTranslation = vec3.create();
 	}
 	
 	/*	* Setter do main
@@ -71,7 +65,7 @@ class Game {
 		let self: Game = this;
 		
 		const loopOverModels = function(resolve: any, reject: any) {
-			let url: string = "/meshes/models/" + self._modelNames[i] + ".stl";
+			let url: string = "/meshes/models/robot/" + self._modelNames[i] + ".stl";
 			
 			stlloader.load(url, function(vertices: number[]) {
 				let mesh: Mesh = new Mesh(self._modelNames[i], gl);
@@ -112,7 +106,8 @@ class Game {
 		*
 	 *	*/
 	public addPlayer () {
-		this._player.model = this._modelMeshes[0];
+		this._player.tracks = this._modelMeshes[0];
+		this._player.gun = this._modelMeshes[1];
 		
 		this._main.scene.players.push(this._player);
 	}
@@ -121,24 +116,33 @@ class Game {
 		* @returns {() => void}
 	 *	*/
 	public animate () : void {
-		if (!this._player.model) return;
+		if (!this._player.tracks || !this._player.gun) return;
 		
-		let position: vec3 = this._player.model.position;
-		
-		vec3.scale(this._xTranslation, this._player.forward, this._player.movement[0] * 0.15);
-		vec3.scale(this._yTranslation, this._player.side, this._player.movement[2] * 0.15);
-		
+		let position: vec3 = this._player.tracks.position;
 		let vLen: number = vec3.len(this._player.movement);
 		let factor: number = vLen == 0 ? 0 : 1 / vLen;
 		
-		this._player.model.setPosition(
-			position[0] + this._xTranslation[0] * factor + this._yTranslation[0] * factor,
-			position[1] + this._xTranslation[1] * factor + this._yTranslation[1] * factor,
-			position[2] + this._xTranslation[2] * factor + this._yTranslation[2] * factor
+		this._player.tracks.setPosition(
+			position[0] - this._player.movement[0] * factor * 0.15,
+			position[1],
+			position[2] + this._player.movement[2] * factor * 0.15
 		);
 		
-		this._player.model.updateBuffers();
-		this._player.model.updateMatrices();
+		this._player.tracks.updateBuffers();
+		this._player.tracks.updateMatrices();
+		
+		position = this._player.gun.position;
+		vLen = vec3.len(this._player.movement);
+		factor = vLen == 0 ? 0 : 1 / vLen;
+		
+		this._player.gun.setPosition(
+			position[0] - this._player.movement[0] * factor * 0.15,
+			position[1],
+			position[2] + this._player.movement[2] * factor * 0.15
+		);
+		
+		this._player.gun.updateBuffers();
+		this._player.gun.updateMatrices();
 		
 		this._main.camera.followPlayer(this._main.game.player);
 	};

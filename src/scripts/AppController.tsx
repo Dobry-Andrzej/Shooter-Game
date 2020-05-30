@@ -198,7 +198,7 @@ const enableGameEvents = async function (canvas: HTMLCanvasElement) {
 		event.preventDefault();
 		event.stopPropagation();
 		
-		app.game.player.turn(event);
+		app.game.player.turnGun(event);
 		
 	}, true);
 		

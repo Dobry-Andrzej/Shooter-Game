@@ -86,9 +86,11 @@ class Scene {
 			}
 		}
 		for (let i: number = 0; i < this._players.length; i++) {
-			let model: Mesh | undefined = this._players[i].model;
-			if (model) {
-				model.render(camera);
+			let tracks: Mesh | undefined = this._players[i].tracks;
+			let gun: Mesh | undefined = this._players[i].gun;
+			if (tracks && gun) {
+				tracks.render(camera);
+				gun.render(camera);
 			}
 		}
 	}

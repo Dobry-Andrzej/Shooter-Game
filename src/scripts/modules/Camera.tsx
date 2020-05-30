@@ -146,13 +146,13 @@ class Camera {
 		* @param {Player} player
 	 *	*/
 	public followPlayer (player: Player) {
-		if (!player.model) return;
+		if (!player.tracks) return;
 		
-		this._eye[0] = player.model.position[0];
+		this._eye[0] = player.tracks.position[0];
 		this._eye[1] = 7;
-		this._eye[2] = player.model.position[2] - 3;
+		this._eye[2] = player.tracks.position[2] - 3;
 		
-		vec3.copy(this._center, player.model.position);
+		vec3.copy(this._center, player.tracks.position);
 		
 		mat4.lookAt(this._viewMatrix, this._eye, this._center, this._up);
 	}

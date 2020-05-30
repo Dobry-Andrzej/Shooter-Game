@@ -7,7 +7,9 @@ import { vec3 } from 'gl-matrix';
 class Player {
 	private _name: string;
 	private _game: Game;
-	private _model?: Mesh;
+	
+	private _tracks?: Mesh;
+	private _gun?: Mesh;
 	
 	private _forward: vec3;
 	private _side: vec3;
@@ -51,18 +53,32 @@ class Player {
 		return this._name;
 	}
 	
-	/*	* Setter do model
-		* @param {Mesh} model
+	/*	* Setter do tracks
+		* @param {Mesh} tracks
 	 *	*/
-	public set model (model: Mesh | undefined) {
-		this._model = model;
+	public set tracks (tracks: Mesh | undefined) {
+		this._tracks = tracks;
 	}
 	
-	/*	* Getter do model
+	/*	* Getter do tracks
 		* @returns {Mesh}
 	 *	*/
-	public get model () : Mesh | undefined {
-		return this._model;
+	public get tracks () : Mesh | undefined {
+		return this._tracks;
+	}
+	
+	/*	* Setter do gun
+		* @param {Mesh} gun
+	 *	*/
+	public set gun (gun: Mesh | undefined) {
+		this._gun = gun;
+	}
+	
+	/*	* Getter do gun
+		* @returns {Mesh}
+	 *	*/
+	public get gun () : Mesh | undefined {
+		return this._gun;
 	}
 	
 	/*	* Setter do forward
@@ -112,13 +128,28 @@ class Player {
 		* @param {number} y
 	 *	*/
 	public startMove (x: number, y: number) : void {
-		if (!this._model) return;
+		if (!this._tracks) return;
 		
-		let xsign: number = Math.sign(this._movement[0] + x);
-		let ysign: number = Math.sign(this._movement[2] + y);
+		let xsign: number = Math.sign(this._movement[0] + y);
+        let ysign: number = Math.sign(this._movement[2] + x);
 		
 		this._movement[0] = xsign;
 		this._movement[2] = ysign;
+		
+		let vDir: vec3 = vec3.create();
+		vec3.set(vDir, 0, 1, 0);
+		
+		vec3.add(this._lookAt, this._tracks.position, this._movement);
+		
+		vec3.sub(this._forward, this._lookAt, this._tracks.position);
+		vec3.normalize(this._forward, this._forward);
+		
+		vec3.cross(this._side, this._forward, vDir);
+		
+		let angle: number = vec3.angle(this._forward, this._initFwd);
+		let sign: number = vec3.dot(this._side, this._initFwd) < 0 ? 1 : -1;
+		
+		this._tracks.setRotation(0, 180 * sign * angle / Math.PI, 0);
 	}
 	
 	/*	* Wyłącza poruszanie się postaci
@@ -126,17 +157,35 @@ class Player {
 		* @param {number} y
 	 *	*/
 	public stopMove (x: number, y: number) : void {
-		if (!this._model) return;
+		if (!this._tracks) return;
 		
-		let xsign: number = Math.sign(this._movement[0] - x);
-		let ysign: number = Math.sign(this._movement[2] - y);
+		let xsign: number = Math.sign(this._movement[0] - y);
+        let ysign: number = Math.sign(this._movement[2] - x);
 		
 		this._movement[0] = xsign;
 		this._movement[2] = ysign;
+		
+		let vDir: vec3 = vec3.create();
+		vec3.set(vDir, 0, 1, 0);
+		
+		vec3.add(this._lookAt, this._tracks.position, this._movement);
+		
+		vec3.sub(this._forward, this._lookAt, this._tracks.position);
+		vec3.normalize(this._forward, this._forward);
+		
+		vec3.cross(this._side, this._forward, vDir);
+		
+		let angle: number = vec3.angle(this._forward, this._initFwd);
+		let sign: number = vec3.dot(this._side, this._initFwd) < 0 ? 1 : -1;
+		
+		this._tracks.setRotation(0, 180 * sign * angle / Math.PI, 0);
 	}
 	
-	public turn (event: MouseEvent) : void {
-		if (!this._model) return;
+	/*	* Ruszanie działkiem za myszka
+		* @param {MouseEvent} event
+	 *	*/
+	public turnGun (event: MouseEvent) : void {
+		if (!this._gun) return;
 		
 		let camera = this._game.main.camera;
 		let plane = this._game.main.scene.meshes[1];
@@ -154,7 +203,7 @@ class Player {
 		if (faceId >= 0) {
 			vec3.set(vDir, 0, 1, 0);
 			
-			vec3.sub(this._forward, this._lookAt, this._model.position);
+			vec3.sub(this._forward, this._lookAt, this._gun.position);
 			vec3.normalize(this._forward, this._forward);
 			
 			vec3.cross(this._side, this._forward, vDir);
@@ -162,7 +211,7 @@ class Player {
 			let angle: number = vec3.angle(this._forward, this._initFwd);
 			let sign: number = vec3.dot(this._side, this._initFwd) > 0 ? 1 : -1;
 			
-			this._model.setRotation(0, 180 * sign * angle / Math.PI, 0);
+			this._gun.setRotation(0, 180 * sign * angle / Math.PI, 0);
 		}
 	}
 
